@@ -1,0 +1,71 @@
+.item {
+    -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2);
+    -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2);
+    box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2);
+    padding: 8px 7px;
+    border-radius: 5px;
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.noTasks {
+    text-align: center;
+    font-size: 14px;
+    margin: 10px;
+}
+
+.addBtn {
+    display: block;
+    max-width: 90px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 7px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    letter-spacing: 0.9px;
+    background-color: #33c926c9;
+    border: none;
+    cursor: pointer;
+
+}
+
+.table {
+    font-size: 14px;
+    font-weight: 400;
+    color: blueviolet;
+    margin-bottom: 10px;
+
+    .tableTitles,
+    .itemIinfo {
+        list-style: none;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-block: 10px;
+        border-bottom: 1px solid grey;
+
+        li {
+            width: 25%;
+            text-align: center;
+        }
+    }
+
+    .itemIinfo {
+        color: black;
+    }
+
+
+
+
+
+    .btnWrapper {
+        position: absolute;
+        right: 50%;
+        bottom: 0;
+        transform: translate(50%, 50%);
+
+    }
+}

@@ -1,0 +1,123 @@
+.container {
+  max-width: 370px;
+  margin: 0 auto;
+  padding: 10px;
+}
+
+.week-list {
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  list-style: none;
+}
+
+
+
+
+.week-info {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.add-task {
+  display: none;
+}
+
+.add-task.active {
+  position: fixed;
+  width: 100%;
+  height: 100dvh;
+  background-color: #00000073;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: antiquewhite;
+
+}
+
+.task-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 40px 20px;
+  background-color: #000000;
+  border-radius: 7px;
+}
+
+.task-date {
+
+  text-align: center;
+}
+
+/* //////////////  POPUP*/
+.open {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100dvh;
+  background-color: #00000067;
+  visibility: visible;
+  opacity: 1;
+  transition: all 0.2s;
+}
+
+.close {
+  width: 0;
+  height: 0;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.popup {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: #797777;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 30px;
+  height: 30px;
+  font-size: 20px;
+  font-weight: bold;
+  border: none;
+  border-radius: 0 0 0 7px;
+}
+
+.hidden-button {
+  display: none;
+}
+
+.button {
+  display: block;
+  max-width: 90px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 7px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  letter-spacing: 0.9px;
+  background-color: #33c926c9;
+  border: none;
+  cursor: pointer;
+}
+
+.button-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-block: 10px;
+}
+
+/* ////////////// */
