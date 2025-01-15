@@ -5,6 +5,7 @@ import ItemList from './components/ItemList';
 import PopUp from './components/PopUp';
 import 'react-calendar/dist/Calendar.css';
 import './App.css'
+import axios from 'axios';
 
 const DATA = [
   {
@@ -41,6 +42,50 @@ const DATA = [
     "personName": "Сидор Сидоров",
     "startTime": "13:00",
     "endTime": "21:00"
+  },
+  {
+    "id": 5,
+    "day": "10.01.2025",
+    "personName": "Сидор Сидоров",
+    "startTime": "13:00",
+    "endTime": "21:00"
+  }
+]
+const DATA2 = [
+  {
+    "id": 1,
+    "day": "15.01.2025",
+    "personName": "Василий Васильев",
+    "startTime": "09:00",
+    "endTime": "12:00"
+  },
+  {
+    "id": 2,
+    "day": "15.01.2025",
+    "personName": "Иван Иванов",
+    "startTime": "19:00",
+    "endTime": "21:00"
+  },
+  {
+    "id": 3,
+    "day": "16.01.2025",
+    "personName": "Максим Максимов",
+    "startTime": "09:00",
+    "endTime": "12:00"
+  },
+  {
+    "id": 4,
+    "day": "17.01.2025",
+    "personName": "Александр Александров",
+    "startTime": "13:00",
+    "endTime": "21:00"
+  },
+  {
+    "id": 4,
+    "day": "18.01.2025",
+    "personName": "Сидор Сидоров",
+    "startTime": "13:00",
+    "endTime": "21:00"
   }
 ]
 const persons = [
@@ -61,6 +106,7 @@ const time = [
 
 
 
+
 function App() {
   const [valueCalendar, setValueCalendar] = useState(new Date())
   const [currentWeek, setCurrentWeek] = useState([{
@@ -75,20 +121,21 @@ function App() {
     ]
 
   }])
-  const [tasks, setTasks] = useState(DATA)
-  const [filterWeek, setFilterWeek] = useState([])
+  const [PVZvalue, setPVZvalue] = useState([])
+  const [PVZcheck, setPVZcheck] = useState("PVZ2")
 
+  useEffect(() => {
+    axios.get(`https://694548aefb424dc0.mokky.dev/${PVZcheck}`).then((res) => {
+      setPVZvalue(res.data)
+    })
+    console.log("UseEffect сработал");
+  }, [PVZcheck])
+  console.log(PVZvalue);
 
 
   useEffect(() => {
     getWeekArray();
-  }, [valueCalendar])
-
-  /*   useEffect(() => {
-      axios.get("https://694548aefb424dc0.mokky.dev/main").then((res) => {
-        setTasks(res.data)
-      })
-    }, [])*/
+  }, [valueCalendar, PVZcheck, PVZvalue])
 
   const getCurrentWeekRange = (date) => {
     const startOfWeek = new Date(date);
@@ -100,8 +147,8 @@ function App() {
 
   const { startOfWeek, endOfWeek } = getCurrentWeekRange(valueCalendar);
 
-  const getWeekArray = () => {
 
+  const getWeekArray = () => {
     const week = [];
     for (let i = 0; i < 7; i++) {
       const currentDay = new Date(startOfWeek);
@@ -109,10 +156,9 @@ function App() {
       const formattedDate = currentDay.toLocaleDateString('ru-RU');
       week.push({ day: formattedDate });
     }
-
     const combinedData = week.map((dayInfo) => {
 
-      const matches = DATA.filter((data) => data.day === dayInfo.day);
+      const matches = PVZvalue.filter((data) => data.day === dayInfo.day);
       if (matches.length > 0) {
         return {
           ...dayInfo,
@@ -123,32 +169,11 @@ function App() {
     });
 
     setCurrentWeek(combinedData);
-
-
   }
   const handleDate = (newDate) => {
     setValueCalendar(newDate)
     getWeekArray();
   }
-  /* const addTask = (date) => {
-    setShowPopup(!showPupup)
-    setDateForAdd(date);
-    setTitlePopup("Добавить")
-
-  } */
-  /* const addToServer = () => {
-    const maxId = Math.max(...DATA.map((item) => item.id) || 0);
-    DATA.push({
-      "id": maxId + 1,
-      "day": dateForAdd,
-      "personName": personForAdd,
-      "startTime": startTimeForAdd,
-      "endTime": endTimeForAdd
-    })
-    setShowPopup(!showPupup)
-    getWeekArray()
-  } */
-
 
 
   const [dateForAdd, setDateForAdd] = useState("")
@@ -190,21 +215,20 @@ function App() {
       setCurrentWeek(newWeek)
       setShowPopup(false)
     } else {
-      console.log("dateForAdd :", dateForAdd);
-      console.log("startTimeForAdd :", startTimeForAdd);
-
       const maxId = Math.max(...DATA.map((item) => item.id) || 0);
-      DATA.push({
+      axios.post(`https://694548aefb424dc0.mokky.dev/${PVZcheck}`, {
         "id": maxId + 1,
         "day": dateForAdd,
         "personName": personForAdd,
         "startTime": startTimeForAdd,
         "endTime": endTimeForAdd
+      }).then((res) => {
+        alert("Запись добавлена")
+        setPVZvalue([...PVZvalue, res.data]);
+
       })
       setShowPopup(!showPupup)
       getWeekArray()
-      console.log(DATA);
-
     }
   }
 
@@ -226,17 +250,38 @@ function App() {
       }
       return day
     })
-    setCurrentWeek(newWeek)
-    setShowPopup(false)
+
+    axios.delete(`https://694548aefb424dc0.mokky.dev/${PVZcheck}/${idPerson}`).then((res) => {
+      alert("Запись удалена")
+      setCurrentWeek(newWeek)
+      setShowPopup(false)
+    }).catch((err) => {
+      alert("Запись не удалена")
+      console.log(err);
+
+    })
   }
 
 
+  const handlePVZ = (e) => {
+    if (e.target.value === "PVZ1") {
+      setPVZvalue(DATA)
+    } else {
+      setPVZvalue(DATA2)
+    }
+    setPVZcheck(e.target.value)
+    getWeekArray()
+  }
 
 
   return (
     <div className="container">
       <>
         <Calendar value={valueCalendar} onChange={handleDate} locale='ru-RU' />
+        <div className="PVZ-wrapper">
+          <label htmlFor="PVZ1"><input type="radio" id="PVZ1" name="PVZ" checked={PVZcheck === 'PVZ1'} value="PVZ1" onChange={handlePVZ} />ПВЗ № 1</label>
+          <label htmlFor="PVZ2"><input type="radio" id="PVZ2" name="PVZ" checked={PVZcheck === 'PVZ2'} value="PVZ2" onChange={handlePVZ} />ПВЗ № 2</label>
+        </div>
         <div className={showPupup ? "open" : "close"}>
 
           <div className="popup" >

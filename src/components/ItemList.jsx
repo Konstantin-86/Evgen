@@ -3,11 +3,12 @@ import { nanoid } from 'nanoid';
 import style from '../styles/ItemList.module.scss'
 
 
-const ItemList = ({ day, editTask, addTask }) => {
+const ItemList = ({ day, editTask, addTask, PVZvalue }) => {
     return (
 
         <li className={style.item}    >
             <h3 className={style.title}>{day.day}</h3>
+            <h5>{PVZvalue}</h5>
             {day.schedule
                 ?
                 <div className={style.table}>
