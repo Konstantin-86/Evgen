@@ -83,6 +83,11 @@
   background-color: #797777;
 }
 
+.popup h5 {
+  margin-block: 10px;
+  font-size: 20px;
+}
+
 .closeBtn {
   position: absolute;
   top: 0;
@@ -118,6 +123,33 @@
   flex-direction: column;
   gap: 10px;
   margin-block: 10px;
+}
+
+/* ////////////// personWrapper */
+.personWrapper {
+  margin-block: 10px;
+}
+
+.personsList {
+  height: 0;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+
+.personsList.active {
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.personsList.active li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-block: 7px;
+  border-bottom: 1px solid #000000;
 }
 
 /* ////////////// */

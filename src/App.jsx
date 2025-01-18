@@ -2,12 +2,19 @@ import { useState, useEffect } from 'react'
 import Calendar from 'react-calendar'
 import { nanoid } from 'nanoid';
 import ItemList from './components/ItemList';
-import PopUp from './components/PopUp';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import Autocomplete from '@mui/material/Autocomplete';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
 import 'react-calendar/dist/Calendar.css';
-import './App.css'
+import './App.css';
 import axios from 'axios';
 
-const DATA = [
+/* const DATA = [
   {
     "id": 1,
     "day": "11.01.2025",
@@ -87,8 +94,9 @@ const DATA2 = [
     "startTime": "13:00",
     "endTime": "21:00"
   }
-]
+] */
 const persons = [
+
   "Иван Иванов",
   "Петр Петров",
   "Сидор Сидоров",
@@ -96,6 +104,38 @@ const persons = [
   "Максим Максимов",
   "Александр Александров",
   "Дмитрий Дмитриев",
+]
+const persons2 = [
+  {
+    "id": 1,
+    "namePerson": "Иван Иванов",
+
+  },
+  {
+    "id": 2,
+    "namePerson": "Петр Петров",
+
+  },
+  {
+    "id": 3,
+    "namePerson": "Сидор Сидоров",
+
+  },
+  {
+    "id": 4,
+    "namePerson": "Василий Васильев",
+
+  },
+  {
+    "id": 5,
+    "namePerson": "Александр Александров",
+
+  },
+  {
+    "id": 6,
+    "namePerson": "Дмитрий Дмитриев",
+
+  },
 ]
 const time = [
   "09:00", "10:00", "11:00", "12:00",
@@ -121,21 +161,46 @@ function App() {
     ]
 
   }])
-  const [PVZvalue, setPVZvalue] = useState([])
-  const [PVZcheck, setPVZcheck] = useState("PVZ2")
+  const [PVZdate1, setPVZdate1] = useState([])
+  const [PVZdate2, setPVZdate2] = useState([])
+  const [persons, setPersons] = useState([])
+  const [PVZcheck, setPVZcheck] = useState("PVZ1")
+
+  const [dateForAdd, setDateForAdd] = useState("")
+  const [personForAdd, setPersonForAdd] = useState("")
+  const [startTimeForAdd, setStartTimeForAdd] = useState("")
+  const [endTimeForAdd, setEndTimeForAdd] = useState("")
+  const [titlePopup, setTitlePopup] = useState("")
+  const [idPerson, setIdPerson] = useState(0)
+  const [showPupup, setShowPopup] = useState(false);
+  const [titlePopUpButton, setTitlePopUpButton] = useState("Добавить")
 
   useEffect(() => {
-    axios.get(`https://694548aefb424dc0.mokky.dev/${PVZcheck}`).then((res) => {
-      setPVZvalue(res.data)
+    axios.get(`https://694548aefb424dc0.mokky.dev/PVZ1`).then((res) => {
+      setPVZdate1(res.data)
+    }).catch((err) => {
+      alert("Проблема с загрузкой данных")
+      console.log(err);
+    })
+    axios.get(`https://694548aefb424dc0.mokky.dev/PVZ2`).then((res) => {
+      setPVZdate2(res.data)
+    }).catch((err) => {
+      alert("Проблема с загрузкой данных")
+      console.log(err);
+    })
+    axios.get("https://694548aefb424dc0.mokky.dev/persons").then((res) => {
+      setPersons(res.data)
+    }).catch((err) => {
+      alert("Проблема с загрузкой данных")
+      console.log(err);
     })
     console.log("UseEffect сработал");
-  }, [PVZcheck])
-  console.log(PVZvalue);
+  }, [])
 
 
   useEffect(() => {
     getWeekArray();
-  }, [valueCalendar, PVZcheck, PVZvalue])
+  }, [valueCalendar, PVZcheck, PVZdate1, PVZdate2])
 
   const getCurrentWeekRange = (date) => {
     const startOfWeek = new Date(date);
@@ -156,8 +221,9 @@ function App() {
       const formattedDate = currentDay.toLocaleDateString('ru-RU');
       week.push({ day: formattedDate });
     }
-    const combinedData = week.map((dayInfo) => {
+    const PVZvalue = PVZcheck === "PVZ1" ? PVZdate1 : PVZdate2
 
+    const combinedData = week.map((dayInfo) => {
       const matches = PVZvalue.filter((data) => data.day === dayInfo.day);
       if (matches.length > 0) {
         return {
@@ -176,14 +242,7 @@ function App() {
   }
 
 
-  const [dateForAdd, setDateForAdd] = useState("")
-  const [personForAdd, setPersonForAdd] = useState("")
-  const [startTimeForAdd, setStartTimeForAdd] = useState("")
-  const [endTimeForAdd, setEndTimeForAdd] = useState("")
-  const [titlePopup, setTitlePopup] = useState("")
-  const [idPerson, setIdPerson] = useState(0)
-  const [showPupup, setShowPopup] = useState(false);
-  const [titlePopUpButton, setTitlePopUpButton] = useState("Добавить")
+
 
   const editTask = (schedule) => {
     setTitlePopup(schedule.day)
@@ -215,20 +274,33 @@ function App() {
       setCurrentWeek(newWeek)
       setShowPopup(false)
     } else {
-      const maxId = Math.max(...DATA.map((item) => item.id) || 0);
-      axios.post(`https://694548aefb424dc0.mokky.dev/${PVZcheck}`, {
-        "id": maxId + 1,
-        "day": dateForAdd,
-        "personName": personForAdd,
-        "startTime": startTimeForAdd,
-        "endTime": endTimeForAdd
-      }).then((res) => {
+      const PVZvalue = PVZcheck === "PVZ1" ? PVZdate1 : PVZdate2
+      const maxId = PVZvalue.length
+        ?
+        Math.max(...PVZvalue.map((item) => item.id))
+        : 0;
+      const newItem = {
+        id: maxId + 1,
+        day: dateForAdd,
+        personName: personForAdd,
+        startTime: startTimeForAdd,
+        endTime: endTimeForAdd
+      }
+      axios.post(`https://694548aefb424dc0.mokky.dev/${PVZcheck}`, newItem).then((res) => {
         alert("Запись добавлена")
-        setPVZvalue([...PVZvalue, res.data]);
 
+
+        if (PVZcheck === "PVZ1") {
+          setPVZdate1([...PVZvalue, newItem])
+        } else {
+          setPVZdate2([...PVZvalue, newItem])
+        }
+        setShowPopup(!showPupup)
+      }).catch((err) => {
+        alert("Запись не добавлена")
+        console.log(err);
       })
-      setShowPopup(!showPupup)
-      getWeekArray()
+
     }
   }
 
@@ -243,6 +315,7 @@ function App() {
     setShowPopup(true)
   }
   const deleteTask = () => {
+    const PVZvalue = PVZcheck === "PVZ1" ? PVZdate1 : PVZdate2
     const newWeek = currentWeek.map((day) => {
       if (day.schedule) {
         day.schedule = day.schedule.filter((schedule) => schedule.id !== idPerson)
@@ -253,7 +326,11 @@ function App() {
 
     axios.delete(`https://694548aefb424dc0.mokky.dev/${PVZcheck}/${idPerson}`).then((res) => {
       alert("Запись удалена")
-      setCurrentWeek(newWeek)
+      if (PVZcheck === "PVZ1") {
+        setPVZdate1(PVZvalue.filter((item) => item.id !== idPerson))
+      } else {
+        setPVZdate2(PVZvalue.filter((item) => item.id !== idPerson))
+      }
       setShowPopup(false)
     }).catch((err) => {
       alert("Запись не удалена")
@@ -264,24 +341,81 @@ function App() {
 
 
   const handlePVZ = (e) => {
-    if (e.target.value === "PVZ1") {
-      setPVZvalue(DATA)
-    } else {
-      setPVZvalue(DATA2)
-    }
+
     setPVZcheck(e.target.value)
     getWeekArray()
   }
 
 
+  /*   ///////////////////// */
+
+  const [newPerson, setNewPerson] = useState("")
+  const [showPersons, setShowPersons] = useState(true)
+  const deletePerson = (id) => {
+    axios.delete(`https://694548aefb424dc0.mokky.dev/persons/${id}`).then((res) => {
+      alert("Персонаж удален")
+      setPersons(persons.filter((person) => person.id !== id))
+      setNewPerson("")
+    }).catch((err) => {
+      alert("Персонаж не удален")
+      console.log(err);
+    })
+  }
+  const addPerson = () => {
+    if (newPerson === "") {
+      alert("Введите имя персонажа")
+      return
+    }
+    const maxId = persons.length
+      ?
+      Math.max(...persons.map((item) => item.id))
+      : 0;
+    const newItem = {
+      id: maxId + 1,
+      namePerson: newPerson
+    }
+    axios.post(`https://694548aefb424dc0.mokky.dev/persons`, newItem).then((res) => {
+      alert("Персонаж добавлен")
+      setPersons([...persons, newItem])
+      setNewPerson("")
+    }).catch((err) => {
+      alert("Персонаж не добавлен")
+      console.log(err);
+    })
+  }
+  /*   ///////////////////// */
   return (
     <div className="container">
       <>
         <Calendar value={valueCalendar} onChange={handleDate} locale='ru-RU' />
-        <div className="PVZ-wrapper">
-          <label htmlFor="PVZ1"><input type="radio" id="PVZ1" name="PVZ" checked={PVZcheck === 'PVZ1'} value="PVZ1" onChange={handlePVZ} />ПВЗ № 1</label>
-          <label htmlFor="PVZ2"><input type="radio" id="PVZ2" name="PVZ" checked={PVZcheck === 'PVZ2'} value="PVZ2" onChange={handlePVZ} />ПВЗ № 2</label>
+        <div className="personWrapper">
+          <h4 onClick={() => setShowPersons(!showPersons)}>Список работников</h4>
+          <ul className={showPersons ? "personsList" : "personsList active"}>
+            {persons.length && persons.map((person) => (
+              <li key={person.namePerson}>{person.namePerson} <Button size='small' variant="outlined" color='error' onClick={() => deletePerson(person.id)}>Удалить</Button></li>
+            ))}
+          </ul>
+          <Box
+            component="form"
+            sx={{ '& > :not(style)': { m: 1, width: '25ch' } }}
+            noValidate
+            autoComplete="off"
+          >
+            <TextField id="outlined-basic" label="Имя персонажа" value={newPerson} onChange={(e) => setNewPerson(e.target.value)} variant="outlined" />
+          </Box>
+          <Button onClick={addPerson} color='primary' variant="contained">Добавить Персонажа</Button>
+
         </div>
+        <FormControl>
+          <RadioGroup
+            row
+            aria-labelledby="demo-row-radio-buttons-group-label"
+            name="row-radio-buttons-group"
+          >
+            <FormControlLabel value="PVZ1" control={<Radio />} checked={PVZcheck === 'PVZ1'} onChange={handlePVZ} label="ПВЗ № 1" />
+            <FormControlLabel value="PVZ2" control={<Radio />} checked={PVZcheck === 'PVZ2'} onChange={handlePVZ} label="ПВЗ № 2" />
+          </RadioGroup>
+        </FormControl>
         <div className={showPupup ? "open" : "close"}>
 
           <div className="popup" >
@@ -291,8 +425,14 @@ function App() {
             <label htmlFor="person-info">Работник</label>
 
             <select id="person-info" value={personForAdd} onChange={(e) => setPersonForAdd(e.target.value)} >
-              {persons.map((person) => <option key={nanoid()}  >{person}</option>)}
+              {persons.map((person) => <option key={nanoid()}  >{person.namePerson}</option>)}
             </select>
+            {/*  <Autocomplete
+              disablePortal
+              options={persons}
+              sx={{ width: 300 }}
+              renderInput={(params) => <TextField {...params} label="Работник" />}
+            /> */}
 
             <label htmlFor="time-for-start">Время начала</label>
             <select name="pets" id="person-info" value={startTimeForAdd} onChange={(e) => setStartTimeForAdd(e.target.value)}>
@@ -310,7 +450,9 @@ function App() {
 
           </div>
         </div>
-        {currentWeek.map((day) => <ItemList key={nanoid()} day={day} editTask={editTask} addTask={addTask} />)}
+        <ul>
+          {currentWeek.map((day) => <ItemList key={nanoid()} day={day} editTask={editTask} addTask={addTask} />)}
+        </ul>
       </>
     </div>
 
