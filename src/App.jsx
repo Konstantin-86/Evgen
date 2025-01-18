@@ -245,6 +245,9 @@ function App() {
 
 
   const editTask = (schedule) => {
+    console.log(schedule);
+
+    setDateForAdd(schedule.day)
     setTitlePopup(schedule.day)
     setPersonForAdd(schedule.personName)
     setStartTimeForAdd(schedule.startTime)
@@ -256,36 +259,47 @@ function App() {
   }
 
   const changeSomeTask = () => {
+    const PVZvalue = PVZcheck === "PVZ1" ? PVZdate1 : PVZdate2
+    const maxId = PVZvalue.length
+      ?
+      Math.max(...PVZvalue.map((item) => item.id))
+      : 0;
+    const newItem = {
+      id: maxId + 1,
+      day: dateForAdd,
+      personName: personForAdd,
+      startTime: startTimeForAdd,
+      endTime: endTimeForAdd
+    }
+    console.log(PVZvalue);
+
     if (titlePopUpButton === "Изменить") {
-      const newWeek = currentWeek.map((day) => {
-        if (day.schedule) {
-          day.schedule.map((schedule) => {
-            if (schedule.id === idPerson) {
-              schedule.personName = personForAdd
-              schedule.startTime = startTimeForAdd
-              schedule.endTime = endTimeForAdd
-            }
-            return schedule
-          })
-          return day
-        }
-        return day
-      })
-      setCurrentWeek(newWeek)
-      setShowPopup(false)
-    } else {
-      const PVZvalue = PVZcheck === "PVZ1" ? PVZdate1 : PVZdate2
-      const maxId = PVZvalue.length
-        ?
-        Math.max(...PVZvalue.map((item) => item.id))
-        : 0;
-      const newItem = {
-        id: maxId + 1,
-        day: dateForAdd,
+      axios.patch(`https://694548aefb424dc0.mokky.dev/${PVZcheck}/${idPerson}`, {
         personName: personForAdd,
         startTime: startTimeForAdd,
         endTime: endTimeForAdd
-      }
+      }).then((res) => {
+        alert("Запись Измененна")
+        const newItem = {
+          id: idPerson,
+          day: dateForAdd,
+          personName: personForAdd,
+          startTime: startTimeForAdd,
+          endTime: endTimeForAdd
+        }
+        if (PVZcheck === "PVZ1") {
+          const newDate = PVZvalue.filter((item) => item.id !== idPerson)
+          setPVZdate1([...newDate, newItem])
+        } else {
+          setPVZdate2([...PVZdate2, newItem])
+        }
+        setShowPopup(!showPupup)
+      }).catch((err) => {
+        alert("Запись не изменена")
+        console.log(err);
+      })
+    } else {
+
       axios.post(`https://694548aefb424dc0.mokky.dev/${PVZcheck}`, newItem).then((res) => {
         alert("Запись добавлена")
 
@@ -419,6 +433,7 @@ function App() {
         <div className={showPupup ? "open" : "close"}>
 
           <div className="popup" >
+            <h3>{idPerson}</h3>
             <button className="closeBtn" onClick={() => setShowPopup(false)}>X</button>
             <h5>{titlePopup}</h5>
 
