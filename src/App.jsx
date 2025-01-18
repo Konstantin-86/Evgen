@@ -403,7 +403,7 @@ function App() {
       <>
         <Calendar value={valueCalendar} onChange={handleDate} locale='ru-RU' />
         <div className="personWrapper">
-          <h4 onClick={() => setShowPersons(!showPersons)}>Список работников</h4>
+          <h4 onClick={() => setShowPersons(!showPersons)} className='personsTitle'>Список работников</h4>
           <ul className={showPersons ? "personsList" : "personsList active"}>
             {persons.length && persons.map((person) => (
               <li key={person.namePerson}>{person.namePerson} <Button size='small' variant="outlined" color='error' onClick={() => deletePerson(person.id)}>Удалить</Button></li>

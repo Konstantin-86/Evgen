@@ -130,10 +130,27 @@
   margin-block: 10px;
 }
 
+.personsTitle {
+  position: relative;
+  display: inline-flex;
+}
+
+.personsTitle::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: -30px;
+  width: 20px;
+  height: 20px;
+  background-image: url(../public/arrow.png);
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
 .personsList {
   height: 0;
   overflow: hidden;
-  transition: all 0.2s;
 }
 
 .personsList.active {
