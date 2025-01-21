@@ -13,6 +13,8 @@ import TextField from '@mui/material/TextField';
 import 'react-calendar/dist/Calendar.css';
 import './App.css';
 import axios from 'axios';
+import PersonSemples from './components/PersonSemples';
+
 
 /* const DATA = [
   {
@@ -143,6 +145,40 @@ const time = [
   "17:00", "18:00", "19:00", "20:00",
   "21:00"
 ]
+const personSemplesAPI = [
+  {
+    id: 1,
+    namePerson: "Илья",
+    startTime: "09:00",
+    endTime: "15:00",
+    bidRubles: 100,
+    color: "#33c926c9"
+  },
+  {
+    id: 2,
+    namePerson: "Кирилл",
+    startTime: "16:00",
+    endTime: "21:00",
+    bidRubles: 200,
+    color: "#c92626c9"
+  },
+  {
+    id: 3,
+    namePerson: "Васька",
+    startTime: "09:00",
+    endTime: "21:00",
+    bidRubles: 300,
+    color: "#26c9c9"
+  },
+  {
+    id: 4,
+    namePerson: "Илья",
+    startTime: "09:00",
+    endTime: "21:00",
+    bidRubles: 200,
+    color: "#26c926c9"
+  },
+]
 
 
 
@@ -174,6 +210,9 @@ function App() {
   const [idPerson, setIdPerson] = useState(0)
   const [showPupup, setShowPopup] = useState(false);
   const [titlePopUpButton, setTitlePopUpButton] = useState("Добавить")
+  const [weekDayName, setWeekDayName] = useState("")
+
+  const [showCalendar, setShowCalendar] = useState(false)
 
   useEffect(() => {
     axios.get(`https://694548aefb424dc0.mokky.dev/PVZ1`).then((res) => {
@@ -236,17 +275,14 @@ function App() {
 
     setCurrentWeek(combinedData);
   }
+
+
   const handleDate = (newDate) => {
     setValueCalendar(newDate)
     getWeekArray();
   }
 
-
-
-
   const editTask = (schedule) => {
-    console.log(schedule);
-
     setDateForAdd(schedule.day)
     setTitlePopup(schedule.day)
     setPersonForAdd(schedule.personName)
@@ -353,18 +389,19 @@ function App() {
     })
   }
 
-
   const handlePVZ = (e) => {
-
     setPVZcheck(e.target.value)
     getWeekArray()
   }
 
-
   /*   ///////////////////// */
 
-  const [newPerson, setNewPerson] = useState("")
-  const [showPersons, setShowPersons] = useState(true)
+
+  const [showPersons, setShowPersons] = useState(false)
+
+
+
+
   const deletePerson = (id) => {
     axios.delete(`https://694548aefb424dc0.mokky.dev/persons/${id}`).then((res) => {
       alert("Персонаж удален")
@@ -401,25 +438,10 @@ function App() {
   return (
     <div className="container">
       <>
-        <Calendar value={valueCalendar} onChange={handleDate} locale='ru-RU' />
-        <div className="personWrapper">
-          <h4 onClick={() => setShowPersons(!showPersons)} className='personsTitle'>Список работников</h4>
-          <ul className={showPersons ? "personsList" : "personsList active"}>
-            {persons.length && persons.map((person) => (
-              <li key={person.namePerson}>{person.namePerson} <Button size='small' variant="outlined" color='error' onClick={() => deletePerson(person.id)}>Удалить</Button></li>
-            ))}
-          </ul>
-          <Box
-            component="form"
-            sx={{ '& > :not(style)': { m: 1, width: '25ch' } }}
-            noValidate
-            autoComplete="off"
-          >
-            <TextField id="outlined-basic" label="Имя персонажа" value={newPerson} onChange={(e) => setNewPerson(e.target.value)} variant="outlined" />
-          </Box>
-          <Button onClick={addPerson} color='primary' variant="contained">Добавить Персонажа</Button>
+        <h3 onClick={() => setShowCalendar(!showCalendar)}>Calendar</h3>
+        <Calendar className={showCalendar ? "openCalendar" : "closeCalendar"} value={valueCalendar} onChange={handleDate} locale='ru-RU' />
+        <PersonSemples personSemplesAPI={personSemplesAPI} />
 
-        </div>
         <FormControl>
           <RadioGroup
             row
@@ -430,10 +452,9 @@ function App() {
             <FormControlLabel value="PVZ2" control={<Radio />} checked={PVZcheck === 'PVZ2'} onChange={handlePVZ} label="ПВЗ № 2" />
           </RadioGroup>
         </FormControl>
-        <div className={showPupup ? "open" : "close"}>
+        <div className={showPupup ? "openPopup" : "closePopup"}>
 
           <div className="popup" >
-            <h3>{idPerson}</h3>
             <button className="closeBtn" onClick={() => setShowPopup(false)}>X</button>
             <h5>{titlePopup}</h5>
 
@@ -442,12 +463,6 @@ function App() {
             <select id="person-info" value={personForAdd} onChange={(e) => setPersonForAdd(e.target.value)} >
               {persons.map((person) => <option key={nanoid()}  >{person.namePerson}</option>)}
             </select>
-            {/*  <Autocomplete
-              disablePortal
-              options={persons}
-              sx={{ width: 300 }}
-              renderInput={(params) => <TextField {...params} label="Работник" />}
-            /> */}
 
             <label htmlFor="time-for-start">Время начала</label>
             <select name="pets" id="person-info" value={startTimeForAdd} onChange={(e) => setStartTimeForAdd(e.target.value)}>
@@ -458,6 +473,7 @@ function App() {
             <select name="pets" id="person-info" value={endTimeForAdd} onChange={(e) => setEndTimeForAdd(e.target.value)}>
               {time.map((time) => <option key={nanoid()} value={time} >{time}</option>)}
             </select>
+
             <div className="button-wrap">
               <button className='button' onClick={changeSomeTask}>{titlePopUpButton}</button>
               <button className={titlePopUpButton === "Изменить" ? "delete-button button" : "hidden-button"} onClick={deleteTask}>Удалить</button>
@@ -465,8 +481,9 @@ function App() {
 
           </div>
         </div>
+
         <ul>
-          {currentWeek.map((day) => <ItemList key={nanoid()} day={day} editTask={editTask} addTask={addTask} />)}
+          {currentWeek.map((day) => <ItemList key={nanoid()} day={day} editTask={editTask} addTask={addTask} weekDayName={weekDayName} />)}
         </ul>
       </>
     </div>

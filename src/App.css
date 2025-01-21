@@ -12,7 +12,19 @@
   list-style: none;
 }
 
+/* //////////Calendar////////// */
 
+.openCalendar {
+  display: block;
+}
+
+.closeCalendar {
+  display: none;
+}
+
+
+
+/* //////////////////// */
 
 
 .week-info {
@@ -52,7 +64,7 @@
 }
 
 /* //////////////  POPUP*/
-.open {
+.openPopup {
   position: fixed;
   display: flex;
   justify-content: center;
@@ -65,9 +77,10 @@
   visibility: visible;
   opacity: 1;
   transition: all 0.2s;
+  z-index: 100;
 }
 
-.close {
+.closePopup {
   width: 0;
   height: 0;
   visibility: hidden;
@@ -75,16 +88,18 @@
 }
 
 .popup {
+  padding: 10px;
+  border-radius: 7px;
+  min-width: 350px;
   position: relative;
   display: flex;
   justify-content: center;
-  align-items: center;
   flex-direction: column;
   background-color: #797777;
 }
 
 .popup h5 {
-  margin-block: 10px;
+  margin-bottom: 10px;
   font-size: 20px;
 }
 
@@ -127,7 +142,39 @@
 
 /* ////////////// personWrapper */
 .personWrapper {
+  position: relative;
   margin-block: 10px;
+}
+
+.popUpSampleActive {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100dvh;
+  background-color: hwb(0 0% 100% / 0.795);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: antiquewhite;
+}
+
+.personSemplesItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 7px;
+  background-color: rgb(196, 189, 189);
+  margin-bottom: 7px;
+}
+
+.popUpSample {
+  display: none;
+}
+
+.svgPlusBtn {
+  background: none;
+  border: none;
 }
 
 .personsTitle {
@@ -169,4 +216,43 @@
   border-bottom: 1px solid #000000;
 }
 
-/* ////////////// */
+/* //////////////  personSemplesList*/
+.inputSemplesActive {
+  max-width: 170px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+  border: 1px solid #312f2f;
+  border-radius: 7px;
+  padding: 7px;
+  margin: 10px;
+}
+
+.inputSemplesDisabled {
+  max-width: 170px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+  border: 1px solid #0a5013;
+  background-color: #0a5013;
+  border-radius: 7px;
+  padding: 7px;
+  margin: 10px;
+}
+
+.personSemplesName {
+  display: flex;
+}
+
+.semplesColor {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: none;
+  text-transform: lowercase;
+  font-size: 12px;
+  text-align: center;
+  margin-right: 10px;
+}

@@ -3,27 +3,21 @@ import { nanoid } from 'nanoid';
 import style from '../styles/ItemList.module.scss'
 
 
-const ItemList = ({ day, editTask, addTask, PVZvalue }) => {
+const ItemList = ({ day, editTask, addTask }) => {
+    const shortDate = (day.day).slice(0, 2)
+
     return (
 
         <li className={style.item}    >
-            <h3 className={style.title}>{day.day}</h3>
-            <h5>{PVZvalue}</h5>
+            <h3 className={style.title}>{shortDate}</h3>
             {day.schedule
                 ?
                 <div className={style.table}>
-                    <ul className={style.tableTitles}>
-                        <li>Имя</li>
-                        <li>Начало</li>
-                        <li>Конец</li>
-                        <li>Часы</li>
-                    </ul>
                     {day.schedule.map((schedule) => (
                         <ul className={style.itemIinfo} onClick={() => editTask(schedule)} key={nanoid()}>
-                            <li className="">{schedule.personName}</li>
-                            <li className="">{schedule.startTime}</li>
-                            <li className="">{schedule.endTime}</li>
-                            <li className="">{Number(schedule.endTime.slice(0, 2)) - Number(schedule.startTime.slice(0, 2))} </li>
+                            <li className={style.itemTime}>{schedule.startTime}</li>
+                            <li className={style.itemLi}>{schedule.personName}</li>
+                            <li className={style.itemHours}>{Number(schedule.endTime.slice(0, 2)) - Number(schedule.startTime.slice(0, 2))}ч</li>
                         </ul>
                     ))}
                 </div>
@@ -31,7 +25,7 @@ const ItemList = ({ day, editTask, addTask, PVZvalue }) => {
                 :
                 <div className={style.noTasks}>Нет задач</div>
             }
-            <button className={style.addBtn} onClick={() => addTask(day.day)}>Добавить</button>
+            <button className={style.addBtn} onClick={() => addTask(day.day)}></button>
         </li>
 
 
