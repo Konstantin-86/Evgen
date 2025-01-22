@@ -1,6 +1,6 @@
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  --mainColor: rgba(27, 18, 18, 0.555);
+  --mainColor: rgb(27, 18, 18);
   --textColor: rgb(255, 255, 255);
 
 }

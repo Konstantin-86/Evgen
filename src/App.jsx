@@ -187,17 +187,17 @@ const personSemplesAPI = [
 
 function App() {
 
-  
 
-  
-  
-  
+
+
+
+
   return (
     <div className="container">
       <>
-      <MyCalendar /* callbackCalendar={callbackCalendar} */ />
+        <MyCalendar />
 
-       
+
       </>
     </div>
 

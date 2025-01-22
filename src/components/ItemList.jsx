@@ -1,32 +1,38 @@
-
+import moment from 'moment';
 import { nanoid } from 'nanoid';
 import style from '../styles/ItemList.module.scss'
 
 
-const ItemList = ({ day, editTask, addTask }) => {
-    const shortDate = (day.day).slice(0, 2)
+const ItemList = ({ weekData }) => {
+
 
     return (
 
-        <li className={style.item}    >
-            <h3 className={style.title}>{shortDate}</h3>
-            {day.schedule
-                ?
-                <div className={style.table}>
-                    {day.schedule.map((schedule) => (
-                        <ul className={style.itemIinfo} onClick={() => editTask(schedule)} key={nanoid()}>
-                            <li className={style.itemTime}>{schedule.startTime}</li>
-                            <li className={style.itemLi}>{schedule.personName}</li>
-                            <li className={style.itemHours}>{Number(schedule.endTime.slice(0, 2)) - Number(schedule.startTime.slice(0, 2))}ч</li>
-                        </ul>
-                    ))}
-                </div>
+        <ul className={style.itemList}>
+            {weekData.map((day) => (
+                <li key={nanoid()} className={style.item}>
+                    <div className={style.itemDay}>
+                        <p className={style.dayOfWeek}>{day.dayOfWeek}</p>
+                        <p className={style.day}>{moment(day.date).format('DD')}</p>
+                    </div>
+                    <div className={style.itemInfo}>
+                        {day.data.length > 0 ? (
+                            day.data.map(person => (
+                                <div className={style.itemText} key={person.id}  >
+                                    <p>{person.startTime}</p>
+                                    <p className={style.itemColor} style={{ backgroundColor: person.color }} >{person.namePerson.slice(0, 2)}</p>
+                                    <p>{person.namePerson}</p>
 
-                :
-                <div className={style.noTasks}>Нет задач</div>
-            }
-            <button className={style.addBtn} onClick={() => addTask(day.day)}></button>
-        </li>
+                                </div>
+                            ))
+                        ) : (
+                            <p>Нет данных</p>
+                        )}
+                    </div>
+
+                </li>
+            ))}
+        </ul>
 
 
     )
