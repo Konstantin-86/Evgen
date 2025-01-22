@@ -1,17 +1,11 @@
-import React, { useState } from 'react'
+import { useState, useEffect } from 'react'
+import moment from 'moment';
 import { nanoid } from 'nanoid'
+import Fab from '@mui/material/Fab';
+import EditIcon from '@mui/icons-material/Edit';
 import styles from '../styles/PopUp.module.scss'
 
 
-const persons = [
-    "Иван Иванов",
-    "Петр Петров",
-    "Сидор Сидоров",
-    "Василий Васильев",
-    "Максим Максимов",
-    "Александр Александров",
-    "Дмитрий Дмитриев",
-]
 const time = [
     "09:00", "10:00", "11:00", "12:00",
     "13:00", "14:00", "15:00", "16:00",
@@ -20,38 +14,43 @@ const time = [
 ]
 
 
-const PopUp = ({ showPupup, setShowPopup, day }) => {
+const PopUp = ({ day, handlePopUp, setHandlePopUp }) => {
+    console.log(day);
 
-    const [dateForAdd, setDateForAdd] = useState("")
-    const [personForAdd, setPersonForAdd] = useState("")
-    const [startTimeForAdd, setStartTimeForAdd] = useState("")
-    const [endTimeForAdd, setEndTimeForAdd] = useState("")
-    const [titlePopup, setTitlePopup] = useState("")
+    const currentDay = moment(day.date).format('DD.MM.YYYY');
+
+
+
 
 
     return (
-        <div className={showPupup ? "open" : "close"}>
+        <div className={handlePopUp ? styles.popUpOpen : styles.popUpClose}>
+            <div className={styles.popUpWrapper}>
+                <button onClick={() => setHandlePopUp(false)}>Закрой Бистра</button>
+                <h1>{currentDay}</h1>
+                <h4>{day.dayOfWeek}</h4>
+                {day?.data ? (
+                    day.data.map(person => (
+                        <div className={styles.itemText} key={nanoid()}  >
+                            <p className={styles.itemName}>
+                                <span className={styles.itemColor} style={{ backgroundColor: person.color }}>{person.namePerson.slice(0, 2)}</span>
+                                <span>{person.namePerson}</span>
+                            </p>
+                            <p сlassName={styles.time}>{person.startTime} - {person.endTime}</p>
+                            <p сlassName={styles.itemTimeDiffrance}>{Number(person.endTime.slice(0, 2)) - Number(person.startTime.slice(0, 2))} ч</p>
+                            <p>{(Number(person.endTime.slice(0, 2)) - Number(person.startTime.slice(0, 2))) * person.currentRate} руб</p>
 
-            <div className="popup" >
+                            <button className={styles.button}>
+                                <Fab color="info" variant="circular" size="small" aria-label="edit">
+                                    <EditIcon />
+                                </Fab>
+                            </button>
+                        </div>
+                    ))
+                )
+                    :
+                    <button>Добавить</button>}
 
-                <button className="closeBtn" onClick={() => setShowPopup(false)}  >X</button>
-
-                <label htmlFor="person-info">Работник</label>
-                <select name="pets" id="person-info" value={personForAdd} onChange={(e) => setPersonForAdd(e.target.value)} >
-                    {persons.map((person) => <option key={nanoid()}  >{person}</option>)}
-                </select>
-
-                <label htmlFor="time-for-start">Время начала</label>
-                <select name="pets" id="person-info" value={startTimeForAdd} onChange={(e) => setStartTimeForAdd(e.target.value)}>
-                    {time.map((time) => <option key={nanoid()} value={time} >{time}</option>)}
-                </select>
-
-                <label htmlFor="time-for-start">Время конца</label>
-                <select name="pets" id="person-info" value={endTimeForAdd} onChange={(e) => setEndTimeForAdd(e.target.value)}>
-                    {time.map((time) => <option key={nanoid()} value={time} >{time}</option>)}
-                </select>
-
-                <button>Добавить</button>
             </div>
         </div>
     )

@@ -1,15 +1,31 @@
 .itemList {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    padding: 10px 7px;
+    padding-block: 10px;
     background-color: #363636;
     border-radius: 7px;
+
+    &::after {
+        position: absolute;
+        content: '';
+        top: 0;
+        bottom: 0;
+        left: 10%;
+        width: 2px;
+        background-color: #020000f8;
+        transform: translateX(-50%);
+    }
 
     .itemDay {
         font-size: 14px;
         width: 10%;
-        border-right: 1px solid #020000f8;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
 
         .dayOfWeek {
             font-size: 12px;
@@ -20,7 +36,6 @@
     .item {
         display: flex;
         align-items: center;
-        gap: 10px;
     }
 
     .itemColor {
@@ -37,7 +52,9 @@
         display: flex;
         flex-direction: column;
         gap: 7px;
-        border-bottom: 1px solid #020000f8;
+        border-bottom: 2px solid #020000f8;
+        padding-left: 10px;
+        padding-bottom: 10px;
 
         .itemText {
             display: flex;

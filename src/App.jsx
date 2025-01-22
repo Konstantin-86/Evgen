@@ -15,6 +15,7 @@ import './App.css';
 import axios from 'axios';
 import PersonSemples from './components/PersonSemples';
 import MyCalendar from './components/MyCalendar';
+import Footer from './components/Footer';
 
 
 /* const DATA = [
@@ -196,6 +197,7 @@ function App() {
     <div className="container">
       <>
         <MyCalendar />
+        <Footer />
 
 
       </>
