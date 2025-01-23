@@ -14,10 +14,7 @@ const ItemList = ({ weekData }) => {
     const popUp = (day) => {
         setCurrentDay(day);
         setHandlePopUp(true);
-
     }
-
-
     return (
 
         <ul className={style.itemList}>

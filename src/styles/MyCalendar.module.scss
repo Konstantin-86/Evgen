@@ -1,0 +1,14 @@
+.showCalendar{
+    width: 100%;
+    height: 100%;
+    visibility: visible;
+    opacity: 1;
+    transition: all 0.2s ease-in-out;
+}
+.hideCalendar{
+    width: 100%;
+    height: 0;
+    visibility: hidden;
+    opacity: 0;
+    transition: all 0.2s ease-in-out;
+}

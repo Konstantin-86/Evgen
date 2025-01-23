@@ -5,6 +5,7 @@ import 'react-calendar/dist/Calendar.css';
 import moment from 'moment/moment';
 import 'moment/locale/ru';
 import ItemList from './ItemList';
+import styles from '../styles/MyCalendar.module.scss';
 
 /* const PVZ1 = [
   {
@@ -71,6 +72,7 @@ const MyCalendar = ({ }) => {
 
   const [date, setDate] = useState(new Date());
   const [weekData, setWeekData] = useState([]);
+  const [showCalendar, setShowCalendar] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -109,13 +111,14 @@ const MyCalendar = ({ }) => {
   return (
 
     <div>
-      <Calendar
+      <h2 onClick={() => setShowCalendar(!showCalendar)}>Календарь</h2>
+      <Calendar 
+      className={showCalendar ? styles.showCalendar : styles.hideCalendar}
         onChange={setDate}
         value={date}
       />
       <div>
         <ItemList weekData={weekData} />
-
       </div>
     </div>
   );

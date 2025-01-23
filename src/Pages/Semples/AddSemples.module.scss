@@ -1,0 +1,22 @@
+.addSemplesOpen{
+    position: fixed;
+    width: 100%;
+    top: 50%;
+    left: 0;
+    transform: translate(0, -50%);
+    z-index: 100;
+    background-color: teal;
+    visibility: visible;
+    opacity: 1;
+    transition: all 0.2s ease-in-out;
+}
+.addSemplesClose{position: fixed;
+    width: 100%;
+    top: 50%;
+    left: 0;
+    transform: translate(0, -50%);
+    z-index: 0;
+    visibility: hidden;
+    opacity: 0;
+    transition: all 0.2s ease-in-out;
+}
