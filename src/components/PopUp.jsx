@@ -15,7 +15,7 @@ const time = [
 
 
 const PopUp = ({ day, handlePopUp, setHandlePopUp }) => {
-    console.log(day);
+ 
 
     const currentDay = moment(day.date).format('DD.MM.YYYY');
 

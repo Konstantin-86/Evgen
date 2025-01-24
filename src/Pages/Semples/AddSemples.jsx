@@ -11,6 +11,8 @@ import { MuiColorInput } from 'mui-color-input'
 import style from './AddSemples.module.scss'
 import { nanoid } from 'nanoid';
 
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { addPersonSemple } from '../../components/API/myFetch';
 
 const time = [
   "09:00", "10:00", "11:00", "12:00",
@@ -19,10 +21,13 @@ const time = [
   "21:00"
 ]
 
-
-const AddSemples = ({data, showAddSemples, setShowAddSemples}) => {
-    const [namePerson, setNamePerson] = useState('');
-    const [valueColor, setValueColor] = useState('#ffffff')
+const AddSemples = ({  showAddSemples, setShowAddSemples}) => {
+  const [newPersonName, setNewPersonName] = useState("")
+  const [newPersonColor, setNewPersonColor] = useState('#ffffff')
+  const [newPersonStartTime, setNewPersonStartTime] = useState('')
+  const [newPersonEndTime, setNewPersonEndTime] = useState('')
+  const queryClient = useQueryClient()
+  
     const handleChangeColor = (newValue) => {
       setValueColor(newValue)
     }
@@ -30,40 +35,46 @@ const AddSemples = ({data, showAddSemples, setShowAddSemples}) => {
   const handleChange = (event) => {
     setNamePerson(event.target.value);
   };
+
+
+  const createMutation = useMutation({
+    mutationFn: addPersonSemple,
+    onSuccess: (_, newUser) => {
+      queryClient.setQueryData(['semples'], (oldData) => {
+        return [...oldData, newUser];
+      });
+    },
+  })
+
+  const handleAddUser = () => {
+      const newUser = {
+        "id": 3,
+        "namePerson": "Виктор adsf",
+        "startTime": "09:00",
+        "endTime": "15:00",
+        "currentRate": 100,
+        "color": "#33c926c9"
+    };
+    
+    createMutation.mutate(newUser);
+    };
+  
+  
     return (
         <div className={showAddSemples ? style.addSemplesOpen : style.addSemplesClose}>
-            <HighlightOffIcon onClick={() => setShowAddSemples(!showAddSemples)}/>
-             <Box sx={{ minWidth: 120 }}>
-      <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Имя</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={namePerson}
-          label="Age"
-          onChange={handleChange}
-        >
-          {data?.length && data.map((elem)=> (
-            <MenuItem key={nanoid()} value={elem.namePerson}>{elem.namePerson}</MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <MuiColorInput fullWidth format="hex" value={valueColor} onChange={handleChangeColor} />
-      <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Время начала</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={namePerson}
-          label="Age"
-          onChange={handleChange}
-        >
-          {time.map((elem)=> (
-            <MenuItem key={nanoid()} value={elem}>{elem}</MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-    </Box>
+          <div className={style.wrap}>
+          <label htmlFor="username">Имя</label>
+          <input type="text" id='username'  placeholder='' value={newPersonName} onChange={(e)=> setNewPersonName(e.target.value)}/>
+
+          <label htmlFor="userColor">Цвет</label>
+          <input type="color" id='userColor'  placeholder='' value={newPersonColor} onChange={(e)=> setNewPersonColor(e.target.value)}/>
+
+          <select name="startTime" value={newPersonStartTime} onChange={(e)=> setNewPersonStartTime(e.target.value)}>
+            {time.map((elem)=> (<option key={nanoid()} value={elem}>{elem}</option>) )}
+</select>
+          <button onClick={handleAddUser}>ADD</button>
+          </div>
+            
         </div>
     )
 }
