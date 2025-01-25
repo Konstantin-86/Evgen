@@ -1,5 +1,5 @@
 
-import style from '../styles/Settings.module.scss'
+import style from './Settings.module.scss'
 
 const Settings = () => {
     return (

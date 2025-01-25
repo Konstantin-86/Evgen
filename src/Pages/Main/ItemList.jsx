@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import moment from 'moment';
 import { nanoid } from 'nanoid';
-import style from '../styles/ItemList.module.scss'
+import style from './ItemList.module.scss'
 import PopUp from './PopUp';
 
 

@@ -1,19 +1,10 @@
 
 import { useState } from 'react';
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import { MuiColorInput } from 'mui-color-input'
+import { nanoid } from 'nanoid';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { addNewSemple } from '../../components/API/personSemple/addNewSemple'
 
 import style from './AddSemples.module.scss'
-import { nanoid } from 'nanoid';
-
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { addPersonSemple } from '../../components/API/myFetch';
-
 const time = [
   "09:00", "10:00", "11:00", "12:00",
   "13:00", "14:00", "15:00", "16:00",
@@ -21,16 +12,18 @@ const time = [
   "21:00"
 ]
 
-const AddSemples = ({  showAddSemples, setShowAddSemples}) => {
+const AddSemples = ({ numberID, showAddSemples, setShowAddSemples }) => {
   const [newPersonName, setNewPersonName] = useState("")
   const [newPersonColor, setNewPersonColor] = useState('#ffffff')
-  const [newPersonStartTime, setNewPersonStartTime] = useState('')
-  const [newPersonEndTime, setNewPersonEndTime] = useState('')
+  const [newPersonStartTime, setNewPersonStartTime] = useState("09:00")
+  const [newPersonEndTime, setNewPersonEndTime] = useState("21:00")
+  const [newPersonRate, setNewPersonRate] = useState(0)
+
   const queryClient = useQueryClient()
-  
-    const handleChangeColor = (newValue) => {
-      setValueColor(newValue)
-    }
+
+  const handleChangeColor = (newValue) => {
+    setValueColor(newValue)
+  }
 
   const handleChange = (event) => {
     setNamePerson(event.target.value);
@@ -38,44 +31,81 @@ const AddSemples = ({  showAddSemples, setShowAddSemples}) => {
 
 
   const createMutation = useMutation({
-    mutationFn: addPersonSemple,
+    mutationFn: addNewSemple,
     onSuccess: (_, newUser) => {
       queryClient.setQueryData(['semples'], (oldData) => {
         return [...oldData, newUser];
       });
     },
   })
+  const clearForm = () => {
+    setNewPersonName("")
+    setNewPersonColor('#ffffff')
+    setNewPersonStartTime("09:00")
+    setNewPersonEndTime("21:00")
+    setNewPersonRate(0)
+  }
 
   const handleAddUser = () => {
-      const newUser = {
-        "id": 3,
-        "namePerson": "Виктор adsf",
-        "startTime": "09:00",
-        "endTime": "15:00",
-        "currentRate": 100,
-        "color": "#33c926c9"
+    if (newPersonName === "") {
+      alert("Заполните имя");
+      return
+    }
+    if (newPersonRate === 0) {
+      alert("Заполните ставку");
+      return
+    }
+    const newUser = {
+      "id": numberID + 1,
+      "namePerson": newPersonName,
+      "startTime": newPersonStartTime,
+      "endTime": newPersonEndTime,
+      "currentRate": newPersonRate,
+      "color": newPersonColor
     };
-    
     createMutation.mutate(newUser);
-    };
-  
-  
-    return (
-        <div className={showAddSemples ? style.addSemplesOpen : style.addSemplesClose}>
-          <div className={style.wrap}>
+    clearForm();
+    setShowAddSemples(false);
+  };
+
+  const handleFocus = (event) => {
+    event.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
+
+
+  return (
+    <div className={showAddSemples ? style.addSemplesOpen : style.addSemplesClose}>
+      <div className={style.wrap}>
+        <button className={style.close} onClick={() => setShowAddSemples(false)}>Закрыть</button>
+        <h2>Новый шаблон</h2>
+
+        <div className={style.name}>
           <label htmlFor="username">Имя</label>
-          <input type="text" id='username'  placeholder='' value={newPersonName} onChange={(e)=> setNewPersonName(e.target.value)}/>
-
-          <label htmlFor="userColor">Цвет</label>
-          <input type="color" id='userColor'  placeholder='' value={newPersonColor} onChange={(e)=> setNewPersonColor(e.target.value)}/>
-
-          <select name="startTime" value={newPersonStartTime} onChange={(e)=> setNewPersonStartTime(e.target.value)}>
-            {time.map((elem)=> (<option key={nanoid()} value={elem}>{elem}</option>) )}
-</select>
-          <button onClick={handleAddUser}>ADD</button>
-          </div>
-            
+          <input type="text" id='username' onFocus={handleFocus} placeholder='' value={newPersonName} onChange={(e) => setNewPersonName(e.target.value)} />
         </div>
-    )
+
+        <div className={style.color}>
+          <label htmlFor="userColor">Цвет</label>
+          <input type="color" id='userColor' placeholder='' value={newPersonColor} onChange={(e) => setNewPersonColor(e.target.value)} />
+        </div>
+
+        <select name="startTime" value={newPersonStartTime} onChange={(e) => setNewPersonStartTime(e.target.value)}>
+          {time.map((elem) => (<option key={nanoid()} value={elem}>{elem}</option>))}
+        </select>
+
+        <select name="endTime" value={newPersonEndTime} onChange={(e) => setNewPersonEndTime(e.target.value)}>
+          {time.map((elem) => (<option key={nanoid()} value={elem}>{elem}</option>))}
+        </select>
+
+        <div className={style.rate}>
+          <label htmlFor="userRate">Ставка</label>
+          <input onFocus={handleFocus} value={newPersonRate} onChange={(e) => setNewPersonRate(e.target.value)} type="number" id='userRate' />
+        </div>
+
+        <button onClick={handleAddUser}>Добавить</button>
+      </div>
+
+    </div>
+  )
 }
 export default AddSemples

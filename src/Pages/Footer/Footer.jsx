@@ -3,7 +3,7 @@ import EqualizerIcon from '@mui/icons-material/Equalizer';
 import BookmarksIcon from '@mui/icons-material/Bookmarks';
 import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications';
 
-import style from '../styles/Footer.module.scss'
+import style from './Footer.module.scss'
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
