@@ -5,6 +5,8 @@ import moment from 'moment';
 import { nanoid } from 'nanoid'
 import Fab from '@mui/material/Fab';
 import EditIcon from '@mui/icons-material/Edit';
+import { getPVZ1 } from '../../components/API/PVZ/getPVZ1'
+import { getPVZ2 } from '../../components/API/PVZ/getPVZ2'
 import styles from './PopUp.module.scss'
 
 
@@ -18,16 +20,39 @@ const time = [
 
 const PopUp = ({ day, handlePopUp, setHandlePopUp }) => {
 
-
-
     const [showSemples, setShowSemples] = useState(false);
-    const queryClient = useQueryClient()
+    const [selectedItems, setSelectedItems] = useState([]);
+
+    const handleClick = (item) => {
+        const isSelected = selectedItems.some((selectedItem) => selectedItem.id === item.id);
+        if (isSelected) {
+            setSelectedItems(selectedItems.filter((selectedItem) => selectedItem.id !== item.id));
+        } else {
+            const newItem = {
+                ...item,
+                otherData: item.otherData || { fines: 0, bonus: 0 },
+            };
+            setSelectedItems([...selectedItems, newItem]);
+        }
+    };
+
     const { data, isLoading } = useQuery({
         queryKey: ['semples'],
         queryFn: getAllSemples,
     });
+    const { data: PVZ1, isLoading: isLoadingPVZ1 } = useQuery({
+        queryKey: ['PVZ1'],
+        queryFn: getPVZ1,
+    });
+    const { data: PVZ2, isLoading: isLoadingPVZ2 } = useQuery({
+        queryKey: ['PVZ2'],
+        queryFn: getPVZ2,
+    });
     const currentDay = moment(day.date).format('DD.MM.YYYY');
 
+    const addNewDay = () => {
+
+    }
 
 
 
@@ -58,27 +83,36 @@ const PopUp = ({ day, handlePopUp, setHandlePopUp }) => {
                     ))
                 )
                     :
-                    <div onClick={() => setShowSemples(!showSemples)} >
+                    <div onClick={() => setShowSemples(true)} >
 
-                        Добавить
-                        {showSemples && <ul className={styles.semleList}>
-                            {isLoading ?
-                                <p>Loading...</p>
-                                :
-                                <li>
-                                    {data.map((item) => (
-                                        <li>
-                                            <p className={styles.itemName}>{item.namePerson}</p>
-                                            <p className={styles.itemColor} style={{ backgroundColor: item.color }}></p>
+                        Шаблоны
+                        {showSemples &&
+                            <div >
+                                {isLoading ?
+                                    <p>Loading...</p>
+                                    :
+                                    <div className={styles.semleList}>
+                                        {data.map((item) => (
+                                            <div key={nanoid()}
+                                                className={styles.semple}
+                                                onClick={() => handleClick(item)}
+                                                style={{
+                                                    backgroundColor: selectedItems.some((selectedItem) => selectedItem.id === item.id)
+                                                        ? '#3c6112'
+                                                        : '#474747',
+                                                }}>
+                                                <p className={styles.sempleName}>{item.namePerson}</p>
+                                                <p className={styles.sempleColor} style={{ backgroundColor: item.color }}></p>
 
-                                            <p>{item.startTime} - {item.endTime}</p>
-                                            <p>{item.currentRate} руб</p>
-                                        </li>
+                                                <p>{item.startTime} - {item.endTime}</p>
+                                                <p>{item.currentRate} руб</p>
+                                            </div>
 
-                                    ))}
-                                </li>
-                            }
-                        </ul>}
+                                        ))}
+                                        <button className={styles.button} onClick={addNewDay}>Сохранить</button>
+                                    </div>
+                                }
+                            </div>}
 
                     </div>
 

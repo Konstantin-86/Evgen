@@ -89,3 +89,42 @@
     border: none;
     background-color: transparent;
 }
+
+.semleList {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.semple {
+    background-color: #474747;
+    padding: 7px 10px;
+    border-radius: 7px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    max-width: 170px;
+    gap: 10px;
+
+    .sempleColor {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+.sempleCheked {
+    background-color: #3c6112;
+    padding: 7px 10px;
+    border-radius: 7px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    max-width: 170px;
+    gap: 10px;
+}
