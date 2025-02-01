@@ -9,6 +9,8 @@ import { getPVZ1 } from '../../components/API/PVZ/getPVZ1'
 import { getPVZ2 } from '../../components/API/PVZ/getPVZ2'
 import styles from './PopUp.module.scss'
 
+import closeBtn from '/close.png'
+
 
 const time = [
     "09:00", "10:00", "11:00", "12:00",
@@ -18,7 +20,7 @@ const time = [
 ]
 
 
-const PopUp = ({ day, handlePopUp, setHandlePopUp }) => {
+const PopUp = ({ day, handlePopUp, setHandlePopUp, callBackNewEvent }) => {
 
     const [showSemples, setShowSemples] = useState(false);
     const [selectedItems, setSelectedItems] = useState([]);
@@ -50,9 +52,39 @@ const PopUp = ({ day, handlePopUp, setHandlePopUp }) => {
     });
     const currentDay = moment(day.date).format('DD.MM.YYYY');
 
-    const addNewDay = () => {
+    const addNewDay = (currentDay) => {
+        const newEvent = {
+            [currentDay]: [...selectedItems]
+
+        };
+        callBackNewEvent(newEvent);
 
     }
+
+    /* "31.01.2025": {
+         "id": 2,
+         "namePerson": "Алексей Алексеев",
+         "startTime": "9:00",
+         "endTime": "18:00",
+         "currentRate": 1405,
+         "color": "#c933ff",
+         "otherData": {
+             "fines": 15,
+             "bonus": 21
+         },
+         {
+         "id": 3,
+         "namePerson": "Алексей Алексеев",
+         "startTime": "9:00",
+         "endTime": "18:00",
+         "currentRate": 1405,
+         "color": "#c933ff",
+         "otherData": {
+             "fines": 15,
+             "bonus": 21
+         }
+         
+     } */
 
 
 
@@ -60,9 +92,13 @@ const PopUp = ({ day, handlePopUp, setHandlePopUp }) => {
     return (
         <div className={handlePopUp ? styles.popUpOpen : styles.popUpClose}>
             <div className={styles.popUpWrapper}>
-                <button onClick={() => setHandlePopUp(false)}>Закрой Бистра</button>
-                <h1>{currentDay}</h1>
-                <h4>{day.dayOfWeek}</h4>
+                <button className={styles.closeButton} onClick={() => setHandlePopUp(false)}>
+                    <img src={closeBtn} alt="" />
+                </button>
+                <h3 className={styles.currentDay}>{currentDay}
+                    <p className={styles.dayOfWeek}>{day.dayOfWeek}</p>
+                </h3>
+
                 {day.data && day.data.length > 0 ? (
                     day.data.map(person => (
                         <div className={styles.itemText} key={nanoid()}  >
@@ -85,13 +121,13 @@ const PopUp = ({ day, handlePopUp, setHandlePopUp }) => {
                     :
                     <div onClick={() => setShowSemples(true)} >
 
-                        Шаблоны
+                        На это день событий нету. Добавить?
                         {showSemples &&
                             <div >
                                 {isLoading ?
                                     <p>Loading...</p>
                                     :
-                                    <div className={styles.semleList}>
+                                    <div className={styles.sempleList}>
                                         {data.map((item) => (
                                             <div key={nanoid()}
                                                 className={styles.semple}
@@ -109,7 +145,7 @@ const PopUp = ({ day, handlePopUp, setHandlePopUp }) => {
                                             </div>
 
                                         ))}
-                                        <button className={styles.button} onClick={addNewDay}>Сохранить</button>
+                                        <button className={styles.button} onClick={() => addNewDay(currentDay)}>Сохранить</button>
                                     </div>
                                 }
                             </div>}

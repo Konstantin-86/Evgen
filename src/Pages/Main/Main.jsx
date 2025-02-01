@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
-import { useQueryClient, useQuery } from '@tanstack/react-query';
+import { useQueryClient, useQuery, useMutation } from '@tanstack/react-query';
 import { getPVZ1 } from '../../components/API/PVZ/getPVZ1';
 import { getPVZ2 } from '../../components/API/PVZ/getPVZ2';
+import { addNewEventPVZ1 } from "../../components/API/PVZ/addNewEventPVZ1"
+import { addNewEventPVZ2 } from "../../components/API/PVZ/addNewEventPVZ2"
+
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Calendar from 'react-calendar';
@@ -13,13 +16,13 @@ import styles from './Main.module.scss';
 
 
 const Main = () => {
-  const queryClient = useQueryClient()
-  const [PVZ1Data, setPVZ1Data] = useState([])
+  const queryClient = useQueryClient();
   const [date, setDate] = useState(new Date());
   const [weekData, setWeekData] = useState([]);
   const [showCalendar, setShowCalendar] = useState(false);
 
   const [alignment, setAlignment] = useState('PVZ1');
+  const [checkPVZ, setCheckPVZ] = useState('PVZ1');
 
   const handleChange = (event) => {
     setAlignment(event.target.value);
@@ -65,6 +68,25 @@ const Main = () => {
       setWeekData(weekDays);
     }
   }, [date, PVZ1, PVZ2, alignment]);
+
+
+  const createMutation = useMutation({
+    mutationFn: (newUser) => {
+      const checkPVZ = alignment === 'PVZ1' ? addNewEventPVZ1 : addNewEventPVZ2
+      return checkPVZ(newUser)
+    },
+    onSuccess: (_, newUser) => {
+      queryClient.setQueryData([alignment], (oldData) => {
+        return [...oldData, newUser];
+      });
+    },
+  })
+
+  const callBackNewEvent = (data) => {
+    console.log(data);
+
+    createMutation.mutate(data);
+  }
   return (
 
     <div>
@@ -88,7 +110,7 @@ const Main = () => {
         value={date}
       />
       <div>
-        <ItemList weekData={weekData} />
+        <ItemList weekData={weekData} callBackNewEvent={callBackNewEvent} />
       </div>
     </div>
   );

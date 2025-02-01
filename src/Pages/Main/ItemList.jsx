@@ -5,7 +5,7 @@ import style from './ItemList.module.scss'
 import PopUp from './PopUp';
 
 
-const ItemList = ({ weekData }) => {
+const ItemList = ({ weekData, callBackNewEvent }) => {
 
     const [currentDay, setCurrentDay] = useState([]);
     const [handlePopUp, setHandlePopUp] = useState(false);
@@ -29,10 +29,10 @@ const ItemList = ({ weekData }) => {
                         {day.data.length > 0 ? (
                             day.data.map(person => (
                                 <div className={style.itemText} key={person.id}  >
-                                    <p>{person.startTime}</p>
+                                    <p className={style.startTime}>{person.startTime}</p>
                                     <p className={style.itemColor} style={{ backgroundColor: person.color }} >{person.namePerson.slice(0, 2)}</p>
-                                    <p>{person.namePerson}</p>
-                                    <p>{person.endTime}ч </p>
+                                    <p className={style.namePerson}>{person.namePerson}</p>
+                                    <p>{Number(person.endTime.slice(0, 2)) - Number(person.startTime.slice(0, 2))}ч </p>
 
                                 </div>
                             ))
@@ -43,7 +43,7 @@ const ItemList = ({ weekData }) => {
 
                 </li>
             ))}
-            <PopUp day={currentDay} handlePopUp={handlePopUp} setHandlePopUp={setHandlePopUp} />
+            <PopUp day={currentDay} handlePopUp={handlePopUp} setHandlePopUp={setHandlePopUp} callBackNewEvent={callBackNewEvent} />
         </ul>
 
 
