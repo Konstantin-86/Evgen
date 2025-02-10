@@ -2,14 +2,40 @@ import { useState, useEffect } from 'react'
 
 import { PieChart, Pie, Cell, Legend } from 'recharts';
 
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
+import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
+
 import { Alert } from '@mui/material'
 import style from './Settings.module.scss'
 import axios from 'axios';
 
+const firebaseConfig = {
+    apiKey: "AIzaSyCXelkOen-9Gcc11EPP1_vJS-flVe2pbiE",
+    authDomain: "testevgen1.firebaseapp.com",
+    projectId: "testevgen1",
+    storageBucket: "testevgen1.firebasestorage.app",
+    messagingSenderId: "636021780567",
+    appId: "1:636021780567:web:5f8f1c8b32cc8aaaf33312"
+};
+
 const Settings = () => {
     const [showAlert, setShowAlert] = useState(true);
 
-    // Функция для закрытия Alert
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    console.log(db);
+
+
+
+
+
+
+
+
+
     const handleClose = () => {
         setShowAlert(false);
     };
@@ -19,9 +45,9 @@ const Settings = () => {
             setTimeout(() => {
                 handleClose();
             }, 2000);
-
         }
     }, [showAlert]);
+
     const value = 50;
     const data = [
         { name: 'Completed', value: value },
@@ -29,66 +55,15 @@ const Settings = () => {
     ];
 
     const COLORS = ['#00C49F', '#FF8042'];
-    const generateDateRange = (startDate, endDate) => {
-        const dates = [];
-        let currentDate = new Date(startDate);
 
-        while (currentDate <= new Date(endDate)) {
-            dates.push(new Date(currentDate).toLocaleDateString('ru-RU'));
-            currentDate.setDate(currentDate.getDate() + 1); // Переход к следующему дню
-        }
 
-        return dates;
-    };
 
-    const generateRandomData = () => {
-        const names = ["Иван Иванов", "Петр Петров", "Жирный боров", "Rjcync", "Алексей Алексеев"];
-        const colors = ["#33c926c9", "#ff5733", "#3357ff", "#c933ff", "#33fff5"];
-        const startDates = generateDateRange("2025-01-28", "2025-02-10");
-        const data = [];
 
-        startDates.forEach((date) => {
-            const dayData = [];
-            const numberOfEntries = Math.floor(Math.random() * 4) + 1; // От 1 до 4 записей на день
 
-            for (let i = 0; i < numberOfEntries; i++) {
-                const randomName = names[Math.floor(Math.random() * names.length)];
-                const randomColor = colors[Math.floor(Math.random() * colors.length)];
-                const randomStartTime = `${Math.floor(Math.random() * 3) + 9}:00`; // С 9:00 до 11:00
-                const randomEndTime = `${Math.floor(Math.random() * 3) + 17}:00`; // С 17:00 до 19:00
-                const randomRate = Math.floor(Math.random() * 1000) + 500; // От 500 до 1500
-
-                dayData.push({
-                    id: i + 1,
-                    namePerson: randomName,
-                    startTime: randomStartTime,
-                    endTime: randomEndTime,
-                    currentRate: randomRate,
-                    color: randomColor,
-                    otherData: {
-                        fines: Math.floor(Math.random() * 100), // Случайные штрафы
-                        bonus: Math.floor(Math.random() * 200), // Случайные бонусы
-                    },
-                });
-            }
-
-            data.push({ [date]: dayData });
-        });
-
-        return data;
-    };
-
-    // Пример использования
-    const randomData = generateRandomData();
-    console.log(JSON.stringify(randomData, null, 2));
-    const sendToMokky = () => {
-        axios.post('https://694548aefb424dc0.mokky.dev/PVZ1', randomData)
-    }
 
     return (
         <div className={style.settings} >
             <h1>Settings.module.scss</h1>
-            <button onClick={sendToMokky}>отправить</button>
             {showAlert && <Alert severity="success" >
                 Данные успешно добавлены
             </Alert>}

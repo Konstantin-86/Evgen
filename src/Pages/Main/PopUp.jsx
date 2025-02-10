@@ -5,8 +5,12 @@ import moment from 'moment';
 import { nanoid } from 'nanoid'
 import Fab from '@mui/material/Fab';
 import EditIcon from '@mui/icons-material/Edit';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+
 import { getPVZ1 } from '../../components/API/PVZ/getPVZ1'
 import { getPVZ2 } from '../../components/API/PVZ/getPVZ2'
+
 import styles from './PopUp.module.scss'
 
 import closeBtn from '/close.png'
@@ -55,38 +59,17 @@ const PopUp = ({ day, handlePopUp, setHandlePopUp, callBackNewEvent }) => {
     const addNewDay = (currentDay) => {
         const newEvent = {
             [currentDay]: [...selectedItems]
-
         };
         callBackNewEvent(newEvent);
-
+        setSelectedItems([]);
+        setHandlePopUp(false)
+        setShowSemples(false);
     }
 
-    /* "31.01.2025": {
-         "id": 2,
-         "namePerson": "Алексей Алексеев",
-         "startTime": "9:00",
-         "endTime": "18:00",
-         "currentRate": 1405,
-         "color": "#c933ff",
-         "otherData": {
-             "fines": 15,
-             "bonus": 21
-         },
-         {
-         "id": 3,
-         "namePerson": "Алексей Алексеев",
-         "startTime": "9:00",
-         "endTime": "18:00",
-         "currentRate": 1405,
-         "color": "#c933ff",
-         "otherData": {
-             "fines": 15,
-             "bonus": 21
-         }
-         
-     } */
-
-
+    const deleteEvent = (person) => {
+        console.log(currentDay);
+        console.log(person);
+    }
 
 
     return (
@@ -111,17 +94,23 @@ const PopUp = ({ day, handlePopUp, setHandlePopUp, callBackNewEvent }) => {
                             <p>{(Number(person.endTime.slice(0, 2)) - Number(person.startTime.slice(0, 2))) * person.currentRate} руб</p>
 
                             <div className={styles.button}>
-                                <Fab color="info" variant="circular" size="small" aria-label="edit">
-                                    <EditIcon />
-                                </Fab>
+
+                                <IconButton
+                                    color='default'
+                                    size="medium"
+                                    onClick={() => deleteEvent(person)}
+                                >
+                                    <DeleteIcon />
+                                </IconButton>
+
                             </div>
                         </div>
                     ))
                 )
                     :
-                    <div onClick={() => setShowSemples(true)} >
+                    <div  >
+                        <p className='noSemple' onClick={() => setShowSemples(true)}>На это день событий нету. Добавить?</p>
 
-                        На это день событий нету. Добавить?
                         {showSemples &&
                             <div >
                                 {isLoading ?
@@ -145,7 +134,7 @@ const PopUp = ({ day, handlePopUp, setHandlePopUp, callBackNewEvent }) => {
                                             </div>
 
                                         ))}
-                                        <button className={styles.button} onClick={() => addNewDay(currentDay)}>Сохранить</button>
+                                        <button className={styles.buttonAdd} onClick={() => addNewDay(currentDay)}>Сохранить</button>
                                     </div>
                                 }
                             </div>}

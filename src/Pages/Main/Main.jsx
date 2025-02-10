@@ -7,93 +7,96 @@ import { addNewEventPVZ2 } from "../../components/API/PVZ/addNewEventPVZ2"
 
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import Calendar from 'react-calendar';
-import moment from 'moment/moment';
+import { Alert } from '@mui/material'
 import 'moment/locale/ru';
 import ItemList from './ItemList';
 import 'react-calendar/dist/Calendar.css';
 import styles from './Main.module.scss';
 
+//////////////
+import getCurrentWeek from "./helpers/getCurrentWeek.js"
+
 
 const Main = () => {
   const queryClient = useQueryClient();
   const [date, setDate] = useState(new Date());
-  const [weekData, setWeekData] = useState([]);
-  const [showCalendar, setShowCalendar] = useState(false);
 
-  const [alignment, setAlignment] = useState('PVZ1');
+  const [currentWeek, setCurrentWeek] = useState([]);
+
+  const [showAlert, setShowAlert] = useState(false);
+
   const [checkPVZ, setCheckPVZ] = useState('PVZ1');
 
   const handleChange = (event) => {
-    setAlignment(event.target.value);
+    setCheckPVZ(event.target.value);
   };
-  const getToggleButtonStyles = (value, alignment) => ({
-    backgroundColor: alignment === value ? '#3a393a' : '#1f1e1f',
-    color: alignment === value ? '#f1f0f0' : '#7e7b7b',
+
+  const getToggleButtonStyles = (value, checkPVZ) => ({
+    backgroundColor: checkPVZ === value ? '#3a393a' : '#1f1e1f',
+    color: checkPVZ === value ? '#f1f0f0' : '#7e7b7b',
     '&:hover': {
-      backgroundColor: alignment === value ? '#388e3c' : '#bdbdbd',
+      backgroundColor: checkPVZ === value ? '#388e3c' : '#bdbdbd',
     },
   });
+  useEffect(() => {
+    if (showAlert) {
+      setTimeout(() => {
+        setShowAlert(false);
+      }, 2000);
+
+    }
+  }, [showAlert]);
 
   const { data: PVZ1, isLoading: isLoadingPVZ1 } = useQuery({
     queryKey: ['PVZ1'],
     queryFn: getPVZ1,
   });
+
   const { data: PVZ2, isLoading: isLoadingPVZ2 } = useQuery({
     queryKey: ['PVZ2'],
     queryFn: getPVZ2,
   });
 
+
   useEffect(() => {
-    if (!isLoadingPVZ1 && PVZ1 && Array.isArray(PVZ1)) {
-      const currentPVZ = alignment === 'PVZ1' ? PVZ1 : PVZ2;
-      const startOfWeek = moment(date).startOf('week');
-      const endOfWeek = moment(date).endOf('week');
-      const weekDays = [];
-      let currentDay = startOfWeek;
-
-      while (currentDay <= endOfWeek) {
-        const formattedDate = currentDay.format('DD.MM.YYYY');
-        const dayData = currentPVZ.find(item => item[formattedDate]);
-
-        weekDays.push({
-          date: currentDay.toDate(),
-          dayOfWeek: currentDay.format('dd'),
-          data: dayData ? dayData[formattedDate] : []
-        });
-
-        currentDay = currentDay.clone().add(1, 'd');
-      }
-
-      setWeekData(weekDays);
+    if (PVZ1 && !isLoadingPVZ1 && PVZ2 && !isLoadingPVZ2) {
+      const checkPVZValue = checkPVZ === 'PVZ1' ? PVZ1 : PVZ2
+      const getWeek = getCurrentWeek(checkPVZValue)
+      console.log(getWeek);
+      setCurrentWeek(getWeek);
     }
-  }, [date, PVZ1, PVZ2, alignment]);
+  }, [checkPVZ, PVZ1, PVZ2, isLoadingPVZ1, isLoadingPVZ2]);
+
+
+
 
 
   const createMutation = useMutation({
     mutationFn: (newUser) => {
-      const checkPVZ = alignment === 'PVZ1' ? addNewEventPVZ1 : addNewEventPVZ2
+      const checkPVZ = checkPVZ === 'PVZ1' ? addNewEventPVZ1 : addNewEventPVZ2
       return checkPVZ(newUser)
     },
     onSuccess: (_, newUser) => {
-      queryClient.setQueryData([alignment], (oldData) => {
+      queryClient.setQueryData([checkPVZ], (oldData) => {
+        setShowAlert(true);
         return [...oldData, newUser];
       });
     },
   })
 
   const callBackNewEvent = (data) => {
-    console.log(data);
-
     createMutation.mutate(data);
   }
+
   return (
 
     <div>
-      <h2 onClick={() => setShowCalendar(!showCalendar)}>Календарь</h2>
+      {showAlert && <Alert severity="success" >
+        Данные успешно добавлены
+      </Alert>}
       <ToggleButtonGroup
         color='info'
-        value={alignment}
+        value={checkPVZ}
         onChange={(event) => handleChange(event)}
         sx={{
           backgroundColor: '#363636',
@@ -101,16 +104,12 @@ const Main = () => {
         }
         }
       >
-        <ToggleButton sx={getToggleButtonStyles('PVZ1', alignment)} value="PVZ1">ПВЗ №1</ToggleButton>
-        <ToggleButton sx={getToggleButtonStyles('PVZ2', alignment)} value="PVZ2">ПВЗ №2</ToggleButton>
+        <ToggleButton sx={getToggleButtonStyles('PVZ1', checkPVZ)} value="PVZ1">ПВЗ №1</ToggleButton>
+        <ToggleButton sx={getToggleButtonStyles('PVZ2', checkPVZ)} value="PVZ2">ПВЗ №2</ToggleButton>
       </ToggleButtonGroup>
-      <Calendar
-        className={showCalendar ? styles.showCalendar : styles.hideCalendar}
-        onChange={setDate}
-        value={date}
-      />
+
       <div>
-        <ItemList weekData={weekData} callBackNewEvent={callBackNewEvent} />
+        <ItemList currentWeek={currentWeek} callBackNewEvent={callBackNewEvent} />
       </div>
     </div>
   );
