@@ -1,15 +1,14 @@
 import { useState, useEffect } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getAllSemples } from '../../components/API/personSemple/getAllSemples'
-import moment from 'moment';
 import { nanoid } from 'nanoid'
-import Fab from '@mui/material/Fab';
-import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import { getPVZ1 } from '../../components/API/PVZ/getPVZ1'
 import { getPVZ2 } from '../../components/API/PVZ/getPVZ2'
+import { deleteEventPVZ1 } from '../../components/API/PVZ/deleteEventPVZ1';
+import { deleteEventPVZ2 } from '../../components/API/PVZ/deleteEventPVZ2';
 
 import styles from './PopUp.module.scss'
 
@@ -24,15 +23,18 @@ const time = [
 ]
 
 
-const PopUp = ({ day, handlePopUp, setHandlePopUp, callBackNewEvent }) => {
+const PopUp = ({ day, handlePopUp, setHandlePopUp, callBackNewEvent, checkPVZ }) => {
 
-    const [showSemples, setShowSemples] = useState(false);
+    const [showSemples, setShowSemples] = useState(true);
     const [selectedItems, setSelectedItems] = useState([]);
+   
+    const queryClient = useQueryClient();
+    
 
     const handleClick = (item) => {
-        const isSelected = selectedItems.some((selectedItem) => selectedItem.id === item.id);
+        const isSelected = selectedItems.some((selectedItem) => selectedItem.idPerson === item.idPerson);
         if (isSelected) {
-            setSelectedItems(selectedItems.filter((selectedItem) => selectedItem.id !== item.id));
+            setSelectedItems(selectedItems.filter((selectedItem) => selectedItem.idPerson !== item.idPerson));
         } else {
             const newItem = {
                 ...item,
@@ -54,21 +56,38 @@ const PopUp = ({ day, handlePopUp, setHandlePopUp, callBackNewEvent }) => {
         queryKey: ['PVZ2'],
         queryFn: getPVZ2,
     });
-    const currentDay = moment(day.date).format('DD.MM.YYYY');
 
-    const addNewDay = (currentDay) => {
-        const newEvent = {
-            [currentDay]: [...selectedItems]
-        };
-        callBackNewEvent(newEvent);
+    const addNewDay = () => {
+        let idCheck = checkPVZ === "PVZ1" ? PVZ1.length : PVZ2.length
+       const updatedArray = selectedItems.map(item => {
+        idCheck ++
+        delete item.idPerson
+            return {
+                date: day.date,
+                id: idCheck,
+                ...item,
+            }
+            
+        })
+        callBackNewEvent(updatedArray);
         setSelectedItems([]);
         setHandlePopUp(false)
-        setShowSemples(false);
     }
 
+    const deletePerson = useMutation({
+        mutationFn: checkPVZ === "PVZ1" ? deleteEventPVZ1 : deleteEventPVZ2, 
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: [checkPVZ] }); 
+          console.log('Item deleted successfully!');
+        },
+        onError: (error) => {
+          console.error('Error deleting item:', error);
+        },
+      });
+
     const deleteEvent = (person) => {
-        console.log(currentDay);
-        console.log(person);
+        deletePerson.mutate(person.id)
+        setHandlePopUp(false)
     }
 
 
@@ -78,10 +97,9 @@ const PopUp = ({ day, handlePopUp, setHandlePopUp, callBackNewEvent }) => {
                 <button className={styles.closeButton} onClick={() => setHandlePopUp(false)}>
                     <img src={closeBtn} alt="" />
                 </button>
-                <h3 className={styles.currentDay}>{currentDay}
+                <h3 className={styles.currentDay}>{day.date}
                     <p className={styles.dayOfWeek}>{day.dayOfWeek}</p>
                 </h3>
-
                 {day.data && day.data.length > 0 ? (
                     day.data.map(person => (
                         <div className={styles.itemText} key={nanoid()}  >
@@ -109,7 +127,6 @@ const PopUp = ({ day, handlePopUp, setHandlePopUp, callBackNewEvent }) => {
                 )
                     :
                     <div  >
-                        <p className='noSemple' onClick={() => setShowSemples(true)}>На это день событий нету. Добавить?</p>
 
                         {showSemples &&
                             <div >
@@ -122,7 +139,7 @@ const PopUp = ({ day, handlePopUp, setHandlePopUp, callBackNewEvent }) => {
                                                 className={styles.semple}
                                                 onClick={() => handleClick(item)}
                                                 style={{
-                                                    backgroundColor: selectedItems.some((selectedItem) => selectedItem.id === item.id)
+                                                    backgroundColor: selectedItems.some((selectedItem) => selectedItem.idPerson === item.idPerson)
                                                         ? '#3c6112'
                                                         : '#474747',
                                                 }}>
@@ -134,7 +151,7 @@ const PopUp = ({ day, handlePopUp, setHandlePopUp, callBackNewEvent }) => {
                                             </div>
 
                                         ))}
-                                        <button className={styles.buttonAdd} onClick={() => addNewDay(currentDay)}>Сохранить</button>
+                                        <button className={styles.buttonAdd} onClick={addNewDay}>Сохранить</button>
                                     </div>
                                 }
                             </div>}

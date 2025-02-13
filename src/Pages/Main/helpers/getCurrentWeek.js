@@ -11,17 +11,16 @@ export default function getCurrentWeek(serverData) {
         const date = new Date(startOfWeek);
         date.setDate(startOfWeek.getDate() + i);
         const formattedDate = date.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });
-        weekDates.push({ date: formattedDate });
+        weekDates.push({ date: formattedDate, data: [] }); 
     }
-    console.log("weekDates", weekDates);
-
 
     weekDates.forEach(weekDate => {
-        const foundData = serverData.find(data => data.date === weekDate.date);
-        if (foundData) {
-            Object.assign(weekDate, foundData);
+        const foundData = serverData.filter(data => data.date === weekDate.date); 
+        if (foundData.length > 0) {
+            weekDate.data = foundData; 
         }
     });
 
     return weekDates;
 }
+

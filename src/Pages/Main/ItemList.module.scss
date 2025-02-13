@@ -1,43 +1,16 @@
 .itemList {
+    font-variant-numeric: inherit;
     position: relative;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    padding-block: 10px;
     background-color: #363636;
     border-radius: 7px;
-
-    &::after {
-        position: absolute;
-        content: '';
-        top: 0;
-        bottom: 0;
-        left: 10%;
-        width: 2px;
-        background-color: #020000f8;
-        transform: translateX(-50%);
-    }
-
-    .itemDay {
-        font-size: 14px;
-        width: 10%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-
-        .dayOfWeek {
-            font-size: 12px;
-            color: #666363f8;
-        }
-    }
-
-    .item {
+    .item{
         display: flex;
         align-items: center;
+        padding-block: 7px;
+        border-bottom: 1px solid #79fcd0;
     }
-
     .itemColor {
         width: 20px;
         height: 20px;
@@ -47,28 +20,42 @@
         text-transform: lowercase;
     }
 
-    .itemInfo {
-        width: 90%;
+}
+.itemInfoList{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    .itemInfo{
         display: flex;
-        flex-direction: column;
+        align-items: center;
         gap: 7px;
-        border-bottom: 2px solid #020000f8;
-        padding-left: 10px;
-        padding-bottom: 10px;
-
-        .itemText {
-            display: flex;
-            align-items: center;
-            gap: 7px;
-            padding-right: 7px;
-        }
     }
 }
 
 .namePerson {
+    font-size: 16px;
     margin-right: auto;
 }
 
 .startTime {
+    font-size: 12px;
     color: rgb(147, 149, 150);
+}
+.sumOfTime{
+    padding-inline: 15px;
+}
+.dayOfWeek{
+    display: flex;
+    flex-direction: column;
+    padding-inline: 15px;
+    margin-right: 10px;
+    .itemDayofWeek{
+        font-size: 12px;
+        color: rgb(147, 149, 150);
+    }
+    .itemDay{
+        font-size: 14px;
+        color: beige;
+    }
 }

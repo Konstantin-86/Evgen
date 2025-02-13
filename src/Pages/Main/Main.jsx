@@ -12,12 +12,14 @@ import 'moment/locale/ru';
 import ItemList from './ItemList';
 import 'react-calendar/dist/Calendar.css';
 import styles from './Main.module.scss';
+import axios from 'axios';
 
 //////////////
 import getCurrentWeek from "./helpers/getCurrentWeek.js"
-
+import getCurrentDay from "./helpers/getCurrentDay.js"
 
 const Main = () => {
+ 
   const queryClient = useQueryClient();
   const [date, setDate] = useState(new Date());
 
@@ -26,6 +28,7 @@ const Main = () => {
   const [showAlert, setShowAlert] = useState(false);
 
   const [checkPVZ, setCheckPVZ] = useState('PVZ1');
+  
 
   const handleChange = (event) => {
     setCheckPVZ(event.target.value);
@@ -62,7 +65,6 @@ const Main = () => {
     if (PVZ1 && !isLoadingPVZ1 && PVZ2 && !isLoadingPVZ2) {
       const checkPVZValue = checkPVZ === 'PVZ1' ? PVZ1 : PVZ2
       const getWeek = getCurrentWeek(checkPVZValue)
-      console.log(getWeek);
       setCurrentWeek(getWeek);
     }
   }, [checkPVZ, PVZ1, PVZ2, isLoadingPVZ1, isLoadingPVZ2]);
@@ -73,8 +75,9 @@ const Main = () => {
 
   const createMutation = useMutation({
     mutationFn: (newUser) => {
-      const checkPVZ = checkPVZ === 'PVZ1' ? addNewEventPVZ1 : addNewEventPVZ2
-      return checkPVZ(newUser)
+      const checkPVZFn = checkPVZ === 'PVZ1' ? addNewEventPVZ1 : addNewEventPVZ2
+     
+      return checkPVZFn(newUser)
     },
     onSuccess: (_, newUser) => {
       queryClient.setQueryData([checkPVZ], (oldData) => {
@@ -82,10 +85,17 @@ const Main = () => {
         return [...oldData, newUser];
       });
     },
+    onError: (error) => {
+      console.error('Ошибка при отправке данных:', error);
+  }
   })
 
   const callBackNewEvent = (data) => {
-    createMutation.mutate(data);
+    if(data.length){
+      data.map((elem)=> {
+        createMutation.mutate(elem)
+      })
+    }
   }
 
   return (
@@ -94,6 +104,9 @@ const Main = () => {
       {showAlert && <Alert severity="success" >
         Данные успешно добавлены
       </Alert>}
+      <h3>
+        {getCurrentDay()}
+      </h3>
       <ToggleButtonGroup
         color='info'
         value={checkPVZ}
@@ -101,16 +114,16 @@ const Main = () => {
         sx={{
           backgroundColor: '#363636',
           color: 'white',
+          marginBottom: '7px',
         }
         }
       >
         <ToggleButton sx={getToggleButtonStyles('PVZ1', checkPVZ)} value="PVZ1">ПВЗ №1</ToggleButton>
         <ToggleButton sx={getToggleButtonStyles('PVZ2', checkPVZ)} value="PVZ2">ПВЗ №2</ToggleButton>
       </ToggleButtonGroup>
-
-      <div>
-        <ItemList currentWeek={currentWeek} callBackNewEvent={callBackNewEvent} />
-      </div>
+      
+        <ItemList checkPVZ={checkPVZ} currentWeek={currentWeek} callBackNewEvent={callBackNewEvent} />
+     
     </div>
   );
 };

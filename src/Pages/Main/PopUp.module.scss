@@ -41,8 +41,9 @@
 .popUpWrapper {
     position: relative;
     width: 100%;
+    min-height: 50dvh;
     padding-inline: 7px;
-    background-color: rgb(3, 80, 80);
+    background-color: rgb(1, 48, 48);
     margin-block: 100px;
 }
 

@@ -56,7 +56,7 @@ const Semples = () => {
 
               <p>{item.startTime} - {item.endTime}</p>
               <p>{item.currentRate} руб</p>
-              <div className={style.deleteIcon} onClick={() => deletePerson(item.id)}>
+              <div className={style.deleteIcon} onClick={() => deletePerson(item.idPerson)}>
                 <DeleteOutlineIcon />
               </div>
 
