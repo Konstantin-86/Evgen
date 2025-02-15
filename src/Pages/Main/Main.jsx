@@ -12,7 +12,6 @@ import 'moment/locale/ru';
 import ItemList from './ItemList';
 import 'react-calendar/dist/Calendar.css';
 import styles from './Main.module.scss';
-import axios from 'axios';
 
 //////////////
 import getCurrentWeek from "./helpers/getCurrentWeek.js"
@@ -22,7 +21,7 @@ import getPreviousWeek from "./helpers/getPrevWeek.js"
 import { useSwipeable } from 'react-swipeable';
 
 const Main = () => {
- 
+
   const queryClient = useQueryClient();
   const [date, setDate] = useState(new Date());
 
@@ -32,8 +31,8 @@ const Main = () => {
 
   const [checkPVZ, setCheckPVZ] = useState('PVZ1');
 
-  
-  
+
+
 
   const handleChange = (event) => {
     setCheckPVZ(event.target.value);
@@ -76,13 +75,12 @@ const Main = () => {
 
 
 
-  
+
 
 
   const createMutation = useMutation({
     mutationFn: (newUser) => {
       const checkPVZFn = checkPVZ === 'PVZ1' ? addNewEventPVZ1 : addNewEventPVZ2
-     
       return checkPVZFn(newUser)
     },
     onSuccess: (_, newUser) => {
@@ -93,33 +91,37 @@ const Main = () => {
     },
     onError: (error) => {
       console.error('Ошибка при отправке данных:', error);
-  }
+    }
   })
 
   const callBackNewEvent = (data) => {
-    if(data.length){
-      data.map((elem)=> {
+    if (data.length) {
+      data.map((elem) => {
         createMutation.mutate(elem)
       })
     }
   }
-  const nextweek = ()=> {
+  const nextweek = () => {
     const currentStartOfWeek = new Date(currentWeek[0].date.split('.').reverse().join('-'));
     const checkPVZValue = checkPVZ === 'PVZ1' ? PVZ1 : PVZ2
-  const nextWeek = getNextWeek(checkPVZValue, currentStartOfWeek)
-  setCurrentWeek(nextWeek);
-  
+    const nextWeek = getNextWeek(checkPVZValue, currentStartOfWeek)
+    setCurrentWeek(nextWeek);
+
   }
-  const prevWeek = ()=> {
+  const prevWeek = () => {
     const currentStartOfWeek = new Date(currentWeek[0].date.split('.').reverse().join('-'));
     const checkPVZValue = checkPVZ === 'PVZ1' ? PVZ1 : PVZ2
-  const prevWeek = getPreviousWeek(checkPVZValue, currentStartOfWeek)
-  setCurrentWeek(prevWeek);
-  
+    const prevWeek = getPreviousWeek(checkPVZValue, currentStartOfWeek)
+    setCurrentWeek(prevWeek);
+
   }
   const handlers = useSwipeable({
-    onSwipedLeft: () => nextweek(),
-    onSwipedRight: () =>  prevWeek(),
+    onSwipedLeft: () => {
+      nextweek()
+      console.log(1111);
+
+    },
+    onSwipedRight: () => prevWeek(),
     preventDefaultTouchmoveEvent: true,
     trackMouse: true
   });
@@ -127,9 +129,9 @@ const Main = () => {
   return (
 
     <div {...handlers} className={styles.main}>
-      {showAlert && <Alert severity="success" >
-        Данные успешно добавлены
-      </Alert>}
+
+      <p className={showAlert ? styles.alert : styles.alertHide}> Данные успешно добавлены</p>
+
       <h3>
         {getCurrentDay()}
       </h3>
@@ -147,10 +149,8 @@ const Main = () => {
         <ToggleButton sx={getToggleButtonStyles('PVZ1', checkPVZ)} value="PVZ1">ПВЗ №1</ToggleButton>
         <ToggleButton sx={getToggleButtonStyles('PVZ2', checkPVZ)} value="PVZ2">ПВЗ №2</ToggleButton>
       </ToggleButtonGroup>
-      
-        <ItemList  checkPVZ={checkPVZ} currentWeek={currentWeek} callBackNewEvent={callBackNewEvent} />
-     <button onClick={prevWeek}>prev week</button>
-     <button onClick={nextweek}>next week</button>
+
+      <ItemList checkPVZ={checkPVZ} currentWeek={currentWeek} callBackNewEvent={callBackNewEvent} />
     </div>
   );
 };

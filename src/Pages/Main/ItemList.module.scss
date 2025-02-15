@@ -5,12 +5,17 @@
     flex-direction: column;
     background-color: #363636;
     border-radius: 7px;
-    .item{
+
+    .item {
         display: flex;
         align-items: center;
         padding-block: 7px;
+    }
+
+    .item:not(:last-child) {
         border-bottom: 1px solid #79fcd0;
     }
+
     .itemColor {
         width: 20px;
         height: 20px;
@@ -21,12 +26,15 @@
     }
 
 }
-.itemInfoList{
+
+
+.itemInfoList {
     width: 100%;
     display: flex;
     flex-direction: column;
     gap: 7px;
-    .itemInfo{
+
+    .itemInfo {
         display: flex;
         align-items: center;
         gap: 7px;
@@ -37,28 +45,32 @@
     font-size: 16px;
     margin-right: auto;
     max-width: 100px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: wrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: wrap;
 }
 
 .startTime {
     font-size: 12px;
     color: rgb(147, 149, 150);
 }
-.sumOfTime{
+
+.sumOfTime {
     padding-inline: 15px;
 }
-.dayOfWeek{
+
+.dayOfWeek {
     display: flex;
     flex-direction: column;
     padding-inline: 15px;
     margin-right: 10px;
-    .itemDayofWeek{
+
+    .itemDayofWeek {
         font-size: 12px;
         color: rgb(147, 149, 150);
     }
-    .itemDay{
+
+    .itemDay {
         font-size: 14px;
         color: beige;
     }

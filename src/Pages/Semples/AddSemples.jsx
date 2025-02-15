@@ -57,6 +57,7 @@ const AddSemples = ({ numberID, showAddSemples, setShowAddSemples }) => {
     }
     const newUser = {
       "id": numberID + 1,
+      "idPerson": numberID + 1,
       "namePerson": newPersonName,
       "startTime": newPersonStartTime,
       "endTime": newPersonEndTime,

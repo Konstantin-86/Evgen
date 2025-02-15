@@ -35,6 +35,8 @@ const Semples = () => {
     },
   });
   const deletePerson = (id) => {
+    console.log(id);
+
     deleteMutation.mutate(id)
 
   }
