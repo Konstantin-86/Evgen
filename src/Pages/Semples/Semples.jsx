@@ -21,6 +21,7 @@ const Semples = () => {
   useEffect(() => {
     if (!isLoading && data) {
       setNumberID(data.length);
+
     }
   }, [isLoading, data]);
 
@@ -35,10 +36,7 @@ const Semples = () => {
     },
   });
   const deletePerson = (id) => {
-    console.log(id);
-
     deleteMutation.mutate(id)
-
   }
 
   return (

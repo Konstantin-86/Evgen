@@ -7,7 +7,6 @@ import { addNewEventPVZ2 } from "../../components/API/PVZ/addNewEventPVZ2"
 
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import { Alert } from '@mui/material'
 import 'moment/locale/ru';
 import ItemList from './ItemList';
 import 'react-calendar/dist/Calendar.css';
@@ -24,15 +23,9 @@ const Main = () => {
 
   const queryClient = useQueryClient();
   const [date, setDate] = useState(new Date());
-
   const [currentWeek, setCurrentWeek] = useState([]);
-
   const [showAlert, setShowAlert] = useState(false);
-
   const [checkPVZ, setCheckPVZ] = useState('PVZ1');
-
-
-
 
   const handleChange = (event) => {
     setCheckPVZ(event.target.value);
@@ -45,6 +38,7 @@ const Main = () => {
       backgroundColor: checkPVZ === value ? '#388e3c' : '#bdbdbd',
     },
   });
+
   useEffect(() => {
     if (showAlert) {
       setTimeout(() => {
@@ -72,10 +66,6 @@ const Main = () => {
       setCurrentWeek(getWeek);
     }
   }, [checkPVZ, PVZ1, PVZ2, isLoadingPVZ1, isLoadingPVZ2]);
-
-
-
-
 
 
   const createMutation = useMutation({
@@ -129,9 +119,7 @@ const Main = () => {
   return (
 
     <div {...handlers} className={styles.main}>
-
       <p className={showAlert ? styles.alert : styles.alertHide}> Данные успешно добавлены</p>
-
       <h3>
         {getCurrentDay()}
       </h3>
@@ -149,7 +137,6 @@ const Main = () => {
         <ToggleButton sx={getToggleButtonStyles('PVZ1', checkPVZ)} value="PVZ1">ПВЗ №1</ToggleButton>
         <ToggleButton sx={getToggleButtonStyles('PVZ2', checkPVZ)} value="PVZ2">ПВЗ №2</ToggleButton>
       </ToggleButtonGroup>
-
       <ItemList checkPVZ={checkPVZ} currentWeek={currentWeek} callBackNewEvent={callBackNewEvent} />
     </div>
   );

@@ -1,98 +1,154 @@
 import React, { useEffect, useState } from 'react';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import { ru } from 'date-fns/locale';
-
-import { useQuery } from '@tanstack/react-query';
-import { getPVZ1 } from '../../components/API/PVZ/getPVZ1';
-
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { getPVZ1 } from '../../components/API/PVZ/getPVZ1'
+import { getPVZ2 } from '../../components/API/PVZ/getPVZ2'
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import getCurrentMonthAndYear from './helpers/getCurrentMonthAndYear.js';
 import styles from './Statictics.module.scss'
 
+
+
 const Statictics = ({ }) => {
-    const [data, setData] = useState([]);
-    const [startDate, setStartDate] = useState(new Date());
-    console.log(startDate);
+    const [checkPVZ, setCheckPVZ] = useState('PVZ1');
+    const [curMonth, setCurMonth] = useState(getCurrentMonthAndYear())
+    const [daysInMonth, setDaysInMonth] = useState(0);
+    const [filtredSumArray, setFiltredSumArray] = useState([]);
+
 
 
     const { data: PVZ1, isLoading: isLoadingPVZ1 } = useQuery({
         queryKey: ['PVZ1'],
         queryFn: getPVZ1,
     });
-    useEffect(() => {
-        if (PVZ1 && !isLoadingPVZ1) {
-            setData(PVZ1);
-        }
-    }, [PVZ1, isLoadingPVZ1]);
 
-    const calculateStatistics = (data) => {
-        const statistics = {};
-
-        data.forEach(day => {
-            const date = Object.keys(day)[0];
-            day[date].forEach(person => {
-                const name = person.namePerson;
-                const startTime = new Date(`1970-01-01T${person.startTime}:00`);
-                const endTime = new Date(`1970-01-01T${person.endTime}:00`);
-                const hoursWorked = (endTime - startTime) / (1000 * 60 * 60);
-                const moneyEarned = hoursWorked * person.currentRate;
-
-                if (!statistics[name]) {
-                    statistics[name] = {
-                        totalHours: 0,
-                        totalMoney: 0
-                    };
-                }
-
-                statistics[name].totalHours += hoursWorked;
-                statistics[name].totalMoney += moneyEarned;
-            });
-        });
-
-        return statistics;
+    const { data: PVZ2, isLoading: isLoadingPVZ2 } = useQuery({
+        queryKey: ['PVZ2'],
+        queryFn: getPVZ2,
+    });
+    const handleChange = (event) => {
+        setCheckPVZ(event.target.value);
     };
+    const getToggleButtonStyles = (value, checkPVZ) => ({
+        backgroundColor: checkPVZ === value ? '#3a393a' : '#1f1e1f',
+        color: checkPVZ === value ? '#f1f0f0' : '#7e7b7b',
+        '&:hover': {
+            backgroundColor: checkPVZ === value ? '#388e3c' : '#bdbdbd',
+        },
+    });
 
-    const statistics = calculateStatistics(data);
-    console.log(statistics);
+    useEffect(() => {
+        const [year, month] = curMonth.split('-').map(Number);
+        const nextMonth = new Date(year, month, 1);
+        const lastDayOfMonth = new Date(nextMonth - 1);
+        setDaysInMonth(lastDayOfMonth.getDate())
+
+    }, [curMonth]);
+
+    const filtredByMonth = () => {
+        const checkPVZValue = checkPVZ === 'PVZ1' ? PVZ1 : PVZ2
+        const filtredArray = checkPVZValue.filter(item => {
+            return item.date.slice(3, 5) === curMonth.slice(5, 7)
+        })
+        console.log(filtredArray);
 
 
+
+        const allHours = checkPVZValue.filter(item => {
+            const end = Number(item.endTime.slice(0, 2))
+            const start = Number(item.startTime.slice(0, 2))
+            const diffrenceTime = end - start
+            const sum = Number(item.currentRate) * diffrenceTime
+            const bonusAndFines = sum + Number(item.otherData.bonus) - Number(item.otherData.fines)
+
+            filtredSumArray.find(elem => {
+                if (elem.name === item.namePerson) {
+                    elem.hours += diffrenceTime
+                    elem.result += sum
+                    elem.fines += Number(item.otherData.fines)
+                    elem.bonus += Number(item.otherData.bonus)
+                    elem.finalResult += bonusAndFines
+                } else {
+                    const newItem = {
+                        name: item.namePerson,
+                        hours: diffrenceTime,
+                        result: sum,
+                        fines: Number(item.otherData.fines),
+                        bonus: Number(item.otherData.bonus),
+                        finalResult: bonusAndFines
+                    }
+                    setFiltredSumArray([...filtredSumArray, newItem])
+                }
+            })
+            if (filtredSumArray.length === 0) {
+                const newItem = {
+                    name: item.namePerson,
+                    hours: diffrenceTime,
+                    result: sum,
+                    fines: Number(item.otherData.fines),
+                    bonus: Number(item.otherData.bonus),
+                    finalResult: bonusAndFines
+                }
+                setFiltredSumArray([...filtredSumArray, newItem])
+            }
+
+            console.log("filtredSumArray", filtredSumArray);
+            console.log("date", item.date, "bonusAndFines", bonusAndFines);
+
+        })
+
+    }
 
     return (
         <>
-            {isLoadingPVZ1 ?
-                <div>Loading...</div>
-                :
-                <div>
-                    <DatePicker
-                        selected={startDate}
-                        onChange={(date) => setStartDate(date)}
-                        locale={ru}
-                        dateFormat="dd/MM/yyyy"
-                        placeholderText="Выберите дату"
-                    />
-                    <p>1</p>
+            <ToggleButtonGroup
+                color='info'
+                value={checkPVZ}
+                onChange={(event) => handleChange(event)}
+                sx={{
+                    backgroundColor: '#363636',
+                    color: 'white',
+                    marginBottom: '7px',
+                }
+                }
+            >
+                <ToggleButton sx={getToggleButtonStyles('PVZ1', checkPVZ)} value="PVZ1">ПВЗ №1</ToggleButton>
+                <ToggleButton sx={getToggleButtonStyles('PVZ2', checkPVZ)} value="PVZ2">ПВЗ №2</ToggleButton>
+            </ToggleButtonGroup>
+            <input type="month" value={curMonth} onChange={(e) => setCurMonth(e.target.value)} />
+            <button onClick={filtredByMonth}>Показать</button>
+            <p>Дней в месяце: {daysInMonth}</p>
+            <p>Часов в месяце</p>
+            <div className={styles.statTable}>
+                <div className={styles.tableItem}>
+                    <p>Name</p>
+                    <p>Колво часов</p>
+                    <div className={styles.itemMoney}>
+                        <p>Заработал</p>
+                        <p>штраф</p>
+                        <p>премия</p>
+                        <p>итого</p>
+                    </div>
                 </div>
-
-
-            }
-            <table>
-                <thead>
-                    <tr>
-                        <th>Имя</th>
-                        <th>Количество часов</th>
-                        <th>Количество денег</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {Object.keys(statistics).map(name => (
-                        <tr key={name}>
-                            <td>{name}</td>
-                            <td>{statistics[name].totalHours.toFixed(2)}</td>
-                            <td>{statistics[name].totalMoney.toFixed(2)}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-
+                <div className={styles.tableItem}>
+                    <p>Name</p>
+                    <p>Колво часов</p>
+                    <div className={styles.itemMoney}>
+                        <p>Заработал</p>
+                        <p>штраф</p>
+                        <p>премия</p>
+                    </div>
+                </div>
+                <div className={styles.tableItem}>
+                    <p>Name</p>
+                    <p>Колво часов</p>
+                    <div className={styles.itemMoney}>
+                        <p>Заработал</p>
+                        <p>штраф</p>
+                        <p>премия</p>
+                    </div>
+                </div>
+            </div>
         </>
     )
 }

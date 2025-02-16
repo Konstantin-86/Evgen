@@ -17,7 +17,7 @@ const AddSemples = ({ numberID, showAddSemples, setShowAddSemples }) => {
   const [newPersonColor, setNewPersonColor] = useState('#ffffff')
   const [newPersonStartTime, setNewPersonStartTime] = useState("09:00")
   const [newPersonEndTime, setNewPersonEndTime] = useState("21:00")
-  const [newPersonRate, setNewPersonRate] = useState(0)
+  const [newPersonRate, setNewPersonRate] = useState(100)
 
   const queryClient = useQueryClient()
 
@@ -100,7 +100,7 @@ const AddSemples = ({ numberID, showAddSemples, setShowAddSemples }) => {
 
         <div className={style.rate}>
           <label htmlFor="userRate">Ставка</label>
-          <input onFocus={handleFocus} value={newPersonRate} onChange={(e) => setNewPersonRate(e.target.value)} type="number" id='userRate' />
+          <input onFocus={handleFocus} value={newPersonRate} onChange={(e) => setNewPersonRate(+e.target.value)} type="number" id='userRate' />
         </div>
 
         <button onClick={handleAddUser}>Добавить</button>

@@ -5,35 +5,15 @@ import { PieChart, Pie, Cell, Legend } from 'recharts';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
-import { collection, getDocs } from "firebase/firestore";
 
 import { Alert } from '@mui/material'
 import style from './Settings.module.scss'
 import axios from 'axios';
 
-const firebaseConfig = {
-    apiKey: "AIzaSyCXelkOen-9Gcc11EPP1_vJS-flVe2pbiE",
-    authDomain: "testevgen1.firebaseapp.com",
-    projectId: "testevgen1",
-    storageBucket: "testevgen1.firebasestorage.app",
-    messagingSenderId: "636021780567",
-    appId: "1:636021780567:web:5f8f1c8b32cc8aaaf33312"
-};
+
 
 const Settings = () => {
     const [showAlert, setShowAlert] = useState(true);
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    console.log(db);
-
-
-
-
-
-
-
 
 
     const handleClose = () => {
