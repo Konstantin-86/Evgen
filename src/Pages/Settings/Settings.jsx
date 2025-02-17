@@ -2,11 +2,6 @@ import { useState, useEffect } from 'react'
 
 import { PieChart, Pie, Cell, Legend } from 'recharts';
 
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/firestore';
-import { initializeApp } from "firebase/app";
-
-import { Alert } from '@mui/material'
 import style from './Settings.module.scss'
 import axios from 'axios';
 
@@ -36,17 +31,8 @@ const Settings = () => {
 
     const COLORS = ['#00C49F', '#FF8042'];
 
-
-
-
-
-
     return (
         <div className={style.settings} >
-            <h1>Settings.module.scss</h1>
-            {showAlert && <Alert severity="success" >
-                Данные успешно добавлены
-            </Alert>}
             <PieChart width={200} height={200}>
                 <Pie
                     data={data}

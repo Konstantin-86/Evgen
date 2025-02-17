@@ -5,6 +5,9 @@ import { getPVZ2 } from '../../components/API/PVZ/getPVZ2'
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import getCurrentMonthAndYear from './helpers/getCurrentMonthAndYear.js';
+
+import StatGrafic from './StatGrafic.jsx';
+
 import styles from './Statictics.module.scss'
 
 
@@ -14,6 +17,8 @@ const Statictics = ({ }) => {
     const [curMonth, setCurMonth] = useState(getCurrentMonthAndYear())
     const [daysInMonth, setDaysInMonth] = useState(0);
     const [filtredSumArray, setFiltredSumArray] = useState([]);
+    const [summarHours, setSummarHours] = useState(0)
+    const [summarRubles, setSummarRubles] = useState(0)
 
 
 
@@ -45,111 +50,120 @@ const Statictics = ({ }) => {
 
     }, [curMonth]);
 
-    const filtredByMonth = () => {
-        const checkPVZValue = checkPVZ === 'PVZ1' ? PVZ1 : PVZ2
-        const filtredArray = checkPVZValue.filter(item => {
-            return item.date.slice(3, 5) === curMonth.slice(5, 7)
-        })
-        console.log(filtredArray);
-
-
-
-        const allHours = checkPVZValue.filter(item => {
-            const end = Number(item.endTime.slice(0, 2))
-            const start = Number(item.startTime.slice(0, 2))
-            const diffrenceTime = end - start
-            const sum = Number(item.currentRate) * diffrenceTime
-            const bonusAndFines = sum + Number(item.otherData.bonus) - Number(item.otherData.fines)
-
-            filtredSumArray.find(elem => {
-                if (elem.name === item.namePerson) {
-                    elem.hours += diffrenceTime
-                    elem.result += sum
-                    elem.fines += Number(item.otherData.fines)
-                    elem.bonus += Number(item.otherData.bonus)
-                    elem.finalResult += bonusAndFines
-                } else {
-                    const newItem = {
-                        name: item.namePerson,
-                        hours: diffrenceTime,
-                        result: sum,
-                        fines: Number(item.otherData.fines),
-                        bonus: Number(item.otherData.bonus),
-                        finalResult: bonusAndFines
+    useEffect(() => {
+        // Проверяем, загружены ли данные
+        if (!isLoadingPVZ1 && !isLoadingPVZ2) {
+            const checkPVZValue = checkPVZ === 'PVZ1' ? PVZ1 : PVZ2;
+            
+            // Проверяем, что checkPVZValue существует и является массивом
+            if (checkPVZValue && Array.isArray(checkPVZValue)) {
+                const filtredArray = checkPVZValue.filter(item => {
+                    return item.date.slice(3, 5) === curMonth.slice(5, 7);
+                });
+    
+                const filtredSumArray = [];
+    
+                filtredArray.forEach(item => {
+                    const end = Number(item.endTime.slice(0, 2));
+                    const start = Number(item.startTime.slice(0, 2));
+                    const diffrenceTime = end - start;
+                    const sum = Number(item.currentRate) * diffrenceTime;
+                    const bonusAndFines = sum + Number(item.otherData.bonus) - Number(item.otherData.fines);
+    
+                    const existingEntry = filtredSumArray.find(elem => elem.name === item.namePerson);
+    
+                    if (existingEntry) {
+                        existingEntry.hours += diffrenceTime;
+                        existingEntry.result += sum;
+                        existingEntry.bonus += Number(item.otherData.bonus);
+                        existingEntry.fines += Number(item.otherData.fines);
+                        existingEntry.finalResult += bonusAndFines;
+                    } else {
+                        filtredSumArray.push({
+                            name: item.namePerson,
+                            hours: diffrenceTime,
+                            result: sum,
+                            bonus: Number(item.otherData.bonus),
+                            fines: Number(item.otherData.fines),
+                            finalResult: bonusAndFines
+                        });
                     }
-                    setFiltredSumArray([...filtredSumArray, newItem])
-                }
-            })
-            if (filtredSumArray.length === 0) {
-                const newItem = {
-                    name: item.namePerson,
-                    hours: diffrenceTime,
-                    result: sum,
-                    fines: Number(item.otherData.fines),
-                    bonus: Number(item.otherData.bonus),
-                    finalResult: bonusAndFines
-                }
-                setFiltredSumArray([...filtredSumArray, newItem])
+                });
+    
+                const sumHours = filtredSumArray.reduce((acc, item) => {
+                    return acc + item.hours;
+                }, 0);
+                setSummarHours(sumHours);
+    
+                const sumOfRubles = filtredSumArray.reduce((acc, item) => {
+                    return acc + item.result;
+                }, 0);
+                setSummarRubles(sumOfRubles);
+    
+                setFiltredSumArray(filtredSumArray);
             }
+        }
+    }, [curMonth, checkPVZ, PVZ1, PVZ2, isLoadingPVZ1, isLoadingPVZ2]);
 
-            console.log("filtredSumArray", filtredSumArray);
-            console.log("date", item.date, "bonusAndFines", bonusAndFines);
+   
 
-        })
-
-    }
 
     return (
-        <>
+        <div className={styles.statWrap}>
+            
             <ToggleButtonGroup
                 color='info'
                 value={checkPVZ}
                 onChange={(event) => handleChange(event)}
                 sx={{
-                    backgroundColor: '#363636',
+                    backgroundColor: 'transparent',
                     color: 'white',
                     marginBottom: '7px',
+                    gap: "15px"
                 }
                 }
             >
                 <ToggleButton sx={getToggleButtonStyles('PVZ1', checkPVZ)} value="PVZ1">ПВЗ №1</ToggleButton>
                 <ToggleButton sx={getToggleButtonStyles('PVZ2', checkPVZ)} value="PVZ2">ПВЗ №2</ToggleButton>
+            <input className={styles.inptMonth} type="month" value={curMonth} onChange={(e) => setCurMonth(e.target.value)} />
             </ToggleButtonGroup>
-            <input type="month" value={curMonth} onChange={(e) => setCurMonth(e.target.value)} />
-            <button onClick={filtredByMonth}>Показать</button>
+            <StatGrafic/>
+    
             <p>Дней в месяце: {daysInMonth}</p>
-            <p>Часов в месяце</p>
-            <div className={styles.statTable}>
-                <div className={styles.tableItem}>
-                    <p>Name</p>
-                    <p>Колво часов</p>
-                    <div className={styles.itemMoney}>
-                        <p>Заработал</p>
-                        <p>штраф</p>
-                        <p>премия</p>
-                        <p>итого</p>
+            <p>Часов в месяце {daysInMonth * 12}</p>
+           
+            <div className={styles.tableWrap}>
+            {filtredSumArray.length ? 
+                filtredSumArray.map((item, index) => (
+                    <div className={styles.statTable} key={index}>
+                        <div className={styles.tableItem}>
+                            <p className={styles.name}>{item.name}</p>
+                            <p className={styles.hours}>{item.hours}</p>
+                            <div className={styles.itemMoney}>
+                                <p className={styles.activeRes }>{item.result}</p>
+                                <p className={styles.activeFines}>{item.fines}</p>
+                                <p className={styles.activeBonus}>{item.bonus}</p>
+                                <p className={styles.activeFinalRes}>{item.finalResult}</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div className={styles.tableItem}>
-                    <p>Name</p>
-                    <p>Колво часов</p>
-                    <div className={styles.itemMoney}>
-                        <p>Заработал</p>
-                        <p>штраф</p>
-                        <p>премия</p>
-                    </div>
-                </div>
-                <div className={styles.tableItem}>
-                    <p>Name</p>
-                    <p>Колво часов</p>
-                    <div className={styles.itemMoney}>
-                        <p>Заработал</p>
-                        <p>штраф</p>
-                        <p>премия</p>
-                    </div>
-                </div>
+                )) : <h5>нет данных</h5>
+            }
+           {filtredSumArray.length ?
+            <div className={styles.resultTable}>
+                <p>Часов по факту: {summarHours}</p>
+                <p>Всего сумма {summarRubles}руб</p>
             </div>
-        </>
+            : null}
+             <div className={styles.explaneTable}>
+                <p className={styles.explaneResult}>Общий заработк без учета бонусов и штрафов</p>
+                <p className={styles.explaneFines}>Штрафы</p>
+                <p className={styles.explaneBonus}>Бонусы</p>
+                <p className={styles.explaneFinalResult}>Итого с учетом бонусов и штрафов</p>
+            </div>
+              </div>
+           
+        </div>
     )
 }
 export default Statictics;
