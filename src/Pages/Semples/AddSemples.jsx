@@ -21,15 +21,6 @@ const AddSemples = ({ numberID, showAddSemples, setShowAddSemples }) => {
 
   const queryClient = useQueryClient()
 
-  const handleChangeColor = (newValue) => {
-    setValueColor(newValue)
-  }
-
-  const handleChange = (event) => {
-    setNamePerson(event.target.value);
-  };
-
-
   const createMutation = useMutation({
     mutationFn: addNewSemple,
     onSuccess: (_, newUser) => {
@@ -43,7 +34,7 @@ const AddSemples = ({ numberID, showAddSemples, setShowAddSemples }) => {
     setNewPersonColor('#ffffff')
     setNewPersonStartTime("09:00")
     setNewPersonEndTime("21:00")
-    setNewPersonRate(0)
+    setNewPersonRate(100)
   }
 
   const handleAddUser = () => {
@@ -55,9 +46,11 @@ const AddSemples = ({ numberID, showAddSemples, setShowAddSemples }) => {
       alert("Заполните ставку");
       return
     }
+    const nextID = numberID + 1;
+    
     const newUser = {
-      "id": numberID + 1,
-      "idPerson": numberID + 1,
+      "id": nextID,
+      "idPerson": nextID,
       "namePerson": newPersonName,
       "startTime": newPersonStartTime,
       "endTime": newPersonEndTime,

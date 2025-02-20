@@ -42,7 +42,8 @@
     position: relative;
     width: 100%;
     min-height: 50dvh;
-    padding-inline: 7px;
+    padding: 7px;
+    padding-top: 15px;
     background-color: rgb(1, 48, 48);
     margin-block: 100px;
 }
@@ -92,7 +93,7 @@
     border: none;
     background-color: transparent;
     margin: 0;
-    padding: 7px;
+    padding: 10px;
 
     img {
         width: 25px;

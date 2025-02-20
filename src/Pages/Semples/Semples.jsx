@@ -18,10 +18,10 @@ const Semples = () => {
     queryKey: ['semples'],
     queryFn: getAllSemples,
   });
+  
   useEffect(() => {
     if (!isLoading && data) {
       setNumberID(data.length);
-
     }
   }, [isLoading, data]);
 
@@ -29,14 +29,14 @@ const Semples = () => {
 
   const deleteMutation = useMutation({
     mutationFn: deleteSemple,
-    onSuccess: (_, id) => {
+    onSuccess: (_, idPerson) => {
       queryClient.setQueryData(['semples'], (oldData) => {
-        return oldData.filter((item) => item.id !== id);
+        return oldData.filter((item) => item.idPerson !== idPerson);
       });
     },
   });
-  const deletePerson = (id) => {
-    deleteMutation.mutate(id)
+  const deletePerson = (idPerson) => {
+    deleteMutation.mutate(idPerson)
   }
 
   return (

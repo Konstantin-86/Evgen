@@ -1,16 +1,33 @@
 import React, { useEffect, useState } from 'react';
-import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer } from 'recharts';
+import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer,BarChart, Bar, XAxis, YAxis, CartesianGrid  } from 'recharts';
 
 import styles from  "./StatGrafic.module.scss"
 
-const data = [
-    { name: 'Категория A', value: 12 },
-    { name: 'Категория B', value: 24 },
-    { name: 'Категория C', value: 24 },
-    { name: 'Категория D', value: 6 },
-  ];
+
+
+
+const StatGrafic = ({filtredSumArray}) => {
+  const [selectedValue, setSelectedValue] = useState(null);
+
+  const handleBarClick = (entry) => {
+    console.log('Clicked bar value:', entry.value);
+  };
+
+const sortedArrayHours = filtredSumArray.map((elem)=> {
+  return {
+    name: elem.name,
+    value: elem.hours
+  }
+})
+const sortedArrayRubles = filtredSumArray.map((elem)=> {
+  return {
+    name: elem.name,
+    value: elem.finalResult
+  }
+})
+
   
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+  const COLORS = filtredSumArray.map((elem) => elem.color);
   
   const RADIAN = Math.PI / 180;
   const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
@@ -20,17 +37,14 @@ const data = [
   
     return (
       <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
-        {`${(percent * 100).toFixed(0)}%`} {/* Процент */}
-       {/*  <tspan x={x} y={y + 15} fontSize={12}> 
-          {data[index].name} 
-        </tspan> */}
+        {`${(percent * 100).toFixed(0)}%`} 
+     
       </text>
     );
   };
+ 
 
   const CustomTooltip = ({ active, payload })=> {
-    console.log(active);
-    console.log(payload);
     
     if (active && payload && payload.length){
         return(
@@ -41,15 +55,15 @@ const data = [
         )
     }
   }
- 
-
-const StatGrafic = () => {
+  
     return (
         <div className={styles.wrap}>
-            <ResponsiveContainer width="100%" height={300}>
+        
+              <h3>Распределение по часам</h3>
+            <ResponsiveContainer width="100%" height={300} >
       <PieChart>
         <Pie
-          data={data}
+          data={sortedArrayHours}
           cx="50%"
           cy="50%"
           labelLine={false}
@@ -58,7 +72,7 @@ const StatGrafic = () => {
           fill="#8884d8"
           dataKey="value"
         >
-          {data.map((entry, index) => (
+          {sortedArrayHours.map((entry, index) => (
             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
           ))}
         </Pie>
@@ -66,6 +80,28 @@ const StatGrafic = () => {
         <Legend />
       </PieChart>
     </ResponsiveContainer>
+
+    
+    <h3 style={{marginBottom: "15px"}}>Распределение по деньгам</h3>
+    <ResponsiveContainer width="100%" height={300} >
+      <BarChart
+        width={400}
+        height={300}
+        data={sortedArrayRubles}
+        margin={{ top: 5, right: 30, left: -20, bottom: 5 }}
+      >
+        <XAxis dataKey="name" tick={{ fontSize: 12}} />
+        <YAxis  tick={{ fontSize: 10}}/>
+        <Tooltip />
+        <Bar
+          dataKey="value"
+          fill="#8884d8"
+          onClick={handleBarClick} 
+        />
+      </BarChart>
+
+     
+      </ResponsiveContainer>
         </div>
     )
 }

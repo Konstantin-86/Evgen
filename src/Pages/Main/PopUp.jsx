@@ -48,6 +48,7 @@ const PopUp = ({ day, handlePopUp, setHandlePopUp, callBackNewEvent, checkPVZ })
         queryKey: ['semples'],
         queryFn: getAllSemples,
     });
+    
     const { data: PVZ1, isLoading: isLoadingPVZ1 } = useQuery({
         queryKey: ['PVZ1'],
         queryFn: getPVZ1,
@@ -130,7 +131,7 @@ const PopUp = ({ day, handlePopUp, setHandlePopUp, callBackNewEvent, checkPVZ })
 
                         {showSemples &&
                             <div >
-                                {isLoading ?
+                                {isLoading  ?
                                     <p>Loading...</p>
                                     :
                                     <div className={styles.sempleList}>
@@ -151,7 +152,10 @@ const PopUp = ({ day, handlePopUp, setHandlePopUp, callBackNewEvent, checkPVZ })
                                             </div>
 
                                         ))}
-                                        <button className={styles.buttonAdd} onClick={addNewDay}>Сохранить</button>
+                                        {data.length === 0 
+                                        ? <p>Нет шаблонов</p>
+                                        : <button className={styles.buttonAdd} onClick={addNewDay}>Сохранить</button>  }
+                                        
                                     </div>
                                 }
                             </div>}

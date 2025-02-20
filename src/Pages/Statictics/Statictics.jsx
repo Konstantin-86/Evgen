@@ -64,6 +64,8 @@ const Statictics = ({ }) => {
                 const filtredSumArray = [];
     
                 filtredArray.forEach(item => {
+                    
+                    
                     const end = Number(item.endTime.slice(0, 2));
                     const start = Number(item.startTime.slice(0, 2));
                     const diffrenceTime = end - start;
@@ -78,6 +80,7 @@ const Statictics = ({ }) => {
                         existingEntry.bonus += Number(item.otherData.bonus);
                         existingEntry.fines += Number(item.otherData.fines);
                         existingEntry.finalResult += bonusAndFines;
+                       
                     } else {
                         filtredSumArray.push({
                             name: item.namePerson,
@@ -85,7 +88,8 @@ const Statictics = ({ }) => {
                             result: sum,
                             bonus: Number(item.otherData.bonus),
                             fines: Number(item.otherData.fines),
-                            finalResult: bonusAndFines
+                            finalResult: bonusAndFines,
+                            color: item.color
                         });
                     }
                 });
@@ -106,8 +110,6 @@ const Statictics = ({ }) => {
     }, [curMonth, checkPVZ, PVZ1, PVZ2, isLoadingPVZ1, isLoadingPVZ2]);
 
    
-
-
     return (
         <div className={styles.statWrap}>
             
@@ -127,10 +129,19 @@ const Statictics = ({ }) => {
                 <ToggleButton sx={getToggleButtonStyles('PVZ2', checkPVZ)} value="PVZ2">ПВЗ №2</ToggleButton>
             <input className={styles.inptMonth} type="month" value={curMonth} onChange={(e) => setCurMonth(e.target.value)} />
             </ToggleButtonGroup>
-            <StatGrafic/>
-    
+            
+            <div className={styles.infoWrap}>
             <p>Дней в месяце: {daysInMonth}</p>
             <p>Часов в месяце {daysInMonth * 12}</p>
+            {filtredSumArray.length ?
+            <div className={styles.resultTable}>
+                <p>Часов по факту: {summarHours}</p>
+                <p>Всего сумма {summarRubles}руб</p>
+            </div>
+            : null}
+            </div>
+
+            <StatGrafic filtredSumArray={filtredSumArray}/>
            
             <div className={styles.tableWrap}>
             {filtredSumArray.length ? 
@@ -149,12 +160,7 @@ const Statictics = ({ }) => {
                     </div>
                 )) : <h5>нет данных</h5>
             }
-           {filtredSumArray.length ?
-            <div className={styles.resultTable}>
-                <p>Часов по факту: {summarHours}</p>
-                <p>Всего сумма {summarRubles}руб</p>
-            </div>
-            : null}
+           
              <div className={styles.explaneTable}>
                 <p className={styles.explaneResult}>Общий заработк без учета бонусов и штрафов</p>
                 <p className={styles.explaneFines}>Штрафы</p>

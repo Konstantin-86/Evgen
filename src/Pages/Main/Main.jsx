@@ -108,8 +108,6 @@ const Main = () => {
   const handlers = useSwipeable({
     onSwipedLeft: () => {
       nextweek()
-      console.log(1111);
-
     },
     onSwipedRight: () => prevWeek(),
     preventDefaultTouchmoveEvent: true,
