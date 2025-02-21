@@ -4,11 +4,13 @@ import { getAllSemples } from '../../components/API/personSemple/getAllSemples'
 import { nanoid } from 'nanoid'
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 
 import { getPVZ1 } from '../../components/API/PVZ/getPVZ1'
 import { getPVZ2 } from '../../components/API/PVZ/getPVZ2'
 import { deleteEventPVZ1 } from '../../components/API/PVZ/deleteEventPVZ1';
 import { deleteEventPVZ2 } from '../../components/API/PVZ/deleteEventPVZ2';
+import PopUpEditEvent from './PopUpEditEvent';
 
 import styles from './PopUp.module.scss'
 
@@ -27,6 +29,8 @@ const PopUp = ({ day, handlePopUp, setHandlePopUp, callBackNewEvent, checkPVZ })
 
     const [showSemples, setShowSemples] = useState(true);
     const [selectedItems, setSelectedItems] = useState([]);
+    const [showEditPopUp, setShowEditPopUp] = useState(false);
+    const [currentPerson, setCurrentPerson] = useState({});
    
     const queryClient = useQueryClient();
     
@@ -90,6 +94,11 @@ const PopUp = ({ day, handlePopUp, setHandlePopUp, callBackNewEvent, checkPVZ })
         deletePerson.mutate(person.id)
         setHandlePopUp(false)
     }
+    const editEvent = (person)=> {
+        setShowEditPopUp(true)
+        setCurrentPerson(person)
+        
+    }
 
 
     return (
@@ -112,14 +121,16 @@ const PopUp = ({ day, handlePopUp, setHandlePopUp, callBackNewEvent, checkPVZ })
                             <p className={styles.itemTimeDiffrance}>{Number(person.endTime.slice(0, 2)) - Number(person.startTime.slice(0, 2))} ч</p>
                             <p>{(Number(person.endTime.slice(0, 2)) - Number(person.startTime.slice(0, 2))) * person.currentRate} руб</p>
 
-                            <div className={styles.button}>
-
+                            <div className={styles.buttons}>
                                 <IconButton
                                     color='default'
                                     size="medium"
                                     onClick={() => deleteEvent(person)}
                                 >
                                     <DeleteIcon />
+                                </IconButton>
+                                <IconButton onClick={() => editEvent(person)}>
+                                <EditOutlinedIcon/>
                                 </IconButton>
 
                             </div>
@@ -163,7 +174,14 @@ const PopUp = ({ day, handlePopUp, setHandlePopUp, callBackNewEvent, checkPVZ })
                     </div>
 
                 }
-
+        {
+            showEditPopUp && <PopUpEditEvent  
+            currentPerson={currentPerson} 
+            setShowEditPopUp={setShowEditPopUp}
+            setHandlePopUp={setHandlePopUp}
+            checkPVZ={checkPVZ}
+            />
+        }
             </div>
         </div>
     )

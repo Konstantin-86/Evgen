@@ -40,7 +40,7 @@ const Semples = () => {
   }
 
   return (
-    <div >
+    <div className={style.wrap} >
       <h1>Шаблоны</h1>
 
       <ul className={style.list}>

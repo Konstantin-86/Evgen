@@ -118,8 +118,8 @@ const Main = () => {
 
     <div {...handlers} className={styles.main}>
       <p className={showAlert ? styles.alert : styles.alertHide}> Данные успешно добавлены</p>
-      <h3>
-        {getCurrentDay()}
+      <h3 style={{marginBottom: '7px'}}>
+       Сегодня {getCurrentDay()}
       </h3>
       <ToggleButtonGroup
         color='info'

@@ -149,7 +149,7 @@ const Statictics = ({ }) => {
                     <div className={styles.statTable} key={index}>
                         <div className={styles.tableItem}>
                             <p className={styles.name}>{item.name}</p>
-                            <p className={styles.hours}>{item.hours}</p>
+                            <p className={styles.hours}>{item.hours}ч</p>
                             <div className={styles.itemMoney}>
                                 <p className={styles.activeRes }>{item.result}</p>
                                 <p className={styles.activeFines}>{item.fines}</p>
