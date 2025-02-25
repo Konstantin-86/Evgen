@@ -1,0 +1,51 @@
+.sempleList {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    max-height: 500px;
+    overflow-y: scroll;
+}
+
+.semple {
+    background-color: #474747;
+    padding: 7px;
+    border-radius: 7px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    max-width: 150px;
+    gap: 7px;
+
+    .sempleColor {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+.sempleCheked {
+    background-color: #3c6112;
+    padding: 7px 10px;
+    border-radius: 7px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    max-width: 170px;
+    gap: 10px;
+}
+
+.noSemple {
+    margin-bottom: 20px;
+}
+
+.buttonAdd {
+    width: 100%;
+    margin: 10px 20px;
+
+}
