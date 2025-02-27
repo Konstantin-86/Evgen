@@ -3,7 +3,6 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
     background-color: #4d4141;
     z-index: 1000;
     padding: 7px;
@@ -42,4 +41,11 @@
         height: 2px;
         background-color: #fff;
     }
+}
+select, input {
+    padding: 3px 10px;
+    margin-bottom: 7px;
+    border-radius: 7px;
+    border: none;
+    outline: none;
 }

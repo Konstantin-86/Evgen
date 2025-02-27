@@ -25,11 +25,21 @@ const Main = () => {
   const [date, setDate] = useState(new Date());
   const [currentWeek, setCurrentWeek] = useState([]);
   const [showAlert, setShowAlert] = useState(false);
-  const [checkPVZ, setCheckPVZ] = useState('PVZ1');
+  const [textAlert, setTextAlert] = useState('');
+  const [checkPVZ, setCheckPVZ] = useState('');
 
   const handleChange = (event) => {
     setCheckPVZ(event.target.value);
+    sessionStorage.setItem('checkPVZ', event.target.value)
   };
+  useEffect(() => {
+    const storedValue = sessionStorage.getItem('checkPVZ');
+    if (storedValue) {
+      setCheckPVZ(storedValue);
+    }else{
+      setCheckPVZ('PVZ1');
+    }
+  }, []);
 
   const getToggleButtonStyles = (value, checkPVZ) => ({
     backgroundColor: checkPVZ === value ? '#3a393a' : '#1f1e1f',
@@ -75,6 +85,7 @@ const Main = () => {
     },
     onSuccess: (_, newUser) => {
       queryClient.setQueryData([checkPVZ], (oldData) => {
+        setTextAlert('Данные успешно добавлены')
         setShowAlert(true);
         return [...oldData, newUser];
       });
@@ -89,7 +100,9 @@ const Main = () => {
     
     if (data.length) {
       data.map((elem) => {
+        setTimeout(() => {
           createMutation.mutate(elem)
+        }, 500);
       })
     }
   }
@@ -119,7 +132,7 @@ const Main = () => {
   return (
 
     <div {...handlers} className={styles.main}>
-      <p className={showAlert ? styles.alert : styles.alertHide}> Данные успешно добавлены</p>
+      <p className={showAlert ? styles.alert : styles.alertHide}>{textAlert}</p>
       <h3 style={{marginBottom: '7px'}}>
        Сегодня {getCurrentDay()}
       </h3>
@@ -137,7 +150,12 @@ const Main = () => {
         <ToggleButton sx={getToggleButtonStyles('PVZ1', checkPVZ)} value="PVZ1">ПВЗ №1</ToggleButton>
         <ToggleButton sx={getToggleButtonStyles('PVZ2', checkPVZ)} value="PVZ2">ПВЗ №2</ToggleButton>
       </ToggleButtonGroup>
-      <ItemList checkPVZ={checkPVZ} currentWeek={currentWeek} callBackNewEvent={callBackNewEvent} />
+      <ItemList checkPVZ={checkPVZ}
+                currentWeek={currentWeek}
+                callBackNewEvent={callBackNewEvent} 
+                setTextAlert={setTextAlert} 
+                setShowAlert={setShowAlert}
+                />
     </div>
   );
 };

@@ -14,7 +14,7 @@ const dayOfWeek = [
 ]
 
 
-const ItemList = ({ checkPVZ, currentWeek, callBackNewEvent }) => {
+const ItemList = ({ checkPVZ, currentWeek, callBackNewEvent, setTextAlert, setShowAlert }) => {
 
     const [currentDay, setCurrentDay] = useState([]);
     const [handlePopUp, setHandlePopUp] = useState(false);
@@ -50,7 +50,14 @@ const ItemList = ({ checkPVZ, currentWeek, callBackNewEvent }) => {
                     </li>
                 ))}
             </ul>
-            <PopUp checkPVZ={checkPVZ} day={currentDay} handlePopUp={handlePopUp} setHandlePopUp={setHandlePopUp} callBackNewEvent={callBackNewEvent} />
+            <PopUp checkPVZ={checkPVZ} 
+                day={currentDay} 
+                handlePopUp={handlePopUp} 
+                setHandlePopUp={setHandlePopUp} 
+                callBackNewEvent={callBackNewEvent} 
+                setTextAlert={setTextAlert}
+                setShowAlert={setShowAlert}
+                />
         </>
 
 

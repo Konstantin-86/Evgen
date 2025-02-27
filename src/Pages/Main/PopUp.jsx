@@ -26,7 +26,7 @@ const time = [
 ]
 
 
-const PopUp = ({ day, handlePopUp, setHandlePopUp, callBackNewEvent, checkPVZ }) => {
+const PopUp = ({ day, handlePopUp, setHandlePopUp, callBackNewEvent, checkPVZ, setTextAlert, setShowAlert }) => {
 
     const [showSemples, setShowSemples] = useState(true);
     const [selectedItems, setSelectedItems] = useState([]);
@@ -36,7 +36,6 @@ const PopUp = ({ day, handlePopUp, setHandlePopUp, callBackNewEvent, checkPVZ })
    
     const queryClient = useQueryClient();
     
-
     const { data, isLoading } = useQuery({
         queryKey: ['semples'],
         queryFn: getAllSemples,
@@ -50,11 +49,6 @@ const PopUp = ({ day, handlePopUp, setHandlePopUp, callBackNewEvent, checkPVZ })
         queryKey: ['PVZ2'],
         queryFn: getPVZ2,
     });
-    
-
-
-
-    
 
     const addNewDay = () => {
         let maxId = 0
@@ -64,11 +58,7 @@ const PopUp = ({ day, handlePopUp, setHandlePopUp, callBackNewEvent, checkPVZ })
                 maxId = item.id
             }
         })
-        console.log(maxId);
-        console.log("selectedItems", selectedItems);
-        
        const updatedArray = selectedItems.map((item, index) => {
-  
         delete item.idPerson
             return {
                 ...item,
@@ -86,7 +76,8 @@ const PopUp = ({ day, handlePopUp, setHandlePopUp, callBackNewEvent, checkPVZ })
         mutationFn: checkPVZ === "PVZ1" ? deleteEventPVZ1 : deleteEventPVZ2, 
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: [checkPVZ] }); 
-          console.log('Item deleted successfully!');
+          setTextAlert('Данные успешно удалены')
+          setShowAlert(true);
         },
         onError: (error) => {
           console.error('Error deleting item:', error);
@@ -162,29 +153,6 @@ const PopUp = ({ day, handlePopUp, setHandlePopUp, callBackNewEvent, checkPVZ })
                                         setSelectedItems={setSelectedItems}
                                         addNewDay={addNewDay}
                                     />
-                                   /*  <div className={styles.sempleList}>
-                                        {data.map((item) => (
-                                            <div key={nanoid()}
-                                                className={styles.semple}
-                                                onClick={() => handleClick(item)}
-                                                style={{
-                                                    backgroundColor: selectedItems.some((selectedItem) => selectedItem.idPerson === item.idPerson)
-                                                        ? '#3c6112'
-                                                        : '#474747',
-                                                }}>
-                                                <p className={styles.sempleName}>{item.namePerson}</p>
-                                                <p className={styles.sempleColor} style={{ backgroundColor: item.color }}></p>
-
-                                                <p>{item.startTime} - {item.endTime}</p>
-                                                <p>{item.currentRate} руб</p>
-                                            </div>
-
-                                        ))}
-                                        {data.length === 0 
-                                        ? <p>Нет шаблонов</p>
-                                        : <button className={styles.buttonAdd} onClick={addNewDay}>Сохранить</button>  }
-                                        
-                                    </div> */
                                 }
                             </div>}
 
@@ -202,6 +170,8 @@ const PopUp = ({ day, handlePopUp, setHandlePopUp, callBackNewEvent, checkPVZ })
             setShowEditPopUp={setShowEditPopUp}
             setHandlePopUp={setHandlePopUp}
             checkPVZ={checkPVZ}
+            setTextAlert={setTextAlert}
+            setShowAlert={setShowAlert}
             />
         }
             </div>

@@ -14,7 +14,7 @@ const time = [
     "17:00", "18:00", "19:00", "20:00",
     "21:00"
   ]
-const PopUpEditEvent = ({currentPerson, setShowEditPopUp, setHandlePopUp, checkPVZ}) => {
+const PopUpEditEvent = ({currentPerson, setShowEditPopUp, setHandlePopUp, checkPVZ, setTextAlert, setShowAlert}) => {
     const [startTimeState, setStartTimeState] = useState(currentPerson.startTime);
     const [endTimeState, setEndTimeState] = useState(currentPerson.endTime);
     const [currentRateState, setCurrentRateState] = useState(currentPerson.currentRate);
@@ -29,6 +29,8 @@ const PopUpEditEvent = ({currentPerson, setShowEditPopUp, setHandlePopUp, checkP
           return checkPVZFn(newUser)
         },
         onSuccess: (_, newUser) => {
+          setTextAlert('Данные успешно изменены')
+          setShowAlert(true);
           queryClient.setQueryData([checkPVZ], (oldData) => {
       const index = oldData.findIndex(user => user.id === newUser.id);
       if (index !== -1) {

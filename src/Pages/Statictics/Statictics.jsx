@@ -13,14 +13,28 @@ import styles from './Statictics.module.scss'
 
 
 const Statictics = ({ }) => {
-    const [checkPVZ, setCheckPVZ] = useState('PVZ1');
-    const [curMonth, setCurMonth] = useState(getCurrentMonthAndYear())
+    const [checkPVZ, setCheckPVZ] = useState('');
+    const [curMonth, setCurMonth] = useState("")
     const [daysInMonth, setDaysInMonth] = useState(0);
     const [filtredSumArray, setFiltredSumArray] = useState([]);
     const [summarHours, setSummarHours] = useState(0)
     const [summarRubles, setSummarRubles] = useState(0)
+console.log(curMonth, "curMonth");
 
-
+    useEffect(() => {
+        const storedValue = sessionStorage.getItem('checkPVZ');
+        const checkMonth = sessionStorage.getItem('curMonth');
+        if (storedValue) {
+          setCheckPVZ(storedValue);
+        }else{
+          setCheckPVZ('PVZ1');
+        }
+        if (checkMonth) {
+          setCurMonth(checkMonth);
+        }else{
+          setCurMonth(getCurrentMonthAndYear())
+        }
+      }, []);
 
     const { data: PVZ1, isLoading: isLoadingPVZ1 } = useQuery({
         queryKey: ['PVZ1'],
@@ -33,6 +47,7 @@ const Statictics = ({ }) => {
     });
     const handleChange = (event) => {
         setCheckPVZ(event.target.value);
+        sessionStorage.setItem('checkPVZ', event.target.value);
     };
     const getToggleButtonStyles = (value, checkPVZ) => ({
         backgroundColor: checkPVZ === value ? '#3a393a' : '#1f1e1f',
@@ -51,11 +66,9 @@ const Statictics = ({ }) => {
     }, [curMonth]);
 
     useEffect(() => {
-        // Проверяем, загружены ли данные
         if (!isLoadingPVZ1 && !isLoadingPVZ2) {
             const checkPVZValue = checkPVZ === 'PVZ1' ? PVZ1 : PVZ2;
             
-            // Проверяем, что checkPVZValue существует и является массивом
             if (checkPVZValue && Array.isArray(checkPVZValue)) {
                 const filtredArray = checkPVZValue.filter(item => {
                     return item.date.slice(3, 5) === curMonth.slice(5, 7);
@@ -64,14 +77,11 @@ const Statictics = ({ }) => {
                 const filtredSumArray = [];
     
                 filtredArray.forEach(item => {
-                    
-                    
                     const end = Number(item.endTime.slice(0, 2));
                     const start = Number(item.startTime.slice(0, 2));
                     const diffrenceTime = end - start;
                     const sum = Number(item.currentRate) * diffrenceTime;
                     const bonusAndFines = sum + Number(item.otherData.bonus) - Number(item.otherData.fines);
-    
                     const existingEntry = filtredSumArray.find(elem => elem.name === item.namePerson);
     
                     if (existingEntry) {
@@ -100,7 +110,7 @@ const Statictics = ({ }) => {
                 setSummarHours(sumHours);
     
                 const sumOfRubles = filtredSumArray.reduce((acc, item) => {
-                    return acc + item.result;
+                    return acc + item.result + item.bonus - item.fines;
                 }, 0);
                 setSummarRubles(sumOfRubles);
     
@@ -127,7 +137,10 @@ const Statictics = ({ }) => {
             >
                 <ToggleButton sx={getToggleButtonStyles('PVZ1', checkPVZ)} value="PVZ1">ПВЗ №1</ToggleButton>
                 <ToggleButton sx={getToggleButtonStyles('PVZ2', checkPVZ)} value="PVZ2">ПВЗ №2</ToggleButton>
-            <input className={styles.inptMonth} type="month" value={curMonth} onChange={(e) => setCurMonth(e.target.value)} />
+            <input className={styles.inptMonth} type="month" value={curMonth} onChange={(e) => {
+                setCurMonth(e.target.value);
+                sessionStorage.setItem('curMonth', e.target.value);
+            }} />
             </ToggleButtonGroup>
             
             <div className={styles.infoWrap}>
