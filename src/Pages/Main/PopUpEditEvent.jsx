@@ -72,7 +72,7 @@ const PopUpEditEvent = ({currentPerson, setShowEditPopUp, setHandlePopUp, checkP
         <button onClick={closeAll} className={styles.closeButton}></button>
         
         <p>{currentPerson.date}</p>
-        <p>{currentPerson.namePerson}</p>
+        <p className={styles.name}>{currentPerson.namePerson}</p>
 
         <p>начало</p>
         <select name="startTime" value={startTimeState} onChange={(e) => setStartTimeState(e.target.value)}>

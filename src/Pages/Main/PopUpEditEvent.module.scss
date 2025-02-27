@@ -48,4 +48,12 @@ select, input {
     border-radius: 7px;
     border: none;
     outline: none;
+    transition: all 0.2s ease-in-out;
+}
+.name{
+    text-align: center;
+    font-size: 18px;
+}
+input:focus {
+    background-color: #a09d9d;
 }

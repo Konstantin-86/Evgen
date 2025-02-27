@@ -53,7 +53,7 @@ const AddSemples = ({ numberID, showAddSemples, setShowAddSemples }) => {
       "namePerson": newPersonName,
       "startTime": newPersonStartTime,
       "endTime": newPersonEndTime,
-      "currentRate": newPersonRate,
+      "currentRate": +newPersonRate,
       "color": newPersonColor
     };
     createMutation.mutate(newUser);
@@ -92,7 +92,7 @@ const AddSemples = ({ numberID, showAddSemples, setShowAddSemples }) => {
 
         <div className={style.rate}>
           <label htmlFor="userRate">Ставка</label>
-          <input onFocus={handleFocus} value={newPersonRate} onChange={(e) => setNewPersonRate(+e.target.value)} type="number" id='userRate' />
+          <input onFocus={handleFocus} value={newPersonRate} onChange={(e) => setNewPersonRate(e.target.value)} type="number" id='userRate' />
         </div>
 
         <button onClick={handleAddUser}>Добавить</button>

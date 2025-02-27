@@ -28,6 +28,9 @@ const Main = () => {
   const [textAlert, setTextAlert] = useState('');
   const [checkPVZ, setCheckPVZ] = useState('');
 
+  console.log(window.innerWidth);
+  
+
   const handleChange = (event) => {
     setCheckPVZ(event.target.value);
     sessionStorage.setItem('checkPVZ', event.target.value)
@@ -96,7 +99,6 @@ const Main = () => {
   })
 
   const callBackNewEvent = (data) => {
-    console.log(data, "data");
     
     if (data.length) {
       data.map((elem) => {
@@ -132,6 +134,8 @@ const Main = () => {
   return (
 
     <div {...handlers} className={styles.main}>
+      <p>{window.innerWidth}</p>
+      
       <p className={showAlert ? styles.alert : styles.alertHide}>{textAlert}</p>
       <h3 style={{marginBottom: '7px'}}>
        Сегодня {getCurrentDay()}

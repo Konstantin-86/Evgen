@@ -99,8 +99,6 @@ const sortedArrayRubles = filtredSumArray.map((elem)=> {
           onClick={handleBarClick} 
         />
       </BarChart>
-
-     
       </ResponsiveContainer>
         </div>
     )

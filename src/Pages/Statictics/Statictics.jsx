@@ -19,8 +19,7 @@ const Statictics = ({ }) => {
     const [filtredSumArray, setFiltredSumArray] = useState([]);
     const [summarHours, setSummarHours] = useState(0)
     const [summarRubles, setSummarRubles] = useState(0)
-console.log(curMonth, "curMonth");
-
+    
     useEffect(() => {
         const storedValue = sessionStorage.getItem('checkPVZ');
         const checkMonth = sessionStorage.getItem('curMonth');

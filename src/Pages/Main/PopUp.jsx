@@ -108,7 +108,7 @@ const PopUp = ({ day, handlePopUp, setHandlePopUp, callBackNewEvent, checkPVZ, s
         <div className={handlePopUp ? styles.popUpOpen : styles.popUpClose}>
             <div className={styles.popUpWrapper}>
                 <button className={styles.closeButton} onClick={closePopUp}>
-                    <img src={closeBtn} alt="" />
+                <p className={styles.closeIcon}></p>
                 </button>
                 <h3 className={styles.currentDay}>{day.date}
                     <p className={styles.dayOfWeek}>{day.dayOfWeek}</p>
@@ -127,13 +127,14 @@ const PopUp = ({ day, handlePopUp, setHandlePopUp, callBackNewEvent, checkPVZ, s
 
                             <div className={styles.buttons}>
                                 <IconButton
-                                    color='default'
+                                    color='error'
                                     size="medium"
+                                    /* style={{ border: '1px solid red', borderRadius: '7px', outline: 'none' }} */
                                     onClick={() => deleteEvent(person)}
                                 >
                                     <DeleteIcon />
                                 </IconButton>
-                                <IconButton onClick={() => editEvent(person)}>
+                                <IconButton color='info' onClick={() => editEvent(person)}>
                                 <EditOutlinedIcon/>
                                 </IconButton>
 

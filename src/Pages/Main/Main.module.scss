@@ -45,3 +45,29 @@
     opacity: 0;
     transition: all 0.2s ease-in-out;
 }
+.closeIcon{
+    position: relative;
+    width: 35px;
+    height: 35px;
+    border: none;
+    background-color: transparent;
+    &::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 100%;
+        rotate: 45deg;
+        height: 2px;
+        background-color: var(--textColor);
+    }
+    &::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        rotate: -45deg;
+        background-color: var(--textColor);
+}}
