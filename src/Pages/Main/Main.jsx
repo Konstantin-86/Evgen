@@ -85,9 +85,11 @@ const Main = () => {
   })
 
   const callBackNewEvent = (data) => {
+    console.log(data, "data");
+    
     if (data.length) {
       data.map((elem) => {
-        createMutation.mutate(elem)
+          createMutation.mutate(elem)
       })
     }
   }

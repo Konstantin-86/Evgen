@@ -37,19 +37,6 @@ const PopUp = ({ day, handlePopUp, setHandlePopUp, callBackNewEvent, checkPVZ })
     const queryClient = useQueryClient();
     
 
-   /*  const handleClick = (item) => {
-        const isSelected = selectedItems.some((selectedItem) => selectedItem.idPerson === item.idPerson);
-        if (isSelected) {
-            setSelectedItems(selectedItems.filter((selectedItem) => selectedItem.idPerson !== item.idPerson));
-        } else {
-            const newItem = {
-                ...item,
-                otherData: item.otherData || { fines: 0, bonus: 0 },
-            };
-            setSelectedItems([...selectedItems, newItem]);
-        }
-    }; */
-
     const { data, isLoading } = useQuery({
         queryKey: ['semples'],
         queryFn: getAllSemples,
@@ -63,17 +50,31 @@ const PopUp = ({ day, handlePopUp, setHandlePopUp, callBackNewEvent, checkPVZ })
         queryKey: ['PVZ2'],
         queryFn: getPVZ2,
     });
+    
+
+
+
+    
 
     const addNewDay = () => {
-        let idCheck = checkPVZ === "PVZ1" ? PVZ1.length : PVZ2.length
-       const updatedArray = selectedItems.map(item => {
+        let maxId = 0
+        const checkPVZValue = checkPVZ === 'PVZ1' ? PVZ1 : PVZ2
+        checkPVZValue.forEach(item => {
+            if (item.id > maxId) {
+                maxId = item.id
+            }
+        })
+        console.log(maxId);
+        console.log("selectedItems", selectedItems);
         
+       const updatedArray = selectedItems.map((item, index) => {
+  
         delete item.idPerson
             return {
-                date: day.date,
                 ...item,
+                id: maxId + index + 1,
+                date: day.date,
             }
-            
         })
         callBackNewEvent(updatedArray);
         setSelectedItems([]);
@@ -94,7 +95,6 @@ const PopUp = ({ day, handlePopUp, setHandlePopUp, callBackNewEvent, checkPVZ })
 
     const deleteEvent = (person) => {
         console.log(person);
-        
         deletePerson.mutate(person.id)
         setHandlePopUp(false)
     }

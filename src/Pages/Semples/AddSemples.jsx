@@ -49,8 +49,7 @@ const AddSemples = ({ numberID, showAddSemples, setShowAddSemples }) => {
     const nextID = numberID + 1;
     
     const newUser = {
-      /* "id": nextID,
-      "idPerson": nextID, */
+      "id": nextID,
       "namePerson": newPersonName,
       "startTime": newPersonStartTime,
       "endTime": newPersonEndTime,

@@ -21,7 +21,13 @@ const Semples = () => {
   
   useEffect(() => {
     if (!isLoading && data) {
-      setNumberID(data.length);
+      let maxId = 0;
+      data.forEach((item) => {
+        if (item.id > maxId) {
+          maxId = item.id;
+        }
+      })
+      setNumberID(maxId);
     }
   }, [isLoading, data]);
 
@@ -29,14 +35,14 @@ const Semples = () => {
 
   const deleteMutation = useMutation({
     mutationFn: deleteSemple,
-    onSuccess: (_, idPerson) => {
+    onSuccess: (_, id) => {
       queryClient.setQueryData(['semples'], (oldData) => {
-        return oldData.filter((item) => item.idPerson !== idPerson);
+        return oldData.filter((item) => item.id !== id);
       });
     },
   });
-  const deletePerson = (idPerson) => {
-    deleteMutation.mutate(idPerson)
+  const deletePerson = (id) => {
+    deleteMutation.mutate(id)
   }
 
   return (
@@ -56,7 +62,7 @@ const Semples = () => {
 
               <p>{item.startTime} - {item.endTime}</p>
               <p>{item.currentRate} руб</p>
-              <div className={style.deleteIcon} onClick={() => deletePerson(item.idPerson)}>
+              <div className={style.deleteIcon} onClick={() => deletePerson(item.id)}>
                 <DeleteOutlineIcon />
               </div>
 
