@@ -2,7 +2,19 @@
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   --mainColor: rgb(27, 18, 18);
   --textColor: rgb(255, 255, 255);
+}
+[data-theme="light"] {
+  --background: #ffffff;
+  --secondary-background: #f0f0f0;
+  --text: #000000;
+  --accent: #ff5722;
+}
 
+[data-theme="dark"] {
+  --background: #121212;
+  --secondary-background: #1e1e1e;
+  --text: #ffffff;
+  --accent: #ff5722;
 }
 
 * {

@@ -1,29 +1,45 @@
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import { nanoid } from 'nanoid'
 import { useQuery } from '@tanstack/react-query';
 import { getAllSemples } from '../../components/API/personSemple/getAllSemples';
 
 import styles from './SempleList.module.scss'
 
-const SempleList = ({ selectedItems, setSelectedItems, addNewDay }) => {
-  
+const SempleList = ({ selectedItems, setSelectedItems, addNewDay, maxId, setMaxId }) => {
 
     const { data, isLoading } = useQuery({
         queryKey: ['semples'],
         queryFn: getAllSemples,
     });
 
+const isItemSelected = (item, selectedItems) => {
+    return selectedItems.some((selectedItem) => 
+        selectedItem.namePerson === item.namePerson &&
+        selectedItem.startTime === item.startTime &&
+        selectedItem.endTime === item.endTime
+    );
+};
+
     const handleClick = (item) => {
-        const isSelected = selectedItems.some((selectedItem) => selectedItem.id === item.id);
+        const isSelected = isItemSelected(item, selectedItems);
         if (isSelected) {
-            setSelectedItems(selectedItems.filter((selectedItem) => selectedItem.id !== item.id));
+            setSelectedItems(selectedItems.filter((selectedItem) => 
+                !(selectedItem.namePerson === item.namePerson &&
+                  selectedItem.startTime === item.startTime &&
+                  selectedItem.endTime === item.endTime)
+            ));
+            setMaxId(maxId - 1);
         } else {
             const newItem = {
                 ...item,
+                id: maxId + 1,
                 otherData: item.otherData || { fines: 0, bonus: 0 },
             };
             setSelectedItems([...selectedItems, newItem]);
+            setMaxId(maxId + 1);
         }
+        console.log(maxId);
+        
     };
 
     
@@ -34,7 +50,7 @@ const SempleList = ({ selectedItems, setSelectedItems, addNewDay }) => {
                 className={styles.semple}
                 onClick={() => handleClick(item)}
                 style={{
-                backgroundColor: selectedItems.some((selectedItem) => selectedItem.id === item.id)
+                backgroundColor: isItemSelected(item, selectedItems)
                     ? '#3c6112'
                     : '#474747',
                 }}>
