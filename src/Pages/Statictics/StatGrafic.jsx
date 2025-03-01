@@ -93,6 +93,9 @@ const StatGrafic = ({ filtredSumArray }) => {
 
   return (
     <div className={styles.wrap}>
+
+
+
       <h3>Распределение по часам</h3>
       <ResponsiveContainer width="100%" height={300}>
         <PieChart>
@@ -140,6 +143,7 @@ const StatGrafic = ({ filtredSumArray }) => {
         </BarChart>
       </ResponsiveContainer>
     </div>
+
   );
 };
 

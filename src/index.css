@@ -33,3 +33,17 @@ body {
 ul {
   list-style: none;
 }
+
+button {
+  max-width: 250px;
+  width: 100%;
+  margin: 20px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--secondary-background);
+  border: 1px solid var(--accent);
+  padding: 7px 10px;
+  border-radius: 7px;
+  color: var(--text);
+}

@@ -12,10 +12,10 @@ import { deleteEventPVZ1 } from "../../components/API/PVZ/deleteEventPVZ1";
 import { deleteEventPVZ2 } from "../../components/API/PVZ/deleteEventPVZ2";
 import PopUpEditEvent from "./PopUpEditEvent";
 
+import SempleList from "./SempleList";
+
 import styles from "./PopUp.module.scss";
 
-import closeBtn from "/close.png";
-import SempleList from "./SempleList";
 
 const time = [
   "09:00",
@@ -143,88 +143,90 @@ const PopUp = ({
 
   return (
     <div className={handlePopUp ? styles.popUpOpen : styles.popUpClose}>
-      <div className={styles.popUpWrapper}>
-        <button className={styles.closeButton} onClick={closePopUp}>
-          <p className={styles.closeIcon}></p>
-        </button>
-        <h3 className={styles.currentDay}>
-          {day.date}
-          <p className={styles.dayOfWeek}>{day.dayOfWeek}</p>
-        </h3>
-        {day.data && day.data.length > 0 && handleNewEvent === false ? (
-          day.data.map((person) => (
-            <div className={styles.itemText} key={nanoid()}>
-              <p className={styles.itemName}>
-                <span
-                  className={styles.itemColor}
-                  style={{ backgroundColor: person.color }}
-                >
-                  {person.namePerson.slice(0, 2)}
-                </span>
-                <span>{person.namePerson}</span>
-              </p>
-              <p className={styles.time}>
-                {person.startTime} - {person.endTime}
-              </p>
-              <p className={styles.itemTimeDiffrance}>
-                {Number(person.endTime.slice(0, 2)) -
-                  Number(person.startTime.slice(0, 2))}{" "}
-                ч
-              </p>
-              <p>
-                {(Number(person.endTime.slice(0, 2)) -
-                  Number(person.startTime.slice(0, 2))) *
-                  person.currentRate}{" "}
-                руб
-              </p>
+      <div className={styles.container}>
+        <div className={styles.popUpWrapper}>
+          <button className={styles.closeButton} onClick={closePopUp}>
+            <p className={styles.closeIcon}></p>
+          </button>
+          <h3 className={styles.currentDay}>
+            {day.date}
+            <p className={styles.dayOfWeek}>{day.dayOfWeek}</p>
+          </h3>
+          {day.data && day.data.length > 0 && handleNewEvent === false ? (
+            day.data.map((person) => (
+              <div className={styles.itemText} key={nanoid()}>
+                <p className={styles.itemName}>
+                  <span
+                    className={styles.itemColor}
+                    style={{ backgroundColor: person.color }}
+                  >
+                    {person.namePerson.slice(0, 2)}
+                  </span>
+                  <span>{person.namePerson}</span>
+                </p>
+                <p className={styles.time}>
+                  {person.startTime} - {person.endTime}
+                </p>
+                <p className={styles.itemTimeDiffrance}>
+                  {Number(person.endTime.slice(0, 2)) -
+                    Number(person.startTime.slice(0, 2))}{" "}
+                  ч
+                </p>
+                <p>
+                  {(Number(person.endTime.slice(0, 2)) -
+                    Number(person.startTime.slice(0, 2))) *
+                    person.currentRate}{" "}
+                  руб
+                </p>
 
-              <div className={styles.buttons}>
-                <IconButton
-                  color="error"
-                  size="medium"
-                  onClick={() => deleteEvent(person)}
-                >
-                  <DeleteIcon />
-                </IconButton>
-                <IconButton color="info" onClick={() => editEvent(person)}>
-                  <EditOutlinedIcon />
-                </IconButton>
+                <div className={styles.buttons}>
+                  <IconButton
+                    color="error"
+                    size="medium"
+                    onClick={() => deleteEvent(person)}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                  <IconButton color="info" onClick={() => editEvent(person)}>
+                    <EditOutlinedIcon />
+                  </IconButton>
+                </div>
               </div>
+            ))
+          ) : (
+            <div>
+              {showSemples && (
+                <div>
+                  {isLoading ? (
+                    <p>Loading...</p>
+                  ) : (
+                    <SempleList
+                      selectedItems={selectedItems}
+                      setSelectedItems={setSelectedItems}
+                      addNewDay={addNewDay}
+                      maxId={maxId}
+                      setMaxId={setMaxId}
+                    />
+                  )}
+                </div>
+              )}
             </div>
-          ))
-        ) : (
-          <div>
-            {showSemples && (
-              <div>
-                {isLoading ? (
-                  <p>Loading...</p>
-                ) : (
-                  <SempleList
-                    selectedItems={selectedItems}
-                    setSelectedItems={setSelectedItems}
-                    addNewDay={addNewDay}
-                    maxId={maxId}
-                    setMaxId={setMaxId}
-                  />
-                )}
-              </div>
-            )}
-          </div>
-        )}
-        {day.data && day.data.length > 0 && handleNewEvent === false && (
-          <button className={styles.addButton} onClick={addNewEvent}>Добавить</button>
-        )}
+          )}
+          {day.data && day.data.length > 0 && handleNewEvent === false && (
+            <button className={styles.addButton} onClick={addNewEvent}>Добавить</button>
+          )}
 
-        {showEditPopUp && (
-          <PopUpEditEvent
-            currentPerson={currentPerson}
-            setShowEditPopUp={setShowEditPopUp}
-            setHandlePopUp={setHandlePopUp}
-            checkPVZ={checkPVZ}
-            setTextAlert={setTextAlert}
-            setShowAlert={setShowAlert}
-          />
-        )}
+          {showEditPopUp && (
+            <PopUpEditEvent
+              currentPerson={currentPerson}
+              setShowEditPopUp={setShowEditPopUp}
+              setHandlePopUp={setHandlePopUp}
+              checkPVZ={checkPVZ}
+              setTextAlert={setTextAlert}
+              setShowAlert={setShowAlert}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

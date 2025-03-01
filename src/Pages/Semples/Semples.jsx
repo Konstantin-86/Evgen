@@ -18,7 +18,7 @@ const Semples = () => {
     queryKey: ['semples'],
     queryFn: getAllSemples,
   });
-  
+
   useEffect(() => {
     if (!isLoading && data) {
       let maxId = 0;
@@ -47,32 +47,29 @@ const Semples = () => {
 
   return (
     <div className={style.wrap} >
-      <h1>Шаблоны</h1>
-
-      <ul className={style.list}>
-        {isLoading
-          ?
-          <p>Loading...</p>
-          :
-          data.map((item) => (
-            <li key={nanoid()} className={style.item} >
-
-              <p className={style.itemName}>{item.namePerson}</p>
-              <p className={style.itemColor} style={{ backgroundColor: item.color }}></p>
-
-              <p>{item.startTime} - {item.endTime}</p>
-              <p>{item.currentRate} руб</p>
-              <div className={style.deleteIcon} onClick={() => deletePerson(item.id)}>
-                <DeleteOutlineIcon />
-              </div>
-
-            </li>
-          ))
-        }
-      </ul>
-      <button className={style.button} onClick={() => setShowAddSemples(!showAddSemples)}>Добавить шаблон</button>
-      <AddSemples numberID={numberID} showAddSemples={showAddSemples} setShowAddSemples={setShowAddSemples} />
-
+      <div className={style.container}>
+        <h1>Шаблоны</h1>
+        <ul className={style.list}>
+          {isLoading
+            ?
+            <p>Loading...</p>
+            :
+            data.map((item) => (
+              <li key={nanoid()} className={style.item} >
+                <p className={style.itemName}>{item.namePerson}</p>
+                <p className={style.itemColor} style={{ backgroundColor: item.color }}></p>
+                <p>{item.startTime} - {item.endTime}</p>
+                <p>{item.currentRate} руб</p>
+                <div className={style.deleteIcon} onClick={() => deletePerson(item.id)}>
+                  <DeleteOutlineIcon />
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+        <button className={style.addButton} onClick={() => setShowAddSemples(!showAddSemples)}>Добавить шаблон</button>
+        <AddSemples numberID={numberID} showAddSemples={showAddSemples} setShowAddSemples={setShowAddSemples} />
+      </div>
     </div>
   )
 }

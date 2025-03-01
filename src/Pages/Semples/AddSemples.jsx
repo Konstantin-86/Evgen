@@ -47,7 +47,7 @@ const AddSemples = ({ numberID, showAddSemples, setShowAddSemples }) => {
       return
     }
     const nextID = numberID + 1;
-    
+
     const newUser = {
       "id": nextID,
       "namePerson": newPersonName,
@@ -69,9 +69,10 @@ const AddSemples = ({ numberID, showAddSemples, setShowAddSemples }) => {
   return (
     <div className={showAddSemples ? style.addSemplesOpen : style.addSemplesClose}>
       <div className={style.wrap}>
-        <button className={style.close} onClick={() => setShowAddSemples(false)}>Закрыть</button>
+        <div className={style.close} onClick={() => setShowAddSemples(false)}>
+          <p className={style.closeIcon}></p>
+        </div>
         <h2>Новый шаблон</h2>
-
         <div className={style.name}>
           <label htmlFor="username">Имя</label>
           <input type="text" id='username' onFocus={handleFocus} placeholder='' value={newPersonName} onChange={(e) => setNewPersonName(e.target.value)} />
@@ -95,10 +96,10 @@ const AddSemples = ({ numberID, showAddSemples, setShowAddSemples }) => {
           <input onFocus={handleFocus} value={newPersonRate} onChange={(e) => setNewPersonRate(e.target.value)} type="number" id='userRate' />
         </div>
 
-        <button onClick={handleAddUser}>Добавить</button>
+        <button className={style.addButton} onClick={handleAddUser}>Добавить</button>
       </div>
-
     </div>
+
   )
 }
 export default AddSemples

@@ -137,32 +137,35 @@ const Main = () => {
 
   return (
     <div {...handlers} className={styles.main}>
-      <p className={showAlert ? styles.alert : styles.alertHide}>{textAlert}</p>
-      <h3 style={{ marginBottom: "7px" }}>Сегодня {getCurrentDay()}</h3>
-      <ToggleButtonGroup
-        color="info"
-        value={checkPVZ}
-        onChange={(event) => handleChange(event)}
-        sx={{
-          backgroundColor: "var(--secondary-background)",
-          color: "white",
-          marginBottom: "7px",
-        }}
-      >
-        <ToggleButton sx={getToggleButtonStyles("PVZ1", checkPVZ)} value="PVZ1">
-          {pvz1Name}
-        </ToggleButton>
-        <ToggleButton sx={getToggleButtonStyles("PVZ2", checkPVZ)} value="PVZ2">
-          {pvz2Name}
-        </ToggleButton>
-      </ToggleButtonGroup>
-      <ItemList
-        checkPVZ={checkPVZ}
-        currentWeek={currentWeek}
-        callBackNewEvent={callBackNewEvent}
-        setTextAlert={setTextAlert}
-        setShowAlert={setShowAlert}
-      />
+      <div className={styles.container}>
+        <p className={showAlert ? styles.alert : styles.alertHide}>{textAlert}</p>
+        <h3 style={{ marginBottom: "7px" }}>Сегодня {getCurrentDay()}</h3>
+        <ToggleButtonGroup
+          color="info"
+          value={checkPVZ}
+          onChange={(event) => handleChange(event)}
+          sx={{
+            backgroundColor: "var(--secondary-background)",
+            color: "white",
+            marginBottom: "7px",
+          }}
+        >
+          <ToggleButton sx={getToggleButtonStyles("PVZ1", checkPVZ)} value="PVZ1">
+            {pvz1Name}
+          </ToggleButton>
+          <ToggleButton sx={getToggleButtonStyles("PVZ2", checkPVZ)} value="PVZ2">
+            {pvz2Name}
+          </ToggleButton>
+        </ToggleButtonGroup>
+        <ItemList
+          checkPVZ={checkPVZ}
+          currentWeek={currentWeek}
+          callBackNewEvent={callBackNewEvent}
+          setTextAlert={setTextAlert}
+          setShowAlert={setShowAlert}
+        />
+
+      </div>
     </div>
   );
 };

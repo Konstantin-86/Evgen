@@ -9,9 +9,19 @@
     align-items: center;
     padding: 0 10px;
     background-color: var(--secondary-background);
+    max-width: 500px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 7px;
     z-index: 999;
 }
 
+.container {
+    max-width: 500px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 7px;
+}
 
 
 .active {

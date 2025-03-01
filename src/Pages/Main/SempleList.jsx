@@ -38,28 +38,30 @@ const SempleList = ({ selectedItems, setSelectedItems, addNewDay, maxId, setMaxI
 
 
     return (
-        <div className={styles.sempleList}>
-            {data.map((item) => (
-                <div key={nanoid()}
-                    className={styles.semple}
-                    onClick={() => handleClick(item)}
-                    style={{
-                        backgroundColor: isItemSelected(item, selectedItems)
-                            ? 'var(--accent)'
-                            : 'var(--secondary-background)',
-                    }}>
-                    <p className={styles.sempleName}>{item.namePerson}</p>
-                    <p className={styles.sempleColor} style={{ backgroundColor: item.color }}></p>
-                    <p>{item.startTime} - {item.endTime}</p>
-                    <p>{item.currentRate} руб</p>
-                </div>
-            ))}
-            {data.length === 0
-                ?
-                <p>Нет шаблонов</p>
-                :
-                <button className={styles.buttonAdd} onClick={addNewDay}>Сохранить</button>}
+        <div className={styles.container}>
+            <div className={styles.sempleList}>
+                {data.map((item) => (
+                    <div key={nanoid()}
+                        className={styles.semple}
+                        onClick={() => handleClick(item)}
+                        style={{
+                            backgroundColor: isItemSelected(item, selectedItems)
+                                ? 'var(--accent)'
+                                : 'var(--secondary-background)',
+                        }}>
+                        <p className={styles.sempleName}>{item.namePerson}</p>
+                        <p className={styles.sempleColor} style={{ backgroundColor: item.color }}></p>
+                        <p>{item.startTime} - {item.endTime}</p>
+                        <p>{item.currentRate} руб</p>
+                    </div>
+                ))}
+                {data.length === 0
+                    ?
+                    <p>Нет шаблонов</p>
+                    :
+                    <button className={styles.buttonAdd} onClick={addNewDay}>Сохранить</button>}
 
+            </div>
         </div>
     )
 }

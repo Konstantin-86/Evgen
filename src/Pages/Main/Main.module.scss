@@ -1,25 +1,16 @@
-.showCalendar {
-    width: 100%;
-    height: 100%;
-    visibility: visible;
-    opacity: 1;
-    transition: all 0.2s ease-in-out;
-}
-
-.hideCalendar {
-    width: 100%;
-    height: 0;
-    visibility: hidden;
-    opacity: 0;
-    transition: all 0.2s ease-in-out;
-}
-
 .main {
     position: relative;
     padding-top: 7px;
     min-height: calc(100dvh - 50px);
     background-color: var(--background);
     color: var(--text);
+}
+
+.container {
+    max-width: 500px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 7px;
 }
 
 .alert {

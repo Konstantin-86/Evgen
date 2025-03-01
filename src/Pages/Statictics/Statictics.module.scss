@@ -4,6 +4,13 @@
     color: var(--text);
 }
 
+.container {
+    max-width: 500px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 7px;
+}
+
 .tableWrap,
 .infoWrap {
     margin: 7px;
