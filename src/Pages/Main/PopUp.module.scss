@@ -44,7 +44,7 @@
     min-height: 50dvh;
     padding: 7px;
     padding-top: 15px;
-    background-color: rgb(1, 48, 48);
+    background-color: var(--background);
     margin-block: 100px;
 }
 
@@ -54,11 +54,11 @@
     padding: 7px;
     overflow: hidden;
     margin-bottom: 10px;
-    background-color: rgb(4, 65, 65);
+    background-color: var(--secondary-background);
     display: flex;
     align-items: center;
     gap: 7px;
-    color: aliceblue;
+    color: var(--text);
 }
 
 .itemName {
@@ -69,17 +69,16 @@
 }
 
 .itemColor {
-    width: 20px;
-    height: 20px;
+    width: 25px;
+    height: 25px;
     border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 12px;
+    text-align: center;
+    padding-top: 4px;
+    font-size: 10px;
     text-transform: lowercase;
 }
 
-.buttons{
+.buttons {
     display: flex;
     flex-direction: column;
     gap: 7px;
@@ -167,12 +166,15 @@
     margin: 10px 20px;
 
 }
-.closeIcon{
+
+.closeIcon {
     position: relative;
-    width: 35px;
-    height: 35px;
+    width: 25px;
+    height: 25px;
     border: none;
+    padding: 10px;
     background-color: transparent;
+
     &::after {
         content: '';
         position: absolute;
@@ -181,8 +183,9 @@
         width: 100%;
         rotate: 45deg;
         height: 2px;
-        background-color: var(--textColor);
+        background-color: var(--text);
     }
+
     &::before {
         content: '';
         position: absolute;
@@ -191,5 +194,15 @@
         width: 100%;
         height: 2px;
         rotate: -45deg;
-        background-color: var(--textColor);
-}}
+        background-color: var(--text);
+    }
+}
+
+.addButton {
+    max-width: 250px;
+    width: 100%;
+    margin: 20px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

@@ -212,7 +212,7 @@ const PopUp = ({
           </div>
         )}
         {day.data && day.data.length > 0 && handleNewEvent === false && (
-          <button onClick={addNewEvent}>Добавить</button>
+          <button className={styles.addButton} onClick={addNewEvent}>Добавить</button>
         )}
 
         {showEditPopUp && (

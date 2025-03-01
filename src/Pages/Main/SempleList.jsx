@@ -20,25 +20,6 @@ const SempleList = ({ selectedItems, setSelectedItems, addNewDay, maxId, setMaxI
         );
     };
 
-    /* const handleClick = (item) => {
-        const isSelected = isItemSelected(item, selectedItems);
-        if (isSelected) {
-            setSelectedItems(selectedItems.filter((selectedItem) =>
-                !(selectedItem.namePerson === item.namePerson &&
-                    selectedItem.startTime === item.startTime &&
-                    selectedItem.endTime === item.endTime)
-            ));
-            setMaxId(maxId - 1);
-        } else {
-            const newItem = {
-                ...item,
-                id: maxId + 1,
-                otherData: item.otherData || { fines: 0, bonus: 0 },
-            };
-            setSelectedItems([...selectedItems, newItem]);
-            setMaxId(maxId + 1);
-        }
-    }; */
     const handleClick = (item) => {
         const isSelected = isItemSelected(item, selectedItems);
         if (isSelected) {
@@ -64,8 +45,8 @@ const SempleList = ({ selectedItems, setSelectedItems, addNewDay, maxId, setMaxI
                     onClick={() => handleClick(item)}
                     style={{
                         backgroundColor: isItemSelected(item, selectedItems)
-                            ? '#3c6112'
-                            : '#474747',
+                            ? 'var(--accent)'
+                            : 'var(--secondary-background)',
                     }}>
                     <p className={styles.sempleName}>{item.namePerson}</p>
                     <p className={styles.sempleColor} style={{ backgroundColor: item.color }}></p>

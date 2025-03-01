@@ -53,11 +53,8 @@ const Main = () => {
   }, []);
 
   const getToggleButtonStyles = (value, checkPVZ) => ({
-    backgroundColor: checkPVZ === value ? "#3a393a" : "#1f1e1f",
+    backgroundColor: checkPVZ === value ? "var(--accent)" : "var(--secondary-background)",
     color: checkPVZ === value ? "#f1f0f0" : "#7e7b7b",
-    "&:hover": {
-      backgroundColor: checkPVZ === value ? "#388e3c" : "#bdbdbd",
-    },
   });
 
   useEffect(() => {
