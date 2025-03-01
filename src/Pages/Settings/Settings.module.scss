@@ -1,5 +1,5 @@
-.settings {
-}
+.settings {}
+
 .pvzWrapper {
   margin: 7px;
   padding: 7px;
@@ -7,9 +7,20 @@
   flex-direction: column;
   gap: 7px;
   border-radius: 7px;
-  background-color: var(--mainColor);
+  background-color: var(--secondary-background);
 }
+
 label {
   display: flex;
   gap: 7px;
+}
+
+.themeWrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 7px;
+  padding: 7px;
+  border-radius: 7px;
+  background-color: var(--secondary-background);
 }

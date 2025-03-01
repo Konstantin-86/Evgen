@@ -10,7 +10,6 @@ import Settings from "./Pages/Settings/Settings.jsx";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import { ThemeProvider } from "./components/ThemeContext.jsx";
 
 import "./index.css";
 
@@ -23,21 +22,21 @@ const queryClient = new QueryClient({
     },
   },
 });
+const savedTheme = localStorage.getItem('theme') || 'light';
+document.documentElement.setAttribute('data-theme', savedTheme);
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider>
-        <Router>
-          <Footer />
-          <Routes>
-            <Route path="/" element={<App />} />
-            <Route path="/stat" element={<Statictics />} />
-            <Route path="/semples" element={<Semples />} />
-            <Route path="/settings" element={<Settings />} />
-          </Routes>
-        </Router>
-      </ThemeProvider>
+      <Router>
+        <Footer />
+        <Routes>
+          <Route path="/" element={<App />} />
+          <Route path="/stat" element={<Statictics />} />
+          <Route path="/semples" element={<Semples />} />
+          <Route path="/settings" element={<Settings />} />
+        </Routes>
+      </Router>
     </QueryClientProvider>
   </StrictMode>
 );

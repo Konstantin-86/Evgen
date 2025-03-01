@@ -1,7 +1,9 @@
-.wrap{
+.wrap {
     padding: 7px;
     margin-bottom: 75px;
+    color: var(--text);
 }
+
 .list {
     display: flex;
     flex-wrap: wrap;
@@ -9,19 +11,14 @@
     margin-bottom: 20px;
 }
 
-.item {
-    position: relative;
-    background-color: #585757;
-    padding: 7px;
-    border-radius: 7px;
-}
+.item {}
 
 button {
     padding: 0.75rem;
     background-color: #4a90e2;
     border: none;
     border-radius: 4px;
-    color: #ffffff;
+    color: var(--text);
     font-size: 1rem;
     cursor: pointer;
     transition: background-color 0.3s ease;
@@ -30,15 +27,15 @@ button {
 
 
 .item {
-    background-color: #2d2d2d;
-    border-radius: 8px;
+    position: relative;
+    background-color: var(--secondary-background);
+    color: var(--text);
+    border-radius: 7px;
     padding: 1rem;
     margin: 0.5rem 0;
-    color: #ffffff;
-    position: relative;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
     padding-top: 7px;
     width: 165px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
     overflow: hidden;
 
     .itemName {
@@ -68,12 +65,12 @@ button {
     p {
         margin: 0.5rem 0; // Отступы между параграфами
         font-size: 14px; // Размер текста
-        color: #e0e0e0; // Светло-серый текст для лучшей читаемости
+        color: var(--text); // Светло-серый текст для лучшей читаемости
 
         &:first-child {
             font-size: 1.1rem; // Увеличенный размер для имени
             font-weight: bold; // Жирный шрифт для имени
-            color: #ffffff; // Белый цвет для имени
+            color: var(--text); // Белый цвет для имени
         }
     }
 

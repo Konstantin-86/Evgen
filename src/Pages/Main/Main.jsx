@@ -147,7 +147,7 @@ const Main = () => {
         value={checkPVZ}
         onChange={(event) => handleChange(event)}
         sx={{
-          backgroundColor: "#363636",
+          backgroundColor: "var(--secondary-background)",
           color: "white",
           marginBottom: "7px",
         }}

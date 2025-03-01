@@ -3,18 +3,21 @@
   --mainColor: rgb(27, 18, 18);
   --textColor: rgb(255, 255, 255);
 }
+
 [data-theme="light"] {
   --background: #ffffff;
   --secondary-background: #f0f0f0;
   --text: #000000;
-  --accent: #ff5722;
+  --accent: #bd8ceb;
+  --secondary-text: #dfdede;
 }
 
 [data-theme="dark"] {
   --background: #121212;
-  --secondary-background: #1e1e1e;
+  --secondary-background: #383838;
   --text: #ffffff;
-  --accent: #ff5722;
+  --accent: #919290;
+  --secondary-text: #2b2a2a;
 }
 
 * {
@@ -24,8 +27,7 @@
 }
 
 body {
-  background-color: var(--mainColor);
-  color: var(--textColor);
+  background-color: var(--background);
 }
 
 ul {

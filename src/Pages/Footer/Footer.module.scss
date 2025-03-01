@@ -8,7 +8,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 0 10px;
-    background-color: #363636;
+    background-color: var(--secondary-background);
     z-index: 999;
 }
 
@@ -17,6 +17,5 @@
 .active {
     padding: 3px;
     border-radius: 3px;
-    background-color: #fff;
-    color: #363636;
+    background-color: var(--accent);
 }

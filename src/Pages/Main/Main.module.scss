@@ -18,6 +18,8 @@
     position: relative;
     padding-top: 7px;
     min-height: calc(100dvh - 50px);
+    background-color: var(--background);
+    color: var(--text);
 }
 
 .alert {
@@ -45,12 +47,14 @@
     opacity: 0;
     transition: all 0.2s ease-in-out;
 }
-.closeIcon{
+
+.closeIcon {
     position: relative;
     width: 35px;
     height: 35px;
     border: none;
     background-color: transparent;
+
     &::after {
         content: '';
         position: absolute;
@@ -61,6 +65,7 @@
         height: 2px;
         background-color: var(--textColor);
     }
+
     &::before {
         content: '';
         position: absolute;
@@ -70,4 +75,5 @@
         height: 2px;
         rotate: -45deg;
         background-color: var(--textColor);
-}}
+    }
+}

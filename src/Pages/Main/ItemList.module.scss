@@ -3,7 +3,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    background-color: #363636;
+    background-color: var(--secondary-background);
     border-radius: 7px;
 
     .item {
@@ -13,7 +13,7 @@
     }
 
     .item:not(:last-child) {
-        border-bottom: 1px solid #79fcd0;
+        border-bottom: 1px solid var(--background);
     }
 
     .itemColor {
@@ -61,6 +61,8 @@
 
 .dayOfWeek {
     display: flex;
+    align-items: center;
+    justify-content: center;
     flex-direction: column;
     padding-inline: 15px;
     margin-right: 10px;

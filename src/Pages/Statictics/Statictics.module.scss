@@ -1,24 +1,30 @@
-.statWrap{
+.statWrap {
     margin-top: 7px;
     margin-bottom: 60px;
+    color: var(--text);
 }
-.tableWrap, .infoWrap{
+
+.tableWrap,
+.infoWrap {
     margin: 7px;
     padding: 7px;
     border-radius: 7px;
-    background-color: #363636;
+    background-color: var(--secondary-background);
+    color: var(--text);
 }
-.inptMonth{
+
+.inptMonth {
     display: inline-block;
     margin-left: auto;
     padding: 7px 10px;
     height: 48.5px;
-    background-color: #585757;
+    background-color: var(--secondary-background);
     border: none;
     outline: none;
     border-radius: 7px;
-    color: aliceblue;
+    color: var(--text);
 }
+
 .statTable {
     display: flex;
     flex-direction: column;
@@ -30,25 +36,30 @@
         border-bottom: 1px solid #000;
         padding-block: 7px;
     }
-    .name, .itemMoney{
+
+    .name,
+    .itemMoney {
         max-width: 150px;
-        width: 100%;
+        width: 33.3%;
     }
-    .hours{
+
+    .hours {
         margin: 0 auto;
     }
-.itemMoney{
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
-    font-size: 12px;
-    justify-content: center;
-    text-align: center;
-}
+
+    .itemMoney {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+        font-size: 12px;
+        justify-content: center;
+        text-align: center;
+        color: #dfdede;
+    }
 
 }
 
-.explaneTable{
+.explaneTable {
     display: flex;
     flex-direction: column;
     gap: 7px;
@@ -56,15 +67,23 @@
     padding: 7px;
     border-radius: 7px;
     border: 1px solid #000;
-    .explaneResult, .explaneFines, .explaneBonus, .explaneFinalResult{
+
+    .explaneResult,
+    .explaneFines,
+    .explaneBonus,
+    .explaneFinalResult {
         position: relative;
         padding-left: 57px;
         font-size: 12px;
         color: #6b6a6a;
     }
-    
+
 }
-.explaneResult::before, .explaneFines::before, .explaneBonus::before, .explaneFinalResult::before{
+
+.explaneResult::before,
+.explaneFines::before,
+.explaneBonus::before,
+.explaneFinalResult::before {
     content: "";
     position: absolute;
     top: 50%;
@@ -72,17 +91,25 @@
     left: 0px;
     width: 40px;
     height: 7px;
-    
+
 }
-.explaneResult::before , .activeRes{
+
+.explaneResult::before,
+.activeRes {
     background-color: #0b126b;
 }
-.explaneFines::before, .activeFines{
-background-color: #88081d;
+
+.explaneFines::before,
+.activeFines {
+    background-color: #88081d;
 }
-.explaneBonus::before, .activeBonus{
-background-color: rgb(41, 92, 75);
+
+.explaneBonus::before,
+.activeBonus {
+    background-color: rgb(41, 92, 75);
 }
-.explaneFinalResult::before, .activeFinalRes{
+
+.explaneFinalResult::before,
+.activeFinalRes {
     background-color: #166107;
 }
