@@ -26,6 +26,7 @@ const SempleList = ({ selectedItems, setSelectedItems, addNewDay, maxId, setMaxI
             setSelectedItems([]);
             setMaxId(maxId - 1);
         } else {
+            
             const newItem = {
                 ...item,
                 id: maxId + 1,

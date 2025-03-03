@@ -7,9 +7,7 @@ import { addNewEventPVZ2 } from "../../components/API/PVZ/addNewEventPVZ2";
 
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import "moment/locale/ru";
 import ItemList from "./ItemList";
-import "react-calendar/dist/Calendar.css";
 import styles from "./Main.module.scss";
 
 import getCurrentWeek from "./helpers/getCurrentWeek.js";
@@ -20,13 +18,24 @@ import { useSwipeable } from "react-swipeable";
 
 const Main = () => {
   const queryClient = useQueryClient();
-  const [date, setDate] = useState(new Date());
+
   const [currentWeek, setCurrentWeek] = useState([]);
   const [showAlert, setShowAlert] = useState(false);
   const [textAlert, setTextAlert] = useState("");
   const [checkPVZ, setCheckPVZ] = useState("");
   const [pvz1Name, setPvz1Name] = useState("ПВЗ1");
   const [pvz2Name, setPvz2Name] = useState("ПВЗ2");
+  const [startOfWeek, setStartOfWeek] = useState("");
+
+  useEffect(() => {
+    const today = new Date();
+    const currentDayOfWeek = today.getDay();
+    const newStartOfWeek = new Date(today);
+    newStartOfWeek.setDate(
+      today.getDate() - currentDayOfWeek + (currentDayOfWeek === 0 ? -6 : 1)
+    );
+    setStartOfWeek(newStartOfWeek);
+  }, []);
 
   useEffect(() => {
     const pvz1 = localStorage.getItem("pvz1name");
@@ -45,17 +54,8 @@ const Main = () => {
   };
   useEffect(() => {
     const storedValue = sessionStorage.getItem("checkPVZ");
-    if (storedValue) {
-      setCheckPVZ(storedValue);
-    } else {
-      setCheckPVZ("PVZ1");
-    }
+    setCheckPVZ(storedValue || "PVZ1");
   }, []);
-
-  const getToggleButtonStyles = (value, checkPVZ) => ({
-    backgroundColor: checkPVZ === value ? "var(--accent)" : "var(--secondary-background)",
-    color: checkPVZ === value ? "#f1f0f0" : "#7e7b7b",
-  });
 
   useEffect(() => {
     if (showAlert) {
@@ -76,12 +76,12 @@ const Main = () => {
   });
 
   useEffect(() => {
-    if (PVZ1 && !isLoadingPVZ1 && PVZ2 && !isLoadingPVZ2) {
+    if (PVZ1 && !isLoadingPVZ1 && PVZ2 && !isLoadingPVZ2 && startOfWeek) {
       const checkPVZValue = checkPVZ === "PVZ1" ? PVZ1 : PVZ2;
-      const getWeek = getCurrentWeek(checkPVZValue);
+      const getWeek = getCurrentWeek(checkPVZValue, startOfWeek);
       setCurrentWeek(getWeek);
     }
-  }, [checkPVZ, PVZ1, PVZ2, isLoadingPVZ1, isLoadingPVZ2]);
+  }, [checkPVZ, PVZ1, isLoadingPVZ1, PVZ2, isLoadingPVZ2]);
 
   const createMutation = useMutation({
     mutationFn: (newUser) => {
@@ -114,16 +114,24 @@ const Main = () => {
     const currentStartOfWeek = new Date(
       currentWeek[0].date.split(".").reverse().join("-")
     );
+    const startOfNextWeek = new Date(currentStartOfWeek);
+    startOfNextWeek.setDate(currentStartOfWeek.getDate() + 7);
+
     const checkPVZValue = checkPVZ === "PVZ1" ? PVZ1 : PVZ2;
-    const nextWeek = getNextWeek(checkPVZValue, currentStartOfWeek);
+    const nextWeek = getCurrentWeek(checkPVZValue, startOfNextWeek);
+    setStartOfWeek(startOfNextWeek);
     setCurrentWeek(nextWeek);
   };
   const prevWeek = () => {
     const currentStartOfWeek = new Date(
       currentWeek[0].date.split(".").reverse().join("-")
     );
+    const startOfNextWeek = new Date(currentStartOfWeek);
+    startOfNextWeek.setDate(currentStartOfWeek.getDate() - 7);
+
     const checkPVZValue = checkPVZ === "PVZ1" ? PVZ1 : PVZ2;
-    const prevWeek = getPreviousWeek(checkPVZValue, currentStartOfWeek);
+    const prevWeek = getCurrentWeek(checkPVZValue, startOfNextWeek);
+    setStartOfWeek(startOfNextWeek);
     setCurrentWeek(prevWeek);
   };
   const handlers = useSwipeable({
@@ -138,24 +146,22 @@ const Main = () => {
   return (
     <div {...handlers} className={styles.main}>
       <div className={styles.container}>
-        <p className={showAlert ? styles.alert : styles.alertHide}>{textAlert}</p>
+        <p className={showAlert ? styles.alert : styles.alertHide}>
+          {textAlert}
+        </p>
         <h3 style={{ marginBottom: "7px" }}>Сегодня {getCurrentDay()}</h3>
         <ToggleButtonGroup
-          color="info"
+          color="primary"
           value={checkPVZ}
           onChange={(event) => handleChange(event)}
           sx={{
             backgroundColor: "var(--secondary-background)",
-            color: "white",
+            color: "var(--text)",
             marginBottom: "7px",
           }}
         >
-          <ToggleButton sx={getToggleButtonStyles("PVZ1", checkPVZ)} value="PVZ1">
-            {pvz1Name}
-          </ToggleButton>
-          <ToggleButton sx={getToggleButtonStyles("PVZ2", checkPVZ)} value="PVZ2">
-            {pvz2Name}
-          </ToggleButton>
+          <ToggleButton value="PVZ1">{pvz1Name}</ToggleButton>
+          <ToggleButton value="PVZ2">{pvz2Name}</ToggleButton>
         </ToggleButtonGroup>
         <ItemList
           checkPVZ={checkPVZ}
@@ -164,7 +170,6 @@ const Main = () => {
           setTextAlert={setTextAlert}
           setShowAlert={setShowAlert}
         />
-
       </div>
     </div>
   );

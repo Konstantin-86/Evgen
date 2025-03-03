@@ -1,215 +1,210 @@
 .container {
-    max-width: 500px;
-    width: 100%;
-    margin: 0 auto;
-    padding: 0 7px;
+  max-width: 500px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 7px;
 }
 
 .popUpOpen {
-    position: fixed;
-    width: 100%;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(3, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 999;
-    visibility: visible;
-    opacity: 1;
-    transition: all 0.2s ease-in-out;
-    overflow-y: scroll;
-
-
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(3, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  visibility: visible;
+  opacity: 1;
+  transition: all 0.2s ease-in-out;
+  overflow-y: scroll;
 }
 
 .popUpClose {
-    position: fixed;
-    width: 100%;
-    height: 100dvh;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    transform: translateY(100px);
-    background-color: rgba(116, 26, 26, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 0;
-    visibility: hidden;
-    opacity: 0;
-    transition: all 0.2s ease-in-out;
-
+  position: fixed;
+  width: 100%;
+  height: 100dvh;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transform: translateY(100px);
+  background-color: rgba(116, 26, 26, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 0;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.2s ease-in-out;
 }
 
 .popUpWrapper {
-    position: relative;
-    width: 100%;
-    min-height: 50dvh;
-    padding: 7px;
-    padding-top: 15px;
-    background-color: var(--background);
-    margin-block: 100px;
+  position: relative;
+  width: 100%;
+  min-height: 50dvh;
+  padding: 7px;
+  padding-top: 15px;
+  background-color: var(--background);
+  margin-block: 100px;
 }
 
 .itemText {
-    position: relative;
-    border-radius: 7px;
-    padding: 7px;
-    overflow: hidden;
-    margin-bottom: 10px;
-    background-color: var(--secondary-background);
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    color: var(--text);
+  position: relative;
+  border-radius: 7px;
+  padding: 7px;
+  overflow: hidden;
+  margin-bottom: 10px;
+  background-color: var(--secondary-background);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--text);
 }
 
 .itemName {
-    display: flex;
-    gap: 7px;
-    font-size: 16px;
-    font-weight: 600;
+  display: flex;
+  gap: 7px;
+  font-size: 16px;
+  font-weight: 600;
 }
 
 .itemColor {
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    text-align: center;
-    padding-top: 4px;
-    font-size: 10px;
-    text-transform: lowercase;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  text-align: center;
+  padding-top: 4px;
+  font-size: 10px;
+  text-transform: lowercase;
 }
 
 .buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
-    margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-left: auto;
 }
 
-
-
 .closeButton {
-    position: absolute;
-    top: 0;
-    right: 0;
-    border: none;
-    background-color: transparent;
-    margin: 0;
-    padding: 10px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  border: none;
+  background-color: transparent;
+  margin: 0;
+  padding: 10px;
 
-    img {
-        width: 25px;
-        height: 25px;
-        object-fit: contain;
-    }
+  img {
+    width: 25px;
+    height: 25px;
+    object-fit: contain;
+  }
 }
 
 .currentDay {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
 
-    .dayOfWeek {
-        font-weight: 400;
-        color: #302f2f;
-    }
+  .dayOfWeek {
+    font-weight: 400;
+    color: #302f2f;
+  }
 }
 
-
 .sempleList {
-    margin-top: 20px;
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    max-height: 500px;
-    overflow-y: scroll;
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  max-height: 500px;
+  overflow-y: scroll;
 }
 
 .semple {
-    background-color: #474747;
-    padding: 7px;
-    border-radius: 7px;
+  background-color: #474747;
+  padding: 7px;
+  border-radius: 7px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  max-width: 150px;
+  gap: 7px;
+
+  .sempleColor {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-wrap: wrap;
-    max-width: 150px;
-    gap: 7px;
-
-    .sempleColor {
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+  }
 }
 
 .sempleCheked {
-    background-color: #3c6112;
-    padding: 7px 10px;
-    border-radius: 7px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    max-width: 170px;
-    gap: 10px;
+  background-color: #3c6112;
+  padding: 7px 10px;
+  border-radius: 7px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  max-width: 170px;
+  gap: 10px;
 }
 
 .noSemple {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .buttonAdd {
-    width: 100%;
-    margin: 10px 20px;
-
+  width: 100%;
+  margin: 10px 20px;
 }
 
 .closeIcon {
-    position: relative;
-    width: 25px;
-    height: 25px;
-    border: none;
-    padding: 10px;
-    background-color: transparent;
+  position: absolute;
+  top: 15px;
+  right: 7px;
+  width: 25px;
+  height: 25px;
+  border: none;
+  padding: 10px;
+  background-color: transparent;
 
-    &::after {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 0;
-        width: 100%;
-        rotate: 45deg;
-        height: 2px;
-        background-color: var(--text);
-    }
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    rotate: 45deg;
+    height: 2px;
+    background-color: var(--text);
+  }
 
-    &::before {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 0;
-        width: 100%;
-        height: 2px;
-        rotate: -45deg;
-        background-color: var(--text);
-    }
+  &::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    rotate: -45deg;
+    background-color: var(--text);
+  }
 }
 
 .addButton {
-    max-width: 250px;
-    width: 100%;
-    margin: 20px auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  max-width: 250px;
+  width: 100%;
+  margin: 20px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

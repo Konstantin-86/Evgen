@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
-import Switch from '@mui/material/Switch';
+import Switch from "@mui/material/Switch";
 
 import style from "./Settings.module.scss";
 
 const Settings = () => {
   const [pvz1Name, setPvz1Name] = useState("ПВЗ1");
   const [pvz2Name, setPvz2Name] = useState("ПВЗ2");
-  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+  const [settingAlarm, setSettingAlarm] = useState(false);
+  const [alarmText, setAlarmText] = useState("");
 
   useEffect(() => {
     const pvz1 = localStorage.getItem("pvz1name");
@@ -20,27 +22,42 @@ const Settings = () => {
   }, []);
 
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
 
   const setChange = () => {
-    localStorage.setItem("pvz1name", pvz1Name);
-    localStorage.setItem("pvz2name", pvz2Name);
+    if (pvz1Name.length > 10 || pvz2Name.length > 10) {
+      setSettingAlarm(true);
+      setAlarmText("Слишком длинное название, max 10 символов");
+      setTimeout(() => {
+        setSettingAlarm(false);
+      }, 3000);
+    } else {
+      setSettingAlarm(true);
+      setAlarmText("Обновил");
+      setTimeout(() => {
+        setSettingAlarm(false);
+      }, 2000);
+      localStorage.setItem("pvz1name", pvz1Name);
+      localStorage.setItem("pvz2name", pvz2Name);
+    }
   };
 
-  // При изменении темы обновляем localStorage и атрибут data-theme
   const toggleTheme = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light';
+    const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
-    localStorage.setItem('theme', newTheme); // Сохраняем тему в localStorage
-    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem("theme", newTheme);
+    document.documentElement.setAttribute("data-theme", newTheme);
   };
 
-  const label = { inputProps: { 'aria-label': 'Switch demo' } };
+  const label = { inputProps: { "aria-label": "Switch demo" } };
 
   return (
     <div className={style.settings}>
       <div className={style.pvzWrapper}>
+        <div className={settingAlarm ? style.showAlarm : style.hideAlarm}>
+          {alarmText}
+        </div>
         <div className={style.pvz}>
           <label htmlFor="pvz1">
             Name of PVZ1
@@ -67,7 +84,12 @@ const Settings = () => {
       </div>
       <div className={style.themeWrap}>
         Тема: {theme === "light" ? "Светлая" : "Темная"}
-        <Switch {...label} value={theme} onChange={toggleTheme} defaultChecked />
+        <Switch
+          {...label}
+          value={theme}
+          onChange={toggleTheme}
+          defaultChecked
+        />
       </div>
     </div>
   );

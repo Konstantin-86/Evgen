@@ -16,7 +16,6 @@ import SempleList from "./SempleList";
 
 import styles from "./PopUp.module.scss";
 
-
 const time = [
   "09:00",
   "10:00",
@@ -74,6 +73,7 @@ const PopUp = ({
 
       curPVZArray.forEach((item) => {
         if (item.id > preId) {
+          preId = item.id;
           setMaxId(item.id);
         }
       });
@@ -95,6 +95,7 @@ const PopUp = ({
     let preId = 0;
     checkPVZValue.forEach((item) => {
       if (item.id > preId) {
+        preId = item.id;
         setMaxId(item.id);
       }
     });
@@ -145,9 +146,7 @@ const PopUp = ({
     <div className={handlePopUp ? styles.popUpOpen : styles.popUpClose}>
       <div className={styles.container}>
         <div className={styles.popUpWrapper}>
-          <button className={styles.closeButton} onClick={closePopUp}>
-            <p className={styles.closeIcon}></p>
-          </button>
+          <div className={styles.closeIcon} onClick={closePopUp}></div>
           <h3 className={styles.currentDay}>
             {day.date}
             <p className={styles.dayOfWeek}>{day.dayOfWeek}</p>
@@ -213,7 +212,9 @@ const PopUp = ({
             </div>
           )}
           {day.data && day.data.length > 0 && handleNewEvent === false && (
-            <button className={styles.addButton} onClick={addNewEvent}>Добавить</button>
+            <button className={styles.addButton} onClick={addNewEvent}>
+              Добавить
+            </button>
           )}
 
           {showEditPopUp && (
