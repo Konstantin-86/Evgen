@@ -21,21 +21,23 @@
 
 .item {
   position: relative;
+  text-align: center;
   background-color: var(--secondary-background);
   color: var(--text);
   border-radius: 7px;
   padding: 1rem;
   margin: 0.5rem 0;
   padding-top: 7px;
+  padding-left: 30px;
   width: 160px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   overflow: hidden;
 
   .itemName {
     max-width: 120px;
-    overflow: hidden;
     text-overflow: ellipsis;
     white-space: wrap;
+    overflow: hidden;
   }
 
   .itemColor {
@@ -48,19 +50,19 @@
   }
 
   &:hover {
-    transform: translateY(-2px); // Легкий подъем при наведении
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); // Увеличенная тень
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
   }
 
   p {
-    margin: 0.5rem 0; // Отступы между параграфами
-    font-size: 14px; // Размер текста
-    color: var(--text); // Светло-серый текст для лучшей читаемости
+    margin: 0.5rem 0;
+    font-size: 14px;
+    color: var(--text);
 
     &:first-child {
-      font-size: 1.1rem; // Увеличенный размер для имени
-      font-weight: bold; // Жирный шрифт для имени
-      color: var(--text); // Белый цвет для имени
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: var(--text);
     }
   }
 
@@ -78,7 +80,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-
     &:hover {
       color: #ff1a1a;
     }
@@ -97,4 +98,16 @@
   padding: 7px 10px;
   border-radius: 7px;
   color: var(--text);
+}
+.edetSemple {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  border: none;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  background-color: greenyellow;
+  border-radius: 0 7px 0 0;
+  margin: 0;
 }

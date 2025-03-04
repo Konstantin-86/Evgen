@@ -1,21 +1,27 @@
-import { useState, useEffect } from 'react';
-import { nanoid } from 'nanoid';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import { useState, useEffect } from "react";
+import { nanoid } from "nanoid";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { editSemple } from "../../components/API/personSemple/editSemple.js";
 
-import { getAllSemples } from '../../components/API/personSemple/getAllSemples'
-import { deleteSemple } from '../../components/API/personSemple/deleteSemple'
-import AddSemples from './AddSemples';
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 
-import style from './Semples.module.scss'
+import { getAllSemples } from "../../components/API/personSemple/getAllSemples";
+import { deleteSemple } from "../../components/API/personSemple/deleteSemple";
+import AddSemples from "./AddSemples";
+
+import style from "./Semples.module.scss";
+import PopupEditSemples from "./PopupEditSemples";
 
 const Semples = () => {
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
   const [showAddSemples, setShowAddSemples] = useState(false);
   const [numberID, setNumberID] = useState(0);
+  const [currentPerson, setCurrentPerson] = useState({});
+  const [showPopup, setShowPopup] = useState(false);
 
   const { data, isLoading } = useQuery({
-    queryKey: ['semples'],
+    queryKey: ["semples"],
     queryFn: getAllSemples,
   });
 
@@ -26,51 +32,108 @@ const Semples = () => {
         if (item.id > maxId) {
           maxId = item.id;
         }
-      })
+      });
       setNumberID(maxId);
     }
   }, [isLoading, data]);
 
-
-
   const deleteMutation = useMutation({
     mutationFn: deleteSemple,
     onSuccess: (_, id) => {
-      queryClient.setQueryData(['semples'], (oldData) => {
+      queryClient.setQueryData(["semples"], (oldData) => {
         return oldData.filter((item) => item.id !== id);
       });
     },
   });
   const deletePerson = (id) => {
-    deleteMutation.mutate(id)
-  }
+    deleteMutation.mutate(id);
+  };
+
+  const editMutation = useMutation({
+    mutationFn: (newUser) => {
+      return editSemple(newUser);
+    },
+    onSuccess: (_, newUser) => {
+      // Обновляем кэш для ключа ["semples"]
+      queryClient.setQueryData(["semples"], (oldData) => {
+        const index = oldData.findIndex((user) => user.id === newUser.id);
+        if (index !== -1) {
+          const newData = [...oldData];
+          newData[index] = newUser;
+          return newData;
+        }
+        return oldData;
+      });
+    },
+    onError: (error) => {
+      console.error("Ошибка при отправке данных:", error);
+    },
+  });
+  const editPerson = (item) => {
+    setShowPopup(true);
+    setCurrentPerson(item);
+  };
+  const callbackToEditSemple = (semple) => {
+    semple.id = currentPerson.id;
+    editMutation.mutate(semple);
+  };
 
   return (
-    <div className={style.wrap} >
+    <div className={style.wrap}>
       <div className={style.container}>
         <h1>Шаблоны</h1>
         <ul className={style.list}>
-          {isLoading
-            ?
+          {isLoading ? (
             <p>Loading...</p>
-            :
+          ) : (
             data.map((item) => (
-              <li key={nanoid()} className={style.item} >
+              <li key={nanoid()} className={style.item}>
                 <p className={style.itemName}>{item.namePerson}</p>
-                <p className={style.itemColor} style={{ backgroundColor: item.color }}></p>
-                <p>{item.startTime} - {item.endTime}</p>
+                <p
+                  className={style.itemColor}
+                  style={{ backgroundColor: item.color }}
+                ></p>
+                <p>
+                  {item.startTime} - {item.endTime}
+                </p>
                 <p>{item.currentRate} руб</p>
-                <div className={style.deleteIcon} onClick={() => deletePerson(item.id)}>
+                <button
+                  className={style.edetSemple}
+                  onClick={() => editPerson(item)}
+                >
+                  <EditOutlinedIcon style={{ color: "var(--text)" }} />
+                </button>
+                <div
+                  className={style.deleteIcon}
+                  onClick={() => deletePerson(item.id)}
+                >
                   <DeleteOutlineIcon />
                 </div>
               </li>
             ))
-          }
+          )}
         </ul>
-        <button className={style.addButton} onClick={() => setShowAddSemples(!showAddSemples)}>Добавить шаблон</button>
-        <AddSemples numberID={numberID} showAddSemples={showAddSemples} setShowAddSemples={setShowAddSemples} />
+
+        <button
+          className={style.addButton}
+          onClick={() => setShowAddSemples(!showAddSemples)}
+        >
+          Добавить шаблон
+        </button>
+        <AddSemples
+          numberID={numberID}
+          showAddSemples={showAddSemples}
+          setShowAddSemples={setShowAddSemples}
+        />
       </div>
+      {showPopup && (
+        <PopupEditSemples
+          person={currentPerson}
+          setShowPopup={setShowPopup}
+          callbackToEditSemple={callbackToEditSemple}
+        />
+      )}
     </div>
-  )
-}
-export default Semples
+  );
+};
+export default Semples;
