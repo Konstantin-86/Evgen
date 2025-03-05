@@ -10,6 +10,7 @@
   --text: #000000;
   --accent: #bd8ceb;
   --secondary-text: #dfdede;
+  --buttonColor: #1976d2;
 }
 
 [data-theme="dark"] {
@@ -18,6 +19,7 @@
   --text: #ffffff;
   --accent: #919290;
   --secondary-text: #2b2a2a;
+  --buttonColor: #1565c0;
 }
 
 * {
@@ -39,8 +41,8 @@ button {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--secondary-background);
-  border: 1px solid var(--accent);
+  background-color: var(--buttonColor);
+  border: none;
   padding: 7px 10px;
   border-radius: 7px;
   color: var(--text);

@@ -49,8 +49,9 @@ const PopupEditSemples = ({ person, setShowPopup, callbackToEditSemple }) => {
           className={styles.closeIcon}
           onClick={() => setShowPopup(false)}
         ></div>
-        <div className={styles.name}>
+        <div>
           <input
+            className={styles.name}
             type="text"
             id="username"
             onFocus={handleFocus}
@@ -71,6 +72,7 @@ const PopupEditSemples = ({ person, setShowPopup, callbackToEditSemple }) => {
         </div>
 
         <select
+          className={styles.select}
           name="startTime"
           value={newStartTime}
           onChange={(e) => setNewStartTime(e.target.value)}
@@ -94,8 +96,10 @@ const PopupEditSemples = ({ person, setShowPopup, callbackToEditSemple }) => {
           ))}
         </select>
 
-        <div className={styles.rate}>
-          <label htmlFor="userRate">Ставка</label>
+        <div>
+          <label className={styles.rate} htmlFor="userRate">
+            Ставка
+          </label>
           <input
             onFocus={handleFocus}
             value={newRate}
@@ -104,7 +108,7 @@ const PopupEditSemples = ({ person, setShowPopup, callbackToEditSemple }) => {
             id="userRate"
           />
         </div>
-        <button onClick={setChange}>Изменить</button>
+        <button onClick={setChange}>Готово</button>
       </div>
     </div>
   );

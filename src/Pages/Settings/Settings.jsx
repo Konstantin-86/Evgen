@@ -83,7 +83,7 @@ const Settings = () => {
         </div>
       </div>
       <div className={style.themeWrap}>
-        Тема: {theme === "light" ? "Светлая" : "Темная"}
+        {theme === "light" ? "О как светло" : "Темно тут у вас"}
         <Switch
           {...label}
           value={theme}

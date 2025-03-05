@@ -1,122 +1,120 @@
 .statWrap {
-    margin-top: 7px;
-    margin-bottom: 60px;
-    color: var(--text);
+  margin-top: 7px;
+  margin-bottom: 60px;
+  color: var(--text);
 }
 
 .container {
-    max-width: 500px;
-    width: 100%;
-    margin: 0 auto;
-    padding: 0 7px;
+  max-width: 500px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 7px;
 }
 
 .tableWrap,
 .infoWrap {
-    margin: 7px;
-    padding: 7px;
-    border-radius: 7px;
-    background-color: var(--secondary-background);
-    color: var(--text);
+  margin: 7px;
+  padding: 7px;
+  border-radius: 7px;
+  background-color: var(--secondary-background);
+  color: var(--text);
 }
 
 .inptMonth {
-    display: inline-block;
-    margin-left: auto;
-    padding: 7px 10px;
-    height: 48.5px;
-    background-color: var(--secondary-background);
-    border: none;
-    outline: none;
-    border-radius: 7px;
-    color: var(--text);
+  width: 122px;
+  display: inline-block;
+  margin-left: 7px;
+  padding: 7px 10px;
+  height: 48.5px;
+  background-color: var(--secondary-background);
+  border: none;
+  outline: none;
+  border-radius: 7px;
+  color: var(--text);
 }
 
 .statTable {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+
+  .tableItem {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #000;
+    padding-block: 7px;
+  }
+
+  .name,
+  .itemMoney {
+    max-width: 150px;
+    width: 33.3%;
+  }
+
+  .hours {
+    margin: 0 auto;
+  }
+
+  .itemMoney {
     display: flex;
     flex-direction: column;
     gap: 7px;
-
-    .tableItem {
-        display: flex;
-        align-items: center;
-        border-bottom: 1px solid #000;
-        padding-block: 7px;
-    }
-
-    .name,
-    .itemMoney {
-        max-width: 150px;
-        width: 33.3%;
-    }
-
-    .hours {
-        margin: 0 auto;
-    }
-
-    .itemMoney {
-        display: flex;
-        flex-direction: column;
-        gap: 7px;
-        font-size: 12px;
-        justify-content: center;
-        text-align: center;
-        color: #dfdede;
-    }
-
+    font-size: 12px;
+    justify-content: center;
+    text-align: center;
+    color: #dfdede;
+  }
 }
 
 .explaneTable {
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
-    margin: 15px 0;
-    padding: 7px;
-    border-radius: 7px;
-    border: 1px solid #000;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin: 15px 0;
+  padding: 7px;
+  border-radius: 7px;
+  border: 1px solid #000;
 
-    .explaneResult,
-    .explaneFines,
-    .explaneBonus,
-    .explaneFinalResult {
-        position: relative;
-        padding-left: 57px;
-        font-size: 12px;
-        color: #6b6a6a;
-    }
-
+  .explaneResult,
+  .explaneFines,
+  .explaneBonus,
+  .explaneFinalResult {
+    position: relative;
+    padding-left: 57px;
+    font-size: 12px;
+    color: #6b6a6a;
+  }
 }
 
 .explaneResult::before,
 .explaneFines::before,
 .explaneBonus::before,
 .explaneFinalResult::before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    transform: translate(0, -50%);
-    left: 0px;
-    width: 40px;
-    height: 7px;
-
+  content: "";
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
+  left: 0px;
+  width: 40px;
+  height: 7px;
 }
 
 .explaneResult::before,
 .activeRes {
-    background-color: #0b126b;
+  background-color: #0b126b;
 }
 
 .explaneFines::before,
 .activeFines {
-    background-color: #88081d;
+  background-color: #88081d;
 }
 
 .explaneBonus::before,
 .activeBonus {
-    background-color: rgb(41, 92, 75);
+  background-color: rgb(41, 92, 75);
 }
 
 .explaneFinalResult::before,
 .activeFinalRes {
-    background-color: #166107;
+  background-color: #166107;
 }

@@ -11,6 +11,7 @@
     display: flex;
     align-items: center;
     padding-block: 7px;
+    min-height: 65px;
   }
 
   .item:not(:last-child) {

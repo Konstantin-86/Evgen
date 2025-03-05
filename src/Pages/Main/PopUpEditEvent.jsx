@@ -88,8 +88,8 @@ const PopUpEditEvent = ({
     <div className={styles.wrapEdit}>
       <div onClick={closeAll} className={styles.closeButton}></div>
 
-      <p>{currentPerson.date}</p>
-      <p className={styles.name}>{currentPerson.namePerson}</p>
+      <h5>{currentPerson.date}</h5>
+      <h3 className={styles.name}>{currentPerson.namePerson}</h3>
 
       <p>начало</p>
       <select
@@ -115,19 +115,19 @@ const PopUpEditEvent = ({
           </option>
         ))}
       </select>
-      <label htmlFor="currentRate">ставка</label>
+      <p>ставка</p>
       <input
         type="number"
         value={currentRateState}
         onChange={(e) => setCurrentRateState(e.target.value)}
       />
-      <label htmlFor="fines">штраф</label>
+      <p>штраф</p>
       <input
         type="number"
         value={finesState}
         onChange={(e) => setFinesState(e.target.value)}
       />
-      <label htmlFor="bonus">бонус</label>
+      <p>бонус</p>
       <input
         type="number"
         value={bonusState}
@@ -135,8 +135,7 @@ const PopUpEditEvent = ({
       />
 
       <button className={styles.editButton} onClick={changeEvent}>
-        {" "}
-        Изменить
+        Готово
       </button>
     </div>
   );

@@ -19,6 +19,7 @@ const Statictics = ({}) => {
   const [summarRubles, setSummarRubles] = useState(0);
   const [pvz1Name, setPvz1Name] = useState("ПВЗ1");
   const [pvz2Name, setPvz2Name] = useState("ПВЗ2");
+  const [sortByName, setSortByName] = useState("Все");
 
   useEffect(() => {
     const pvz1 = localStorage.getItem("pvz1name");
@@ -55,6 +56,18 @@ const Statictics = ({}) => {
     queryKey: ["PVZ2"],
     queryFn: getPVZ2,
   });
+
+  useEffect(() => {
+    if (!isLoadingPVZ1 && !isLoadingPVZ2) {
+      const combinedData = [...PVZ1, ...PVZ2];
+
+      const filtered = combinedData.filter((item) => {
+        return item.namePerson === sortByName;
+      });
+
+      console.log("filtered", filtered);
+    }
+  }, [sortByName]);
   const handleChange = (event) => {
     setCheckPVZ(event.target.value);
     sessionStorage.setItem("checkPVZ", event.target.value);
@@ -138,16 +151,31 @@ const Statictics = ({}) => {
         >
           <ToggleButton value="PVZ1">{pvz1Name}</ToggleButton>
           <ToggleButton value="PVZ2">{pvz2Name}</ToggleButton>
-          <input
-            className={styles.inptMonth}
-            type="month"
-            value={curMonth}
-            onChange={(e) => {
-              setCurMonth(e.target.value);
-              sessionStorage.setItem("curMonth", e.target.value);
-            }}
-          />
         </ToggleButtonGroup>
+        <input
+          className={styles.inptMonth}
+          type="month"
+          value={curMonth}
+          onChange={(e) => {
+            setCurMonth(e.target.value);
+            sessionStorage.setItem("curMonth", e.target.value);
+          }}
+        />
+        <select
+          className={styles.select}
+          name="startTime"
+          value={sortByName}
+          onChange={(e) => setSortByName(e.target.value)}
+        >
+          {/* {time.map((elem) => (
+            <option key={nanoid()} value={elem}>
+              {elem}
+            </option>
+          ))} */}
+          <option value="Все">Все</option>
+          <option value="Влад">Влад</option>
+          <option value="Ксения">Ксения</option>
+        </select>
 
         <div className={styles.infoWrap}>
           <p>Дней в месяце: {daysInMonth}</p>

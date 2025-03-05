@@ -2,13 +2,19 @@
   position: fixed;
   top: 35px;
   left: 0;
-  width: 100%;
+  width: calc(100% - 14px);
   background-color: var(--background);
   z-index: 1000;
   padding: 7px;
   display: flex;
   flex-direction: column;
   gap: 7px;
+  border-radius: 7px;
+  margin-inline: 7px;
+  p {
+    font-size: 12px;
+    color: rgb(150, 150, 150);
+  }
 }
 
 .closeButton {
@@ -48,8 +54,11 @@
 
 select,
 input {
+  font-size: 14px;
+  font-weight: 400;
   padding: 7px 10px;
   background-color: var(--secondary-background);
+  color: var(--text);
   margin-bottom: 7px;
   border-radius: 7px;
   border: none;
@@ -63,8 +72,9 @@ input {
 }
 
 input:focus {
-  background-color: #ebeaea;
-  outline: 2px solid #ebeaea;
+  font-size: 16px;
+  font-weight: 700;
+  outline: 2px solid #0c1db4;
 }
 
 .editButton {

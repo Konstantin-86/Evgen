@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { nanoid } from "nanoid";
 import PopUp from "./PopUp";
+import { motion, AnimatePresence } from "motion/react";
 
 import style from "./ItemList.module.scss";
 
@@ -38,27 +39,35 @@ const ItemList = ({
               {day.data.length ? (
                 <ul className={style.itemInfoList}>
                   {day.data.map((item) => (
-                    <li className={style.itemInfo} key={nanoid()}>
-                      <p className={style.startTime}>
-                        {item.startTime}-{item.endTime}
-                      </p>
-                      <p
-                        className={style.itemColor}
-                        style={{ backgroundColor: item.color }}
+                    <AnimatePresence key={nanoid()}>
+                      <motion.li
+                        className={style.itemInfo}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.2 }}
                       >
-                        {item.namePerson.slice(0, 2)}
-                      </p>
-                      <p className={style.namePerson}>{item.namePerson}</p>
-                      <p className={style.sumOfTime}>
-                        {Number(item.endTime.slice(0, 2)) -
-                          Number(item.startTime.slice(0, 2))}
-                        ч{" "}
-                      </p>
-                    </li>
+                        <p className={style.startTime}>
+                          {item.startTime}-{item.endTime}
+                        </p>
+                        <p
+                          className={style.itemColor}
+                          style={{ backgroundColor: item.color }}
+                        >
+                          {item.namePerson.slice(0, 2)}
+                        </p>
+                        <p className={style.namePerson}>{item.namePerson}</p>
+                        <p className={style.sumOfTime}>
+                          {Number(item.endTime.slice(0, 2)) -
+                            Number(item.startTime.slice(0, 2))}
+                          ч
+                        </p>
+                      </motion.li>
+                    </AnimatePresence>
                   ))}
                 </ul>
               ) : (
-                <div>нет данных</div>
+                <p>нет данных</p>
               )}
             </li>
           ))}

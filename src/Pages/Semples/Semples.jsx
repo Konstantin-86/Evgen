@@ -19,11 +19,21 @@ const Semples = () => {
   const [numberID, setNumberID] = useState(0);
   const [currentPerson, setCurrentPerson] = useState({});
   const [showPopup, setShowPopup] = useState(false);
+  const [textAlarm, setTextAlarm] = useState("Шаблон успешно изменен");
+  const [alarm, setAlarm] = useState(false);
 
   const { data, isLoading } = useQuery({
     queryKey: ["semples"],
     queryFn: getAllSemples,
   });
+
+  useEffect(() => {
+    if (alarm) {
+      setTimeout(() => {
+        setAlarm(false);
+      }, 3000);
+    }
+  }, [alarm]);
 
   useEffect(() => {
     if (!isLoading && data) {
@@ -47,6 +57,8 @@ const Semples = () => {
   });
   const deletePerson = (id) => {
     deleteMutation.mutate(id);
+    setTextAlarm("Шаблон успешно удален");
+    setAlarm(true);
   };
 
   const editMutation = useMutation({
@@ -54,8 +66,9 @@ const Semples = () => {
       return editSemple(newUser);
     },
     onSuccess: (_, newUser) => {
-      // Обновляем кэш для ключа ["semples"]
       queryClient.setQueryData(["semples"], (oldData) => {
+        setTextAlarm("Шаблон изменен");
+        setAlarm(true);
         const index = oldData.findIndex((user) => user.id === newUser.id);
         if (index !== -1) {
           const newData = [...oldData];
@@ -82,6 +95,9 @@ const Semples = () => {
     <div className={style.wrap}>
       <div className={style.container}>
         <h1>Шаблоны</h1>
+        <div className={alarm ? style.showAlarm : style.hideAlarm}>
+          {textAlarm}
+        </div>
         <ul className={style.list}>
           {isLoading ? (
             <p>Loading...</p>
@@ -97,6 +113,11 @@ const Semples = () => {
                   {item.startTime} - {item.endTime}
                 </p>
                 <p>{item.currentRate} руб</p>
+                <div className={style.hours}>
+                  {Number(item.endTime.slice(0, 2)) -
+                    Number(item.startTime.slice(0, 2))}
+                  ч
+                </div>
                 <button
                   className={style.edetSemple}
                   onClick={() => editPerson(item)}
@@ -124,6 +145,8 @@ const Semples = () => {
           numberID={numberID}
           showAddSemples={showAddSemples}
           setShowAddSemples={setShowAddSemples}
+          setAlarm={setAlarm}
+          setTextAlarm={setTextAlarm}
         />
       </div>
       {showPopup && (
