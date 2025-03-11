@@ -24,7 +24,6 @@ const AddSemples = ({
   numberID,
   showAddSemples,
   setShowAddSemples,
-  setAlarm,
   setTextAlarm,
 }) => {
   const [newPersonName, setNewPersonName] = useState("");
@@ -39,7 +38,6 @@ const AddSemples = ({
     mutationFn: addNewSemple,
     onSuccess: (_, newUser) => {
       setTextAlarm("Шаблон успешно добавлен");
-      setAlarm(true);
       queryClient.setQueryData(["semples"], (oldData) => {
         return [...oldData, newUser];
       });

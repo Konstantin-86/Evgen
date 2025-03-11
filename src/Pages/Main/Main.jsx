@@ -15,6 +15,7 @@ import getCurrentDay from "./helpers/getCurrentDay.js";
 import getNextWeek from "./helpers/getNextWeek.js";
 import getPreviousWeek from "./helpers/getPrevWeek.js";
 import { useSwipeable } from "react-swipeable";
+import { Logger } from "sass";
 
 const Main = () => {
   const queryClient = useQueryClient();
@@ -57,14 +58,6 @@ const Main = () => {
     setCheckPVZ(storedValue || "PVZ1");
   }, []);
 
-  useEffect(() => {
-    if (showAlert) {
-      setTimeout(() => {
-        setShowAlert(false);
-      }, 2000);
-    }
-  }, [showAlert]);
-
   const { data: PVZ1, isLoading: isLoadingPVZ1 } = useQuery({
     queryKey: ["PVZ1"],
     queryFn: getPVZ1,
@@ -92,7 +85,7 @@ const Main = () => {
     onSuccess: (_, newUser) => {
       queryClient.setQueryData([checkPVZ], (oldData) => {
         setTextAlert("Данные успешно добавлены");
-        setShowAlert(true);
+
         return [...oldData, newUser];
       });
     },
@@ -102,13 +95,7 @@ const Main = () => {
   });
 
   const callBackNewEvent = (data) => {
-    if (data.length) {
-      data.map((elem) => {
-        setTimeout(() => {
-          createMutation.mutate(elem);
-        }, 500);
-      });
-    }
+    createMutation.mutate(data);
   };
   const nextweek = () => {
     const currentStartOfWeek = new Date(
@@ -168,7 +155,6 @@ const Main = () => {
           currentWeek={currentWeek}
           callBackNewEvent={callBackNewEvent}
           setTextAlert={setTextAlert}
-          setShowAlert={setShowAlert}
         />
       </div>
     </div>

@@ -39,7 +39,6 @@ const PopUp = ({
   callBackNewEvent,
   checkPVZ,
   setTextAlert,
-  setShowAlert,
 }) => {
   const [showSemples, setShowSemples] = useState(true);
   const [selectedItems, setSelectedItems] = useState([]);
@@ -80,15 +79,11 @@ const PopUp = ({
     }
   }, [PVZ1, PVZ2, checkPVZ]);
 
-  const addNewDay = () => {
-    const updatedArray = selectedItems.map((item) => {
-      delete item.idPerson;
-      return {
-        ...item,
-        date: day.date,
-      };
-    });
-    callBackNewEvent(updatedArray);
+  const addNewDay = (newItem) => {
+    delete newItem.idPerson;
+    newItem.date = day.date;
+
+    callBackNewEvent(newItem);
     setSelectedItems([]);
     setHandlePopUp(false);
     setHandleNewEvent(false);
@@ -106,7 +101,6 @@ const PopUp = ({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [checkPVZ] });
       setTextAlert("Данные успешно удалены");
-      setShowAlert(true);
     },
     onError: (error) => {
       console.error("Error deleting item:", error);
@@ -224,7 +218,6 @@ const PopUp = ({
               setHandlePopUp={setHandlePopUp}
               checkPVZ={checkPVZ}
               setTextAlert={setTextAlert}
-              setShowAlert={setShowAlert}
             />
           )}
         </div>

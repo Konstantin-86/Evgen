@@ -27,13 +27,7 @@ const Semples = () => {
     queryFn: getAllSemples,
   });
 
-  useEffect(() => {
-    if (alarm) {
-      setTimeout(() => {
-        setAlarm(false);
-      }, 3000);
-    }
-  }, [alarm]);
+
 
   useEffect(() => {
     if (!isLoading && data) {
@@ -58,7 +52,6 @@ const Semples = () => {
   const deletePerson = (id) => {
     deleteMutation.mutate(id);
     setTextAlarm("Шаблон успешно удален");
-    setAlarm(true);
   };
 
   const editMutation = useMutation({
@@ -68,7 +61,6 @@ const Semples = () => {
     onSuccess: (_, newUser) => {
       queryClient.setQueryData(["semples"], (oldData) => {
         setTextAlarm("Шаблон изменен");
-        setAlarm(true);
         const index = oldData.findIndex((user) => user.id === newUser.id);
         if (index !== -1) {
           const newData = [...oldData];
@@ -145,7 +137,6 @@ const Semples = () => {
           numberID={numberID}
           showAddSemples={showAddSemples}
           setShowAddSemples={setShowAddSemples}
-          setAlarm={setAlarm}
           setTextAlarm={setTextAlarm}
         />
       </div>

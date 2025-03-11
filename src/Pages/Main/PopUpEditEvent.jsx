@@ -28,7 +28,6 @@ const PopUpEditEvent = ({
   setHandlePopUp,
   checkPVZ,
   setTextAlert,
-  setShowAlert,
 }) => {
   const [startTimeState, setStartTimeState] = useState(currentPerson.startTime);
   const [endTimeState, setEndTimeState] = useState(currentPerson.endTime);
@@ -47,7 +46,6 @@ const PopUpEditEvent = ({
     },
     onSuccess: (_, newUser) => {
       setTextAlert("Данные успешно изменены");
-      setShowAlert(true);
       queryClient.setQueryData([checkPVZ], (oldData) => {
         const index = oldData.findIndex((user) => user.id === newUser.id);
         if (index !== -1) {
