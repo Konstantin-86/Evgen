@@ -24,8 +24,6 @@ const Main = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [textAlert, setTextAlert] = useState("");
   const [checkPVZ, setCheckPVZ] = useState("");
-  const [pvz1Name, setPvz1Name] = useState("ПВЗ1");
-  const [pvz2Name, setPvz2Name] = useState("ПВЗ2");
   const [startOfWeek, setStartOfWeek] = useState("");
 
   useEffect(() => {
@@ -36,17 +34,6 @@ const Main = () => {
       today.getDate() - currentDayOfWeek + (currentDayOfWeek === 0 ? -6 : 1)
     );
     setStartOfWeek(newStartOfWeek);
-  }, []);
-
-  useEffect(() => {
-    const pvz1 = localStorage.getItem("pvz1name");
-    const pvz2 = localStorage.getItem("pvz2name");
-    if (pvz1) {
-      setPvz1Name(pvz1);
-    }
-    if (pvz2) {
-      setPvz2Name(pvz2);
-    }
   }, []);
 
   const handleChange = (event) => {
@@ -147,8 +134,8 @@ const Main = () => {
             marginBottom: "7px",
           }}
         >
-          <ToggleButton value="PVZ1">{pvz1Name}</ToggleButton>
-          <ToggleButton value="PVZ2">{pvz2Name}</ToggleButton>
+          <ToggleButton value="PVZ1">НОВОТРОИЦК_26</ToggleButton>
+          <ToggleButton value="PVZ2">НОВОТРОИЦК_42</ToggleButton>
         </ToggleButtonGroup>
         <ItemList
           checkPVZ={checkPVZ}

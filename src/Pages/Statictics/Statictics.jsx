@@ -149,8 +149,8 @@ const Statictics = ({}) => {
             marginBottom: "7px",
           }}
         >
-          <ToggleButton value="PVZ1">{pvz1Name}</ToggleButton>
-          <ToggleButton value="PVZ2">{pvz2Name}</ToggleButton>
+          <ToggleButton value="PVZ1">НОВОТРОИЦК_26</ToggleButton>
+          <ToggleButton value="PVZ2">НОВОТРОИЦК_42</ToggleButton>
         </ToggleButtonGroup>
         <input
           className={styles.inptMonth}
@@ -167,11 +167,6 @@ const Statictics = ({}) => {
           value={sortByName}
           onChange={(e) => setSortByName(e.target.value)}
         >
-          {/* {time.map((elem) => (
-            <option key={nanoid()} value={elem}>
-              {elem}
-            </option>
-          ))} */}
           <option value="Все">Все</option>
           <option value="Влад">Влад</option>
           <option value="Ксения">Ксения</option>
