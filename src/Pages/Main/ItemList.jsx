@@ -37,33 +37,39 @@ const ItemList = ({
               </div>
               {day.data.length ? (
                 <ul className={style.itemInfoList}>
-                  {day.data.map((item) => (
-                    <AnimatePresence key={nanoid()}>
-                      <motion.li
-                        className={style.itemInfo}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <p className={style.startTime}>
-                          {item.startTime}-{item.endTime}
-                        </p>
-                        <p
-                          className={style.itemColor}
-                          style={{ backgroundColor: item.color }}
+                  {day.data
+                    .sort((a, b) => {
+                      const aHours = parseInt(a.startTime.slice(0, 2), 10);
+                      const bHours = parseInt(b.startTime.slice(0, 2), 10);
+                      return aHours - bHours;
+                    })
+                    .map((item) => (
+                      <AnimatePresence key={nanoid()}>
+                        <motion.li
+                          className={style.itemInfo}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
+                          transition={{ duration: 0.2 }}
                         >
-                          {item.namePerson.slice(0, 2)}
-                        </p>
-                        <p className={style.namePerson}>{item.namePerson}</p>
-                        <p className={style.sumOfTime}>
-                          {Number(item.endTime.slice(0, 2)) -
-                            Number(item.startTime.slice(0, 2))}
-                          ч
-                        </p>
-                      </motion.li>
-                    </AnimatePresence>
-                  ))}
+                          <p className={style.startTime}>
+                            {item.startTime}-{item.endTime}
+                          </p>
+                          <p
+                            className={style.itemColor}
+                            style={{ backgroundColor: item.color }}
+                          >
+                            {item.namePerson.slice(0, 2)}
+                          </p>
+                          <p className={style.namePerson}>{item.namePerson}</p>
+                          <p className={style.sumOfTime}>
+                            {Number(item.endTime.slice(0, 2)) -
+                              Number(item.startTime.slice(0, 2))}
+                            ч
+                          </p>
+                        </motion.li>
+                      </AnimatePresence>
+                    ))}
                 </ul>
               ) : (
                 <p>нет данных</p>

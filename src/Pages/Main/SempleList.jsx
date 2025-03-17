@@ -70,61 +70,62 @@ const SempleList = ({
   return (
     <div className={styles.container}>
       <div className={styles.sempleList}>
-        {data.map((item) => (
-          <div
-            key={nanoid()}
-            className={styles.semple}
-            onClick={() => handleClick(item)}
-            style={{
-              backgroundColor: isItemSelected(item, selectedItems)
-                ? "var(--accent)"
-                : "var(--secondary-background)",
-            }}
-          >
-            <p className={styles.sempleName}>{item.namePerson}</p>
-            <p
-              className={styles.sempleColor}
-              style={{ backgroundColor: item.color }}
-            ></p>
-            <p>
-              {item.startTime} - {item.endTime}
-            </p>
-            <p>{item.currentRate} руб</p>
-            {itemCheckedId === item.id && (
-              <div className={styles.wrapNewTime}>
-                <select
-                  name="startTime"
-                  value={newPersonStartTime}
-                  onChange={(e) => setNewPersonStartTime(e.target.value)}
-                >
-                  {time.map((elem) => (
-                    <option key={nanoid()} value={elem}>
-                      {elem}
-                    </option>
-                  ))}
-                </select>
+        {data
+          .map((item) => (
+            <div
+              key={nanoid()}
+              className={styles.semple}
+              onClick={() => handleClick(item)}
+              style={{
+                backgroundColor: isItemSelected(item, selectedItems)
+                  ? "var(--accent)"
+                  : "var(--secondary-background)",
+              }}
+            >
+              <p className={styles.sempleName}>{item.namePerson}</p>
+              <p
+                className={styles.sempleColor}
+                style={{ backgroundColor: item.color }}
+              ></p>
+              <p>
+                {item.startTime} - {item.endTime}
+              </p>
+              <p>{item.currentRate} руб</p>
+              {itemCheckedId === item.id && (
+                <div className={styles.wrapNewTime}>
+                  <select
+                    name="startTime"
+                    value={newPersonStartTime}
+                    onChange={(e) => setNewPersonStartTime(e.target.value)}
+                  >
+                    {time.map((elem) => (
+                      <option key={nanoid()} value={elem}>
+                        {elem}
+                      </option>
+                    ))}
+                  </select>
 
-                <select
-                  name="endTime"
-                  value={newPersonEndTime}
-                  onChange={(e) => setNewPersonEndTime(e.target.value)}
-                >
-                  {time.map((elem) => (
-                    <option key={nanoid()} value={elem}>
-                      {elem}
-                    </option>
-                  ))}
-                </select>
-                <button
-                  className={styles.buttonAdd}
-                  onClick={() => addNewEvent(item)}
-                >
-                  Создать
-                </button>
-              </div>
-            )}
-          </div>
-        ))}
+                  <select
+                    name="endTime"
+                    value={newPersonEndTime}
+                    onChange={(e) => setNewPersonEndTime(e.target.value)}
+                  >
+                    {time.map((elem) => (
+                      <option key={nanoid()} value={elem}>
+                        {elem}
+                      </option>
+                    ))}
+                  </select>
+                  <button
+                    className={styles.buttonAdd}
+                    onClick={() => addNewEvent(item)}
+                  >
+                    Создать
+                  </button>
+                </div>
+              )}
+            </div>
+          ))}
       </div>
     </div>
   );
