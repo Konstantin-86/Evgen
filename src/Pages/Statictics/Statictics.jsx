@@ -2,50 +2,32 @@ import React, { useEffect, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getPVZ1 } from "../../components/API/PVZ/getPVZ1";
 import { getPVZ2 } from "../../components/API/PVZ/getPVZ2";
-import ToggleButton from "@mui/material/ToggleButton";
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import { getPVZ3 } from "../../components/API/PVZ/getPVZ3";
+
 import getCurrentMonthAndYear from "./helpers/getCurrentMonthAndYear.js";
+import filtredArray from "./helpers/filtredArray.js";
 
 import StatGrafic from "./StatGrafic.jsx";
 
 import styles from "./Statictics.module.scss";
 
-const Statictics = ({}) => {
+import filters from "../../assets/filters.png";
+
+const Statictics = () => {
   const [checkPVZ, setCheckPVZ] = useState("");
   const [curMonth, setCurMonth] = useState("");
   const [daysInMonth, setDaysInMonth] = useState(0);
   const [filtredSumArray, setFiltredSumArray] = useState([]);
   const [summarHours, setSummarHours] = useState(0);
   const [summarRubles, setSummarRubles] = useState(0);
-  const [pvz1Name, setPvz1Name] = useState("ПВЗ1");
-  const [pvz2Name, setPvz2Name] = useState("ПВЗ2");
-  const [sortByName, setSortByName] = useState("Все");
-
-  useEffect(() => {
-    const pvz1 = localStorage.getItem("pvz1name");
-    const pvz2 = localStorage.getItem("pvz2name");
-    if (pvz1) {
-      setPvz1Name(pvz1);
-    }
-    if (pvz2) {
-      setPvz2Name(pvz2);
-    }
-  }, []);
-
-  useEffect(() => {
-    const storedValue = sessionStorage.getItem("checkPVZ");
-    const checkMonth = sessionStorage.getItem("curMonth");
-    if (storedValue) {
-      setCheckPVZ(storedValue);
-    } else {
-      setCheckPVZ("PVZ1");
-    }
-    if (checkMonth) {
-      setCurMonth(checkMonth);
-    } else {
-      setCurMonth(getCurrentMonthAndYear());
-    }
-  }, []);
+  const [selectName, setSelectName] = useState("Все");
+  const [nameArray, setNameArray] = useState([]);
+  const [customDateStart, setCustomDateStart] = useState("");
+  const [customDateEnd, setCustomDateEnd] = useState("");
+  const [selectPeriod, setSelectPeriod] = useState("month");
+  const [PVZname, setPVZname] = useState("");
+  const [handleFilter, setHandleFilter] = useState(false);
+  const [alertInput, setAlertInput] = useState(false);
 
   const { data: PVZ1, isLoading: isLoadingPVZ1 } = useQuery({
     queryKey: ["PVZ1"],
@@ -57,21 +39,33 @@ const Statictics = ({}) => {
     queryFn: getPVZ2,
   });
 
+  const { data: PVZ3, isLoading: isLoadingPVZ3 } = useQuery({
+    queryKey: ["PVZ3"],
+    queryFn: getPVZ3,
+  });
+
   useEffect(() => {
-    if (!isLoadingPVZ1 && !isLoadingPVZ2) {
-      const combinedData = [...PVZ1, ...PVZ2];
+    const storedValue = sessionStorage.getItem("checkPVZ");
+    const checkMonth = sessionStorage.getItem("curMonth");
+    setCheckPVZ(storedValue || "PVZ1");
 
-      const filtered = combinedData.filter((item) => {
-        return item.namePerson === sortByName;
-      });
-
-      console.log("filtered", filtered);
+    if (checkMonth) {
+      setCurMonth(checkMonth);
+    } else {
+      setCurMonth(getCurrentMonthAndYear());
     }
-  }, [sortByName]);
-  const handleChange = (event) => {
-    setCheckPVZ(event.target.value);
-    sessionStorage.setItem("checkPVZ", event.target.value);
-  };
+  }, []);
+
+  useEffect(() => {
+    const storedValue = sessionStorage.getItem("checkName");
+    setSelectName(storedValue || "Все");
+    if (!isLoadingPVZ1 && !isLoadingPVZ2 && !isLoadingPVZ3) {
+      const allPVZ = [...PVZ1, ...PVZ2, ...PVZ3];
+      const getUnikName = new Set(allPVZ.map((item) => item.namePerson));
+      const getUnikNameArray = Array.from(getUnikName).sort((a, b) => a.localeCompare(b));
+      setNameArray(getUnikNameArray);
+    }
+  }, [PVZ1, PVZ2, PVZ3, isLoadingPVZ1, isLoadingPVZ2, isLoadingPVZ3]);
 
   useEffect(() => {
     const [year, month] = curMonth.split("-").map(Number);
@@ -81,99 +75,149 @@ const Statictics = ({}) => {
   }, [curMonth]);
 
   useEffect(() => {
-    if (!isLoadingPVZ1 && !isLoadingPVZ2) {
-      const checkPVZValue = checkPVZ === "PVZ1" ? PVZ1 : PVZ2;
-
-      if (checkPVZValue && Array.isArray(checkPVZValue)) {
-        const filtredArray = checkPVZValue.filter((item) => {
-          return item.date.slice(3, 5) === curMonth.slice(5, 7);
-        });
-
-        const filtredSumArray = [];
-
-        filtredArray.forEach((item) => {
-          const end = Number(item.endTime.slice(0, 2));
-          const start = Number(item.startTime.slice(0, 2));
-          const diffrenceTime = end - start;
-          const sum = Number(item.currentRate) * diffrenceTime;
-          const bonusAndFines =
-            sum + Number(item.otherData.bonus) - Number(item.otherData.fines);
-          const existingEntry = filtredSumArray.find(
-            (elem) => elem.name === item.namePerson
-          );
-
-          if (existingEntry) {
-            existingEntry.hours += diffrenceTime;
-            existingEntry.result += sum;
-            existingEntry.bonus += Number(item.otherData.bonus);
-            existingEntry.fines += Number(item.otherData.fines);
-            existingEntry.finalResult += bonusAndFines;
-          } else {
-            filtredSumArray.push({
-              name: item.namePerson,
-              hours: diffrenceTime,
-              result: sum,
-              bonus: Number(item.otherData.bonus),
-              fines: Number(item.otherData.fines),
-              finalResult: bonusAndFines,
-              color: item.color,
-            });
-          }
-        });
-
-        const sumHours = filtredSumArray.reduce((acc, item) => {
-          return acc + item.hours;
-        }, 0);
-        setSummarHours(sumHours);
-
-        const sumOfRubles = filtredSumArray.reduce((acc, item) => {
-          return acc + item.result + item.bonus - item.fines;
-        }, 0);
-        setSummarRubles(sumOfRubles);
-
-        setFiltredSumArray(filtredSumArray);
+    if (!isLoadingPVZ1 && !isLoadingPVZ2 && !isLoadingPVZ3) {
+      let checkPVZValue = []
+      switch (checkPVZ) {
+        case "PVZ1":
+          checkPVZValue = PVZ1;
+          setPVZname("НОВОТРОИЦК_26")
+          break;
+        case "PVZ2":
+          checkPVZValue = PVZ2;
+          setPVZname("НОВОТРОИЦК_42")
+          break;
+        case "PVZ3":
+          checkPVZValue = PVZ3;
+          setPVZname("НОВОТРОИЦК_48")
+          break;
+        case "allPVZ":
+          checkPVZValue = [...PVZ1, ...PVZ2, ...PVZ3];
+          setPVZname("Все ПВЗ")
+          break;
       }
-    }
-  }, [curMonth, checkPVZ, PVZ1, PVZ2, isLoadingPVZ1, isLoadingPVZ2]);
+      let per = ""
+      if (selectPeriod === "month") {
+        per = curMonth
+      } else {
+        per = [customDateStart, customDateEnd]
+      }
 
+      const [arg1, arg2, arg3] = filtredArray(checkPVZValue, per, selectName);
+      setSummarHours(arg1);
+      setSummarRubles(arg2);
+      setFiltredSumArray(arg3);
+    }
+  }, [PVZ1, PVZ2, PVZ3, isLoadingPVZ1, isLoadingPVZ2, isLoadingPVZ3]);
+
+
+
+  const handleChange = (event) => {
+    setCheckPVZ(event.target.value);
+    sessionStorage.setItem("checkPVZ", event.target.value);
+  };
+  const handleChangeName = (event) => {
+    setSelectName(event.target.value);
+    sessionStorage.setItem("checkName", event.target.value);
+  };
+
+  const show = () => {
+    if (selectPeriod === "period") {
+      if (customDateStart === "" || customDateEnd === "")
+        setAlertInput(true);
+      setTimeout(() => setAlertInput(false), 3000);
+      return
+    }
+    setHandleFilter(!handleFilter)
+    if (!isLoadingPVZ1 && !isLoadingPVZ2 && !isLoadingPVZ3) {
+      let checkPVZValue = []
+      switch (checkPVZ) {
+        case "PVZ1":
+          checkPVZValue = PVZ1;
+          break;
+        case "PVZ2":
+          checkPVZValue = PVZ2;
+          break;
+        case "PVZ3":
+          checkPVZValue = PVZ3;
+          break;
+        case "allPVZ":
+          checkPVZValue = [...PVZ1, ...PVZ2, ...PVZ3];
+          break;
+      }
+      let per = ""
+      if (selectPeriod === "month") {
+        per = curMonth
+      } else {
+        per = [customDateStart, customDateEnd]
+      }
+      console.log("checkPVZValue", checkPVZValue);
+
+
+      const [arg1, arg2, arg3] = filtredArray(checkPVZValue, per, selectName);
+      setSummarHours(arg1);
+      setSummarRubles(arg2);
+      setFiltredSumArray(arg3);
+    }
+
+
+  }
   return (
     <div className={styles.statWrap}>
       <div className={styles.container}>
-        <ToggleButtonGroup
-          color="primary"
-          value={checkPVZ}
-          onChange={(event) => handleChange(event)}
-          sx={{
-            backgroundColor: "var(--secondary-background)",
-            color: "var(--text)",
-            marginBottom: "7px",
-          }}
-        >
-          <ToggleButton value="PVZ1">НОВОТРОИЦК_26</ToggleButton>
-          <ToggleButton value="PVZ2">НОВОТРОИЦК_42</ToggleButton>
-        </ToggleButtonGroup>
-        <input
-          className={styles.inptMonth}
-          type="month"
-          value={curMonth}
-          onChange={(e) => {
-            setCurMonth(e.target.value);
-            sessionStorage.setItem("curMonth", e.target.value);
-          }}
-        />
-        <select
-          className={styles.select}
-          name="startTime"
-          value={sortByName}
-          onChange={(e) => setSortByName(e.target.value)}
-        >
-          <option value="Все">Все</option>
-          <option value="Влад">Влад</option>
-          <option value="Ксения">Ксения</option>
-        </select>
+        <div className={handleFilter ? styles.innerFiltersActive : styles.innerFiltersHide}>
+          <select name="choosePVZ" value={checkPVZ} onChange={handleChange}>
+            <option value="PVZ1">НОВОТРОИЦК_26</option>
+            <option value="PVZ2">НОВОТРОИЦК_42</option>
+            <option value="PVZ3">НОВОТРОИЦК_48</option>
+            <option value="allPVZ">Все</option>
+          </select>
+          <select name="chooseName" value={selectName} onChange={(event) => handleChangeName(event)}  >
+            <option value={"Все"}>Все</option>
+            {nameArray.length && (
+              nameArray.map((item) => (
+                <option value={item} key={item}>{item}</option>
+              ))
+            )}
+          </select>
+          <div className={styles.innerCustomDate}>
+            <div className={styles.dateWrapBtn}>
+              <button onClick={() => setSelectPeriod("month")} style={selectPeriod === "month" ? { backgroundColor: "var(--accent)" } : { backgroundColor: "var(--secondary-background)" }} >Месяц</button>
+              <button onClick={() => setSelectPeriod("period")}
+                style={selectPeriod === "period" ? { backgroundColor: "var(--accent)" } : { backgroundColor: "var(--secondary-background)" }}
+              >Период</button>
+
+            </div>
+            {selectPeriod === "period" &&
+              <div className={alertInput ? styles.customDateWrong : styles.customDate}>
+                <input type="date" name="start" value={customDateStart} onChange={(e) => setCustomDateStart(e.target.value)} />
+                <input type="date" name="end" value={customDateEnd} onChange={(e) => setCustomDateEnd(e.target.value)} />
+              </div>}
+            {selectPeriod === "month" && <input
+              className={styles.inptMonth}
+              type="month"
+              value={curMonth}
+              onChange={(e) => {
+                setCurMonth(e.target.value);
+                sessionStorage.setItem("curMonth", e.target.value);
+              }}
+            />}
+          </div>
+          <button onClick={show}>показать</button>
+        </div>
+
+        <div className={styles.innerCurSettings}>
+          <p>{checkPVZ}</p>
+          <p>{selectName === "Все" ? "Все работники" : selectName}</p>
+          <p>{selectPeriod === "month" ? curMonth : `${customDateStart} - ${customDateEnd}`}</p>
+
+          <img onClick={() => setHandleFilter(!handleFilter)} className={styles.filters} src={filters} alt="" />
+
+        </div>
+
 
         <div className={styles.infoWrap}>
           <p>Дней в месяце: {daysInMonth}</p>
+
           <p>Часов в месяце {daysInMonth * 12}</p>
           {filtredSumArray.length ? (
             <div className={styles.resultTable}>
@@ -187,20 +231,22 @@ const Statictics = ({}) => {
 
         <div className={styles.tableWrap}>
           {filtredSumArray.length ? (
-            filtredSumArray.map((item, index) => (
-              <div className={styles.statTable} key={index}>
-                <div className={styles.tableItem}>
-                  <p className={styles.name}>{item.name}</p>
-                  <p className={styles.hours}>{item.hours}ч</p>
-                  <div className={styles.itemMoney}>
-                    <p className={styles.activeRes}>{item.result}</p>
-                    <p className={styles.activeFines}>{item.fines}</p>
-                    <p className={styles.activeBonus}>{item.bonus}</p>
-                    <p className={styles.activeFinalRes}>{item.finalResult}</p>
+            filtredSumArray
+              .sort((a, b) => a.name.localeCompare(b.name))
+              .map((item, index) => (
+                <div className={styles.statTable} key={index}>
+                  <div className={styles.tableItem}>
+                    <p className={styles.name}>{item.name}</p>
+                    <p className={styles.hours}>{item.hours}ч</p>
+                    <div className={styles.itemMoney}>
+                      <p className={styles.activeRes}>{item.result}</p>
+                      <p className={styles.activeFines}>{item.fines}</p>
+                      <p className={styles.activeBonus}>{item.bonus}</p>
+                      <p className={styles.activeFinalRes}>{item.finalResult}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))
+              ))
           ) : (
             <h5>нет данных</h5>
           )}
@@ -217,7 +263,7 @@ const Statictics = ({}) => {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 export default Statictics;

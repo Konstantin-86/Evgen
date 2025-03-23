@@ -1,4 +1,5 @@
 .statWrap {
+  position: relative;
   margin-top: 7px;
   margin-bottom: 60px;
   color: var(--text);
@@ -12,12 +13,31 @@
 }
 
 .tableWrap,
-.infoWrap {
+.infoWrap,
+.innerCurSettings {
   margin: 7px;
   padding: 7px;
   border-radius: 7px;
   background-color: var(--secondary-background);
   color: var(--text);
+}
+
+.innerCurSettings {
+  position: relative;
+}
+
+.filters {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  padding: 7px;
+  border-radius: 7px;
+  background-color: var(--another-background);
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  cursor: pointer;
+  z-index: 1000;
 }
 
 .inptMonth {
@@ -117,4 +137,68 @@
 .explaneFinalResult::before,
 .activeFinalRes {
   background-color: #166107;
+}
+
+.innerFiltersActive {
+  position: absolute;
+  top: 7px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 7px;
+  border-radius: 7px;
+  background-color: var(--secondary-background);
+  max-width: 473px;
+  width: 100%;
+  min-height: 50dvh;
+  transition: all 0.2s ease-in-out;
+  z-index: 1000;
+}
+
+.innerFiltersActive select {
+  border: 1px solid var(--accent);
+  display: flex;
+}
+
+.innerFiltersHide {
+  position: absolute;
+  top: -200%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 7px;
+  border-radius: 7px;
+  background-color: var(--secondary-background);
+  max-width: 473px;
+  width: 100%;
+  min-height: 50dvh;
+  transition: all 0.2s ease-in-out;
+  z-index: 1000;
+}
+
+.customDateWrong {
+  outline: 2px solid red;
+  border-radius: 7px;
+}
+
+.customDate {
+  outline: 2px solid transparent;
+  border-radius: 7px;
+}
+
+.dateWrapBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+  margin-block: 14px;
+}
+
+.dateWrapBtn button {
+  border: 1px solid var(--accent);
+  margin: 0;
+}
+
+.innerCustomDate input {
+  border: 1px solid var(--accent);
+  min-height: 50px;
+  margin-right: 14px;
 }

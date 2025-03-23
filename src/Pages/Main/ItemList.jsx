@@ -12,6 +12,7 @@ const ItemList = ({
   currentWeek,
   callBackNewEvent,
   setTextAlert,
+
 }) => {
   const [currentDay, setCurrentDay] = useState([]);
   const [handlePopUp, setHandlePopUp] = useState(false);
@@ -111,6 +112,7 @@ const ItemList = ({
         setHandlePopUp={setHandlePopUp}
         callBackNewEvent={callBackNewEvent}
         setTextAlert={setTextAlert}
+
       />
     </>
   );

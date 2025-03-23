@@ -7,6 +7,7 @@
 [data-theme="light"] {
   --background: #ffffff;
   --secondary-background: #f0f0f0;
+  --another-background: #ffffff;
   --text: #000000;
   --accent: #bd8ceb;
   --secondary-text: #dfdede;
@@ -16,6 +17,7 @@
 [data-theme="dark"] {
   --background: #121212;
   --secondary-background: #383838;
+  --another-background: #3f3d3d;
   --text: #ffffff;
   --accent: #919290;
   --secondary-text: #2b2a2a;
@@ -46,4 +48,5 @@ button {
   padding: 7px 10px;
   border-radius: 7px;
   color: var(--text);
+  cursor: pointer;
 }

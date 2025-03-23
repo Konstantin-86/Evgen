@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import { useQueryClient, useQuery, useMutation } from "@tanstack/react-query";
 import { getPVZ1 } from "../../components/API/PVZ/getPVZ1";
 import { getPVZ2 } from "../../components/API/PVZ/getPVZ2";
+import { getPVZ3 } from "../../components/API/PVZ/getPVZ3";
 import { addNewEventPVZ1 } from "../../components/API/PVZ/addNewEventPVZ1";
 import { addNewEventPVZ2 } from "../../components/API/PVZ/addNewEventPVZ2";
+import { addNewEventPVZ3 } from "../../components/API/PVZ/addNewEventPVZ3";
 
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
@@ -21,6 +23,8 @@ const Main = () => {
   const queryClient = useQueryClient();
 
   const [currentWeek, setCurrentWeek] = useState([]);
+  const [PVZ, setPVZ] = useState([]);
+  const [addPVZFunction, setAddPVZFunction] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
   const [textAlert, setTextAlert] = useState("");
   const [checkPVZ, setCheckPVZ] = useState("");
@@ -54,20 +58,40 @@ const Main = () => {
     queryKey: ["PVZ2"],
     queryFn: getPVZ2,
   });
+  const { data: PVZ3, isLoading: isLoadingPVZ3 } = useQuery({
+    queryKey: ["PVZ3"],
+    queryFn: getPVZ3,
+  });
 
   useEffect(() => {
-    if (PVZ1 && !isLoadingPVZ1 && PVZ2 && !isLoadingPVZ2 && startOfWeek) {
-      const checkPVZValue = checkPVZ === "PVZ1" ? PVZ1 : PVZ2;
+    if (PVZ1 && !isLoadingPVZ1 && PVZ2 && !isLoadingPVZ2 && startOfWeek && PVZ3 && !isLoadingPVZ3) {
+      let checkPVZValue = []
+      switch (checkPVZ) {
+        case "PVZ1":
+          checkPVZValue = PVZ1;
+          setPVZ(PVZ1);
+          setAddPVZFunction(() => addNewEventPVZ1);
+          break;
+        case "PVZ2":
+          checkPVZValue = PVZ2;
+          setPVZ(PVZ2);
+          setAddPVZFunction(() => addNewEventPVZ2);
+          break;
+        case "PVZ3":
+          checkPVZValue = PVZ3;
+          setPVZ(PVZ3);
+          setAddPVZFunction(() => addNewEventPVZ3);
+          break;
+      }
       const getWeek = getCurrentWeek(checkPVZValue, startOfWeek);
       setCurrentWeek(getWeek);
     }
-  }, [checkPVZ, PVZ1, isLoadingPVZ1, PVZ2, isLoadingPVZ2]);
+  }, [checkPVZ, PVZ1, isLoadingPVZ1, PVZ2, isLoadingPVZ2, PVZ3, isLoadingPVZ3, startOfWeek]);
 
   const createMutation = useMutation({
     mutationFn: (newUser) => {
-      const checkPVZFn =
-        checkPVZ === "PVZ1" ? addNewEventPVZ1 : addNewEventPVZ2;
-      return checkPVZFn(newUser);
+
+      return addPVZFunction(newUser);
     },
     onSuccess: (_, newUser) => {
       queryClient.setQueryData([checkPVZ], (oldData) => {
@@ -91,8 +115,8 @@ const Main = () => {
     const startOfNextWeek = new Date(currentStartOfWeek);
     startOfNextWeek.setDate(currentStartOfWeek.getDate() + 7);
 
-    const checkPVZValue = checkPVZ === "PVZ1" ? PVZ1 : PVZ2;
-    const nextWeek = getCurrentWeek(checkPVZValue, startOfNextWeek);
+    /* const checkPVZValue = checkPVZ === "PVZ1" ? PVZ1 : PVZ2; */
+    const nextWeek = getCurrentWeek(PVZ, startOfNextWeek);
     setStartOfWeek(startOfNextWeek);
     setCurrentWeek(nextWeek);
   };
@@ -103,8 +127,8 @@ const Main = () => {
     const startOfNextWeek = new Date(currentStartOfWeek);
     startOfNextWeek.setDate(currentStartOfWeek.getDate() - 7);
 
-    const checkPVZValue = checkPVZ === "PVZ1" ? PVZ1 : PVZ2;
-    const prevWeek = getCurrentWeek(checkPVZValue, startOfNextWeek);
+    /* const checkPVZValue = checkPVZ === "PVZ1" ? PVZ1 : PVZ2; */
+    const prevWeek = getCurrentWeek(PVZ, startOfNextWeek);
     setStartOfWeek(startOfNextWeek);
     setCurrentWeek(prevWeek);
   };
@@ -124,24 +148,18 @@ const Main = () => {
           {textAlert}
         </p>
         <h3 style={{ marginBottom: "7px" }}>Сегодня {getCurrentDay()}</h3>
-        <ToggleButtonGroup
-          color="primary"
-          value={checkPVZ}
-          onChange={(event) => handleChange(event)}
-          sx={{
-            backgroundColor: "var(--secondary-background)",
-            color: "var(--text)",
-            marginBottom: "7px",
-          }}
-        >
-          <ToggleButton value="PVZ1">НОВОТРОИЦК_26</ToggleButton>
-          <ToggleButton value="PVZ2">НОВОТРОИЦК_42</ToggleButton>
-        </ToggleButtonGroup>
+
+        <select name="choosePVZ" value={checkPVZ} onChange={handleChange}>
+          <option value="PVZ1">НОВОТРОИЦК_26</option>
+          <option value="PVZ2">НОВОТРОИЦК_42</option>
+          <option value="PVZ3">НОВОТРОИЦК_48</option>
+        </select>
         <ItemList
           checkPVZ={checkPVZ}
           currentWeek={currentWeek}
           callBackNewEvent={callBackNewEvent}
           setTextAlert={setTextAlert}
+
         />
       </div>
     </div>

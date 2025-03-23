@@ -8,8 +8,10 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 
 import { getPVZ1 } from "../../components/API/PVZ/getPVZ1";
 import { getPVZ2 } from "../../components/API/PVZ/getPVZ2";
+import { getPVZ3 } from "../../components/API/PVZ/getPVZ3";
 import { deleteEventPVZ1 } from "../../components/API/PVZ/deleteEventPVZ1";
 import { deleteEventPVZ2 } from "../../components/API/PVZ/deleteEventPVZ2";
+import { deleteEventPVZ3 } from "../../components/API/PVZ/deleteEventPVZ3";
 import PopUpEditEvent from "./PopUpEditEvent";
 
 import SempleList from "./SempleList";
@@ -39,6 +41,7 @@ const PopUp = ({
   callBackNewEvent,
   checkPVZ,
   setTextAlert,
+
 }) => {
   const [showSemples, setShowSemples] = useState(true);
   const [selectedItems, setSelectedItems] = useState([]);
@@ -47,6 +50,8 @@ const PopUp = ({
   const [handleNewEvent, setHandleNewEvent] = useState(false);
   const [checkPVZValue, setCheckPVZValue] = useState([]);
   const [maxId, setMaxId] = useState(0);
+  const [PVZ, setPVZ] = useState([]);
+  const [deletePVZFunction, setDeletePVZFunction] = useState(null);
 
   const queryClient = useQueryClient();
 
@@ -63,21 +68,43 @@ const PopUp = ({
     queryKey: ["PVZ2"],
     queryFn: getPVZ2,
   });
+  const { data: PVZ3, isLoading: isLoadingPVZ3 } = useQuery({
+    queryKey: ["PVZ3"],
+    queryFn: getPVZ3,
+  });
 
   useEffect(() => {
-    if (!isLoading && PVZ1 && PVZ2) {
-      let preId = 0;
-      const curPVZArray = checkPVZ === "PVZ1" ? PVZ1 : PVZ2;
-      setCheckPVZValue(curPVZArray);
-
-      curPVZArray.forEach((item) => {
+    let checkPVZValue = []
+    switch (checkPVZ) {
+      case "PVZ1":
+        checkPVZValue = PVZ1;
+        setPVZ(PVZ1);
+        setDeletePVZFunction(() => deleteEventPVZ1)
+        break;
+      case "PVZ2":
+        checkPVZValue = PVZ2;
+        setPVZ(PVZ2);
+        setDeletePVZFunction(() => deleteEventPVZ2)
+        break;
+      case "PVZ3":
+        checkPVZValue = PVZ3;
+        setPVZ(PVZ3);
+        setDeletePVZFunction(() => deleteEventPVZ3)
+        break;
+    }
+    let preId = 0;
+    if (PVZ1 && PVZ2 && PVZ3) {
+      checkPVZValue.forEach((item) => {
         if (item.id > preId) {
           preId = item.id;
           setMaxId(item.id);
         }
       });
     }
-  }, [PVZ1, PVZ2, checkPVZ]);
+
+
+  }, [PVZ1, PVZ2, PVZ3, checkPVZ, isLoadingPVZ1, isLoadingPVZ2, isLoadingPVZ3]);
+
 
   const addNewDay = (newItem) => {
     delete newItem.idPerson;
@@ -87,17 +114,11 @@ const PopUp = ({
     setSelectedItems([]);
     setHandlePopUp(false);
     setHandleNewEvent(false);
-    let preId = 0;
-    checkPVZValue.forEach((item) => {
-      if (item.id > preId) {
-        preId = item.id;
-        setMaxId(item.id);
-      }
-    });
+
   };
 
   const deletePerson = useMutation({
-    mutationFn: checkPVZ === "PVZ1" ? deleteEventPVZ1 : deleteEventPVZ2,
+    mutationFn: deletePVZFunction,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [checkPVZ] });
       setTextAlert("Данные успешно удалены");
@@ -110,12 +131,7 @@ const PopUp = ({
   const deleteEvent = (person) => {
     deletePerson.mutate(person.id);
     setHandlePopUp(false);
-    let preId = 0;
-    checkPVZValue.forEach((item) => {
-      if (item.id > preId) {
-        setMaxId(item.id);
-      }
-    });
+
   };
   const editEvent = (person) => {
     setShowEditPopUp(true);

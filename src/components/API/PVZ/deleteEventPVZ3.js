@@ -1,10 +1,8 @@
 import axios from "axios";
-import { PVZ1API } from "../variables";
+import { PVZ3API } from "../variables";
 
-export const deleteEventPVZ1 = async (id) => {
-    const path = `${PVZ1API}/${id}`
-
-
+export const deleteEventPVZ3 = async (id) => {
+    const path = `${PVZ3API}/${id}`
     try {
         await axios.delete(path)
             .then(() => console.log("Данные успешно удалены с сервера"));
