@@ -64,8 +64,16 @@ const Main = () => {
   });
 
   useEffect(() => {
-    if (PVZ1 && !isLoadingPVZ1 && PVZ2 && !isLoadingPVZ2 && startOfWeek && PVZ3 && !isLoadingPVZ3) {
-      let checkPVZValue = []
+    if (
+      PVZ1 &&
+      !isLoadingPVZ1 &&
+      PVZ2 &&
+      !isLoadingPVZ2 &&
+      startOfWeek &&
+      PVZ3 &&
+      !isLoadingPVZ3
+    ) {
+      let checkPVZValue = [];
       switch (checkPVZ) {
         case "PVZ1":
           checkPVZValue = PVZ1;
@@ -86,11 +94,19 @@ const Main = () => {
       const getWeek = getCurrentWeek(checkPVZValue, startOfWeek);
       setCurrentWeek(getWeek);
     }
-  }, [checkPVZ, PVZ1, isLoadingPVZ1, PVZ2, isLoadingPVZ2, PVZ3, isLoadingPVZ3, startOfWeek]);
+  }, [
+    checkPVZ,
+    PVZ1,
+    isLoadingPVZ1,
+    PVZ2,
+    isLoadingPVZ2,
+    PVZ3,
+    isLoadingPVZ3,
+    startOfWeek,
+  ]);
 
   const createMutation = useMutation({
     mutationFn: (newUser) => {
-
       return addPVZFunction(newUser);
     },
     onSuccess: (_, newUser) => {
@@ -126,8 +142,6 @@ const Main = () => {
     );
     const startOfNextWeek = new Date(currentStartOfWeek);
     startOfNextWeek.setDate(currentStartOfWeek.getDate() - 7);
-
-    /* const checkPVZValue = checkPVZ === "PVZ1" ? PVZ1 : PVZ2; */
     const prevWeek = getCurrentWeek(PVZ, startOfNextWeek);
     setStartOfWeek(startOfNextWeek);
     setCurrentWeek(prevWeek);
@@ -159,7 +173,6 @@ const Main = () => {
           currentWeek={currentWeek}
           callBackNewEvent={callBackNewEvent}
           setTextAlert={setTextAlert}
-
         />
       </div>
     </div>

@@ -90,11 +90,10 @@ const StatGrafic = ({ filtredSumArray }) => {
       );
     }
   };
-  console.log(filtredSumArray.length);
 
   return (
     <>
-      {filtredSumArray.length <= 1 ? null :
+      {filtredSumArray.length <= 1 ? null : (
         <div className={styles.wrap}>
           <h3>Распределение по часам</h3>
           <ResponsiveContainer width="100%" height={300}>
@@ -141,11 +140,9 @@ const StatGrafic = ({ filtredSumArray }) => {
               <Bar dataKey="value" fill="#8884d8" />
             </BarChart>
           </ResponsiveContainer>
-        </div>}
-
+        </div>
+      )}
     </>
-
-
   );
 };
 

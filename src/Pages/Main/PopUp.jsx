@@ -41,7 +41,6 @@ const PopUp = ({
   callBackNewEvent,
   checkPVZ,
   setTextAlert,
-
 }) => {
   const [showSemples, setShowSemples] = useState(true);
   const [selectedItems, setSelectedItems] = useState([]);
@@ -74,22 +73,22 @@ const PopUp = ({
   });
 
   useEffect(() => {
-    let checkPVZValue = []
+    let checkPVZValue = [];
     switch (checkPVZ) {
       case "PVZ1":
         checkPVZValue = PVZ1;
         setPVZ(PVZ1);
-        setDeletePVZFunction(() => deleteEventPVZ1)
+        setDeletePVZFunction(() => deleteEventPVZ1);
         break;
       case "PVZ2":
         checkPVZValue = PVZ2;
         setPVZ(PVZ2);
-        setDeletePVZFunction(() => deleteEventPVZ2)
+        setDeletePVZFunction(() => deleteEventPVZ2);
         break;
       case "PVZ3":
         checkPVZValue = PVZ3;
         setPVZ(PVZ3);
-        setDeletePVZFunction(() => deleteEventPVZ3)
+        setDeletePVZFunction(() => deleteEventPVZ3);
         break;
     }
     let preId = 0;
@@ -101,20 +100,17 @@ const PopUp = ({
         }
       });
     }
-
-
   }, [PVZ1, PVZ2, PVZ3, checkPVZ, isLoadingPVZ1, isLoadingPVZ2, isLoadingPVZ3]);
-
 
   const addNewDay = (newItem) => {
     delete newItem.idPerson;
     newItem.date = day.date;
+    newItem.numberPVZ = checkPVZ;
 
     callBackNewEvent(newItem);
     setSelectedItems([]);
     setHandlePopUp(false);
     setHandleNewEvent(false);
-
   };
 
   const deletePerson = useMutation({
@@ -131,7 +127,6 @@ const PopUp = ({
   const deleteEvent = (person) => {
     deletePerson.mutate(person.id);
     setHandlePopUp(false);
-
   };
   const editEvent = (person) => {
     setShowEditPopUp(true);
