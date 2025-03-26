@@ -41,16 +41,26 @@
 }
 
 .inptMonth {
-  width: 122px;
-  display: inline-block;
-  margin-left: 7px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
   padding: 7px 10px;
   height: 48.5px;
   background-color: var(--secondary-background);
-  border: none;
   outline: none;
   border-radius: 7px;
   color: var(--text);
+  border: 1px solid var(--accent);
+  height: 57px;
+}
+.customDate input {
+  border: 1px solid var(--accent);
+  height: 57px;
+}
+.buttonShow {
+  padding: 10px 14px;
+  font-size: 16px;
+  min-width: 50%;
 }
 
 .statTable {
@@ -72,7 +82,62 @@
   }
 
   .hours {
+    position: relative;
     margin: 0 auto;
+  }
+  .hours::before {
+    content: "";
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 2px;
+    background-color: #4411b9;
+    rotate: 45deg;
+    transition: all 0.2s ease;
+  }
+  .hours::after {
+    content: "";
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 2px;
+    background-color: #4411b9;
+    rotate: 135deg;
+    transition: all 0.2s ease;
+  }
+
+  .hoursOpen {
+    position: relative;
+    margin: 0 auto;
+  }
+  .hoursOpen::before {
+    content: "";
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 2px;
+    background-color: #4411b9;
+    rotate: -45deg;
+    transition: all 0.2s ease;
+  }
+  .hoursOpen::after {
+    content: "";
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 2px;
+    background-color: #4411b9;
+    transform: all 0.2s ease;
+    rotate: -135deg;
+    transition: all 0.2s ease;
   }
 
   .itemMoney {
@@ -177,11 +242,17 @@
 .customDateWrong {
   outline: 2px solid red;
   border-radius: 7px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
 }
 
 .customDate {
   outline: 2px solid transparent;
   border-radius: 7px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
 }
 
 .dateWrapBtn {
@@ -197,8 +268,37 @@
   margin: 0;
 }
 
-.innerCustomDate input {
-  border: 1px solid var(--accent);
-  min-height: 50px;
-  margin-right: 14px;
+.detailItem,
+.detailsHeader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+  padding-block: 7px;
+}
+.detailItem:nth-child(even) {
+  background-color: #8d7a7a;
+}
+.detailItem p {
+  width: 14%;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.detailsHeader {
+  font-weight: 600;
+}
+.detailsHeader p {
+  width: 14%;
+  text-align: center;
+}
+.detailsWrapHide {
+  height: 0;
+  opacity: 0;
+  visibility: hidden;
+}
+.detailsWrapShow {
+  height: 100%;
+  opacity: 1;
+  visibility: visible;
 }

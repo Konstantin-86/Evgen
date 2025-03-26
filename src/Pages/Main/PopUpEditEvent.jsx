@@ -4,6 +4,7 @@ import { nanoid } from "nanoid";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { editEventPVZ1 } from "../../components/API/PVZ/editEventPVZ1";
 import { editEventPVZ2 } from "../../components/API/PVZ/editEventPVZ2";
+import { editEventPVZ3 } from "../../components/API/PVZ/editEventPVZ3";
 
 import styles from "./PopUpEditEvent.module.scss";
 
@@ -41,7 +42,19 @@ const PopUpEditEvent = ({
 
   const createMutation = useMutation({
     mutationFn: (newUser) => {
-      const checkPVZFn = checkPVZ === "PVZ1" ? editEventPVZ1 : editEventPVZ2;
+      /* const checkPVZFn = checkPVZ === "PVZ1" ? editEventPVZ1 : editEventPVZ2; */
+      let checkPVZFn = [];
+      switch (checkPVZ) {
+        case "PVZ1":
+          checkPVZFn = editEventPVZ1;
+          break;
+        case "PVZ2":
+          checkPVZFn = editEventPVZ2;
+          break;
+        case "PVZ3":
+          checkPVZFn = editEventPVZ3;
+          break;
+      }
       return checkPVZFn(newUser);
     },
     onSuccess: (_, newUser) => {

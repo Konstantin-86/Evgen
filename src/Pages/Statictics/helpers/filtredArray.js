@@ -71,9 +71,8 @@ export default function filtredArray(array, period, selectName = "Все") {
       existingEntry.fines += Number(item.otherData.fines);
       existingEntry.finalResult += bonusAndFines;
 
-      // Добавляем детальную информацию в массив details
       existingEntry.details.push({
-        date: item.date, // предполагая, что есть такое поле
+        date: item.date,
         startTime: item.startTime,
         endTime: item.endTime,
         rate: item.currentRate,
@@ -117,8 +116,6 @@ export default function filtredArray(array, period, selectName = "Все") {
   const sumOfRubles = filtredSumArray.reduce((acc, item) => {
     return acc + item.result + item.bonus - item.fines;
   }, 0);
-  console.log("filtredArray", filtredArray);
-  console.log("filtredSumArray", filtredSumArray);
 
   return [sumHours, sumOfRubles, filtredSumArray];
 }

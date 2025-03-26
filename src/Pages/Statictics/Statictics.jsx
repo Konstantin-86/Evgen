@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
+import { nanoid } from "nanoid";
 import { getPVZ1 } from "../../components/API/PVZ/getPVZ1";
 import { getPVZ2 } from "../../components/API/PVZ/getPVZ2";
 import { getPVZ3 } from "../../components/API/PVZ/getPVZ3";
@@ -14,7 +15,7 @@ import styles from "./Statictics.module.scss";
 import filters from "../../assets/filters.png";
 
 const Statictics = () => {
-  const [checkPVZ, setCheckPVZ] = useState("");
+  const [checkPVZ, setCheckPVZ] = useState("PVZ1");
   const [curMonth, setCurMonth] = useState("");
   const [daysInMonth, setDaysInMonth] = useState(0);
   const [filtredSumArray, setFiltredSumArray] = useState([]);
@@ -28,6 +29,7 @@ const Statictics = () => {
   const [PVZname, setPVZname] = useState("");
   const [handleFilter, setHandleFilter] = useState(false);
   const [alertInput, setAlertInput] = useState(false);
+  const [showDetailsArray, setShowDetailsArray] = useState([]);
 
   const { data: PVZ1, isLoading: isLoadingPVZ1 } = useQuery({
     queryKey: ["PVZ1"],
@@ -97,19 +99,17 @@ const Statictics = () => {
           setPVZname("Все ПВЗ");
           break;
       }
-      let per = "";
-      if (selectPeriod === "month") {
-        per = curMonth;
-      } else {
-        per = [customDateStart, customDateEnd];
-      }
 
-      const [arg1, arg2, arg3] = filtredArray(checkPVZValue, per, selectName);
+      const [arg1, arg2, arg3] = filtredArray(
+        checkPVZValue,
+        curMonth,
+        selectName
+      );
       setSummarHours(arg1);
       setSummarRubles(arg2);
       setFiltredSumArray(arg3);
     }
-  }, [PVZ1, PVZ2, PVZ3, isLoadingPVZ1, isLoadingPVZ2, isLoadingPVZ3]);
+  }, [PVZ1, PVZ2, PVZ3, isLoadingPVZ1, isLoadingPVZ2, isLoadingPVZ3, curMonth]);
 
   const handleChange = (event) => {
     setCheckPVZ(event.target.value);
@@ -170,6 +170,15 @@ const Statictics = () => {
         return "Все ПВЗ";
     }
   };
+
+  const showDetails = (item) => {
+    if (!showDetailsArray.includes(item.name)) {
+      setShowDetailsArray([...showDetailsArray, item.name]);
+    } else {
+      setShowDetailsArray(showDetailsArray.filter((i) => i !== item.name));
+    }
+  };
+
   return (
     <div className={styles.statWrap}>
       <div className={styles.container}>
@@ -252,7 +261,9 @@ const Statictics = () => {
               />
             )}
           </div>
-          <button onClick={show}>показать</button>
+          <button className={styles.buttonShow} onClick={show}>
+            показать
+          </button>
         </div>
 
         <div className={styles.innerCurSettings}>
@@ -293,10 +304,22 @@ const Statictics = () => {
             filtredSumArray
               .sort((a, b) => a.name.localeCompare(b.name))
               .map((item, index) => (
-                <div className={styles.statTable} key={index}>
+                <div
+                  className={styles.statTable}
+                  key={index}
+                  onClick={() => showDetails(item)}
+                >
                   <div className={styles.tableItem}>
                     <p className={styles.name}>{item.name}</p>
-                    <p className={styles.hours}>{item.hours}ч</p>
+                    <p
+                      className={
+                        showDetailsArray.includes(item.name)
+                          ? styles.hoursOpen
+                          : styles.hours
+                      }
+                    >
+                      {item.hours}ч
+                    </p>
                     <div className={styles.itemMoney}>
                       <p className={styles.activeRes}>{item.result}</p>
                       <p className={styles.activeFines}>{item.fines}</p>
@@ -305,6 +328,39 @@ const Statictics = () => {
                         {item.finalResult}
                       </p>
                     </div>
+                  </div>
+                  <div
+                    className={
+                      showDetailsArray.includes(item.name)
+                        ? styles.detailsWrapShow
+                        : styles.detailsWrapHide
+                    }
+                  >
+                    <div className={styles.detailsHeader}>
+                      <p>date</p>
+                      <p>time</p>
+                      <p>pvz</p>
+                      <p>rate</p>
+                      <p>fines</p>
+                      <p>bonus</p>
+                      <p>total</p>
+                    </div>
+
+                    {item.details
+                      .sort((a, b) => a.date.localeCompare(b.date))
+                      .map((elem) => (
+                        <div key={nanoid()} className={styles.detailItem}>
+                          <p title={elem.date}>{elem.date}</p>
+                          <p>
+                            {elem.startTime} - {elem.endTime}
+                          </p>
+                          <p>{elem?.namePVZ}</p>
+                          <p>{elem.rate}</p>
+                          <p>{elem.fines}</p>
+                          <p>{elem.bonus}</p>
+                          <p>{elem.total}</p>
+                        </div>
+                      ))}
                   </div>
                 </div>
               ))
