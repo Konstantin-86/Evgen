@@ -172,12 +172,16 @@ const Statictics = () => {
   };
 
   const showDetails = (item) => {
+    console.log("item", item);
+
     if (!showDetailsArray.includes(item.name)) {
       setShowDetailsArray([...showDetailsArray, item.name]);
     } else {
       setShowDetailsArray(showDetailsArray.filter((i) => i !== item.name));
     }
   };
+  console.log(filtredSumArray);
+
 
   return (
     <div className={styles.statWrap}>

@@ -35,6 +35,7 @@
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 
   .itemName {
+    margin-top: 20px;
     max-width: 120px;
     text-overflow: ellipsis;
     white-space: wrap;
@@ -42,6 +43,7 @@
   }
 
   .itemColor {
+    margin: 0;
     position: absolute;
     top: 7px;
     right: 7px;
@@ -80,6 +82,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
     &:hover {
       color: #ff1a1a;
     }
@@ -88,6 +91,7 @@
 
 .addButton {
   max-width: 250px;
+  font-size: 16px;
   width: 100%;
   margin: 20px auto;
   display: flex;
@@ -95,10 +99,11 @@
   align-items: center;
   background-color: var(--secondary-background);
   border: 1px solid var(--accent);
-  padding: 7px 10px;
+  padding: 10px;
   border-radius: 7px;
   color: var(--text);
 }
+
 .edetSemple {
   position: absolute;
   bottom: 0;
@@ -111,6 +116,7 @@
   border-radius: 0 7px 0 0;
   margin: 0;
 }
+
 .showAlarm {
   position: fixed;
   top: 7px;
@@ -126,6 +132,7 @@
   opacity: 1;
   transition: all 0.2s ease-in-out;
 }
+
 .hideAlarm {
   position: fixed;
   top: -100%;
@@ -135,6 +142,7 @@
   opacity: 0;
   transition: all 0.2s ease-in-out;
 }
+
 .hours {
   position: absolute;
   top: 7px;

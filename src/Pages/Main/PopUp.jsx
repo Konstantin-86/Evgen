@@ -54,6 +54,7 @@ const PopUp = ({
 
   const queryClient = useQueryClient();
 
+
   const { data, isLoading } = useQuery({
     queryKey: ["semples"],
     queryFn: getAllSemples,
@@ -205,6 +206,7 @@ const PopUp = ({
                     <p>Loading...</p>
                   ) : (
                     <SempleList
+                      dayArray={day}
                       selectedItems={selectedItems}
                       setSelectedItems={setSelectedItems}
                       addNewDay={addNewDay}

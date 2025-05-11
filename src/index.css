@@ -12,6 +12,10 @@
   --accent: #bd8ceb;
   --secondary-text: #dfdede;
   --buttonColor: #1976d2;
+  --statColorResult: #FF6B6B;
+  --statColorFines: #4ECDC4;
+  --statColorBonus: #cea444;
+  --statColorFinalResult: #A5BECC;
 }
 
 [data-theme="dark"] {
@@ -22,6 +26,10 @@
   --accent: #919290;
   --secondary-text: #2b2a2a;
   --buttonColor: #1565c0;
+  --statColorResult: #FF6B6B;
+  --statColorFines: #4ECDC4;
+  --statColorBonus: #cea444;
+  --statColorFinalResult: #A5BECC;
 }
 
 * {

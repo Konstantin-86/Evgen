@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getAllSemples } from "../../components/API/personSemple/getAllSemples";
 
 import styles from "./SempleList.module.scss";
+import { Alarm } from "@mui/icons-material";
 
 const time = [
   "09:00",
@@ -22,12 +23,15 @@ const time = [
 ];
 
 const SempleList = ({
+  dayArray,
   selectedItems,
   setSelectedItems,
   addNewDay,
   maxId,
   setMaxId,
 }) => {
+
+
   const { data } = useQuery({
     queryKey: ["semples"],
     queryFn: getAllSemples,
@@ -35,6 +39,7 @@ const SempleList = ({
   const [itemCheckedId, setItemCheckedId] = useState("");
   const [newPersonStartTime, setNewPersonStartTime] = useState("");
   const [newPersonEndTime, setNewPersonEndTime] = useState("");
+  const [alarm, setAlarm] = useState(false)
 
   const isItemSelected = (item, selectedItems) => {
     return selectedItems.some(
@@ -53,7 +58,45 @@ const SempleList = ({
     setNewPersonStartTime(item.startTime);
     setNewPersonEndTime(item.endTime);
   };
+
+  function isTimeAvailable(newSlot, existingSlots) {
+    if (!time.includes(newSlot.startTime) || !time.includes(newSlot.endTime)) {
+      return false;
+    }
+
+    const startIndex = time.indexOf(newSlot.startTime);
+    const endIndex = time.indexOf(newSlot.endTime);
+    if (startIndex >= endIndex) {
+      return false;
+    }
+
+    for (const slot of existingSlots) {
+      const existingStartIndex = time.indexOf(slot.startTime);
+      const existingEndIndex = time.indexOf(slot.endTime);
+
+      if (startIndex < existingEndIndex && endIndex > existingStartIndex) {
+        return false;
+      }
+    }
+
+    return true;
+  }
   const addNewEvent = (item) => {
+
+    const newSlot1 = { startTime: newPersonStartTime, endTime: newPersonEndTime }
+    let existingSlots = []
+    dayArray?.data.map((elem) => {
+      existingSlots.push({ startTime: elem.startTime, endTime: elem.endTime })
+    })
+
+    if (!isTimeAvailable(newSlot1, existingSlots)) {
+      setAlarm(true)
+      setTimeout(() => {
+        setAlarm(false)
+      }, 1500);
+      return
+    }
+
     const newItem = {
       ...item,
       id: maxId + 1,
@@ -70,6 +113,15 @@ const SempleList = ({
   return (
     <div className={styles.container}>
       <div className={styles.sempleList}>
+        {alarm ?
+          <div className={styles.alarmWrap}>
+            <div className={styles.alarmContent}>
+              <p>Глаза разуй, время не правильно указано</p>
+            </div>
+          </div>
+          :
+          null}
+
         {data
           .map((item) => (
             <div

@@ -53,10 +53,12 @@
   border: 1px solid var(--accent);
   height: 57px;
 }
+
 .customDate input {
   border: 1px solid var(--accent);
   height: 57px;
 }
+
 .buttonShow {
   padding: 10px 14px;
   font-size: 16px;
@@ -85,6 +87,7 @@
     position: relative;
     margin: 0 auto;
   }
+
   .hours::before {
     content: "";
     position: absolute;
@@ -93,10 +96,11 @@
     transform: translateX(-50%);
     width: 10px;
     height: 2px;
-    background-color: #4411b9;
+    background-color: var(--statColorResult);
     rotate: 45deg;
     transition: all 0.2s ease;
   }
+
   .hours::after {
     content: "";
     position: absolute;
@@ -105,7 +109,7 @@
     transform: translateX(-50%);
     width: 10px;
     height: 2px;
-    background-color: #4411b9;
+    background-color: var(--statColorResult);
     rotate: 135deg;
     transition: all 0.2s ease;
   }
@@ -114,6 +118,7 @@
     position: relative;
     margin: 0 auto;
   }
+
   .hoursOpen::before {
     content: "";
     position: absolute;
@@ -126,6 +131,7 @@
     rotate: -45deg;
     transition: all 0.2s ease;
   }
+
   .hoursOpen::after {
     content: "";
     position: absolute;
@@ -186,22 +192,30 @@
 
 .explaneResult::before,
 .activeRes {
-  background-color: #0b126b;
+  background-color: var(--statColorResult);
+  border-radius: 3px;
+  padding: 3px;
 }
 
 .explaneFines::before,
 .activeFines {
-  background-color: #88081d;
+  background-color: var(--statColorFines);
+  border-radius: 3px;
+  padding: 3px;
 }
 
 .explaneBonus::before,
 .activeBonus {
-  background-color: rgb(41, 92, 75);
+  background-color: var(--statColorBonus);
+  border-radius: 3px;
+  padding: 3px;
 }
 
 .explaneFinalResult::before,
 .activeFinalRes {
-  background-color: #166107;
+  background-color: var(--statColorFinalResult);
+  border-radius: 3px;
+  padding: 3px;
 }
 
 .innerFiltersActive {
@@ -276,27 +290,34 @@
   font-size: 12px;
   padding-block: 7px;
 }
+
 .detailItem:nth-child(even) {
-  background-color: #8d7a7a;
+  background-color: var(--statColorFinalResult);
+  border-radius: 3px;
 }
+
 .detailItem p {
   width: 14%;
   text-align: center;
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 .detailsHeader {
   font-weight: 600;
 }
+
 .detailsHeader p {
   width: 14%;
   text-align: center;
 }
+
 .detailsWrapHide {
   height: 0;
   opacity: 0;
   visibility: hidden;
 }
+
 .detailsWrapShow {
   height: 100%;
   opacity: 1;

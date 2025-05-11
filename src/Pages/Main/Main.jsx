@@ -7,17 +7,12 @@ import { addNewEventPVZ1 } from "../../components/API/PVZ/addNewEventPVZ1";
 import { addNewEventPVZ2 } from "../../components/API/PVZ/addNewEventPVZ2";
 import { addNewEventPVZ3 } from "../../components/API/PVZ/addNewEventPVZ3";
 
-import ToggleButton from "@mui/material/ToggleButton";
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import ItemList from "./ItemList";
 import styles from "./Main.module.scss";
 
 import getCurrentWeek from "./helpers/getCurrentWeek.js";
 import getCurrentDay from "./helpers/getCurrentDay.js";
-import getNextWeek from "./helpers/getNextWeek.js";
-import getPreviousWeek from "./helpers/getPrevWeek.js";
 import { useSwipeable } from "react-swipeable";
-import { Logger } from "sass";
 
 const Main = () => {
   const queryClient = useQueryClient();

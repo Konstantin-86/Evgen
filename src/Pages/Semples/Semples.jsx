@@ -131,7 +131,7 @@ const Semples = () => {
           className={style.addButton}
           onClick={() => setShowAddSemples(!showAddSemples)}
         >
-          Добавить шаблон
+          Добавить
         </button>
         <AddSemples
           numberID={numberID}

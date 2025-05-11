@@ -18,37 +18,6 @@ export default function filtredArray(array, period, selectName = "Все") {
     }
   });
 
-  /*  const filtredSumArray = [];
-
-  filtredArray.forEach((item) => {
-    const end = Number(item.endTime.slice(0, 2));
-    const start = Number(item.startTime.slice(0, 2));
-    const diffrenceTime = end - start;
-    const sum = Number(item.currentRate) * diffrenceTime;
-    const bonusAndFines =
-      sum + Number(item.otherData.bonus) - Number(item.otherData.fines);
-    const existingEntry = filtredSumArray.find(
-      (elem) => elem.name === item.namePerson
-    );
-
-    if (existingEntry) {
-      existingEntry.hours += diffrenceTime;
-      existingEntry.result += sum;
-      existingEntry.bonus += Number(item.otherData.bonus);
-      existingEntry.fines += Number(item.otherData.fines);
-      existingEntry.finalResult += bonusAndFines;
-    } else {
-      filtredSumArray.push({
-        name: item.namePerson,
-        hours: diffrenceTime,
-        result: sum,
-        bonus: Number(item.otherData.bonus),
-        fines: Number(item.otherData.fines),
-        finalResult: bonusAndFines,
-        color: item.color,
-      });
-    }
-  }); */
 
   const filtredSumArray = [];
 
@@ -70,6 +39,21 @@ export default function filtredArray(array, period, selectName = "Все") {
       existingEntry.bonus += Number(item.otherData.bonus);
       existingEntry.fines += Number(item.otherData.fines);
       existingEntry.finalResult += bonusAndFines;
+      let checkNameofPVZ = ""
+      switch (item.numberPVZ) {
+        case ("PVZ1"):
+          checkNameofPVZ = 26
+          break;
+        case ("PVZ2"):
+          checkNameofPVZ = 42
+          break;
+        case ("PVZ3"):
+          checkNameofPVZ = 48
+          break;
+        default: checkNameofPVZ = "???"
+      }
+      console.log("checkNameofPVZ", checkNameofPVZ);
+
 
       existingEntry.details.push({
         date: item.date,
@@ -81,8 +65,23 @@ export default function filtredArray(array, period, selectName = "Все") {
         bonus: Number(item.otherData.bonus),
         fines: Number(item.otherData.fines),
         total: bonusAndFines,
+
+        namePVZ: checkNameofPVZ,
       });
     } else {
+      let checkNameofPVZ = ""
+      switch (item.numberPVZ) {
+        case ("PVZ1"):
+          checkNameofPVZ = 26
+          break;
+        case ("PVZ2"):
+          checkNameofPVZ = 42
+          break;
+        case ("PVZ3"):
+          checkNameofPVZ = 48
+          break;
+        default: checkNameofPVZ = "???"
+      }
       filtredSumArray.push({
         name: item.namePerson,
         hours: diffrenceTime,
@@ -102,7 +101,7 @@ export default function filtredArray(array, period, selectName = "Все") {
             bonus: Number(item.otherData.bonus),
             fines: Number(item.otherData.fines),
             total: bonusAndFines,
-            namePVZ: item.numberPVZ,
+            namePVZ: checkNameofPVZ,
           },
         ],
       });
