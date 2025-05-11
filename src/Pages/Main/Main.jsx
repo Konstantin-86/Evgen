@@ -33,7 +33,7 @@ const Main = () => {
       setTimeout(() => {
         sessionStorage.setItem("trollShown", "done")
         setTroll(false)
-      }, 1500);
+      }, 4000);
 
     } else {
       setTroll(false);
