@@ -13,7 +13,7 @@ import styles from "./Main.module.scss";
 import getCurrentWeek from "./helpers/getCurrentWeek.js";
 import getCurrentDay from "./helpers/getCurrentDay.js";
 import { useSwipeable } from "react-swipeable";
-import krasnodar from "../../assets/FC_Krasnodar.png"
+import krasnodar from "../../assets/FC_Krasnodar.png";
 
 const Main = () => {
   const queryClient = useQueryClient();
@@ -25,24 +25,10 @@ const Main = () => {
   const [textAlert, setTextAlert] = useState("");
   const [checkPVZ, setCheckPVZ] = useState("");
   const [startOfWeek, setStartOfWeek] = useState("");
-  const [troll, setTroll] = useState(true)
-
-  useEffect(() => {
-    const wasShown = sessionStorage.getItem('trollShown');
-    if (!wasShown) {
-      setTimeout(() => {
-        sessionStorage.setItem("trollShown", "done")
-        setTroll(false)
-      }, 4000);
-
-    } else {
-      setTroll(false);
-    }
-  }, []);
 
   const tryTroll = () => {
-    sessionStorage.removeItem("trollShown")
-  }
+    sessionStorage.removeItem("trollShown");
+  };
 
   useEffect(() => {
     const today = new Date();
@@ -170,14 +156,9 @@ const Main = () => {
 
   return (
     <div {...handlers} className={styles.main}>
-      {troll ?
-        <div className={styles.troll}>
-          <img src={krasnodar} alt="krasnodar" />
-          <h1>Чемпион</h1>
-        </div>
-        :
-        null
-      }
+      <div className={styles.troll}>
+        <img src={krasnodar} alt="krasnodar" />
+      </div>
 
       <div className={styles.container}>
         <p className={showAlert ? styles.alert : styles.alertHide}>

@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import Switch from "@mui/material/Switch";
 
 import style from "./Settings.module.scss";
-
 const Settings = () => {
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
 

@@ -32,7 +32,20 @@
   right: 7px;
   padding: 7px;
   border-radius: 7px;
-  background-color: var(--another-background);
+  background-color: var(--secondary-background);
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  cursor: pointer;
+  z-index: 1000;
+}
+.filtersOpen {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  padding: 7px;
+  border-radius: 7px;
+  background-color: var(--statColorFinalResult);
   width: 40px;
   height: 40px;
   object-fit: cover;
@@ -220,17 +233,26 @@
 
 .innerFiltersActive {
   position: absolute;
-  top: 7px;
+  top: 0px;
   left: 50%;
   transform: translateX(-50%);
   padding: 7px;
   border-radius: 7px;
-  background-color: var(--secondary-background);
+  background-color: #000000be;
   max-width: 473px;
   width: 100%;
-  min-height: 50dvh;
+  height: 100dvh;
   transition: all 0.2s ease-in-out;
   z-index: 1000;
+}
+.bgFilters {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 7px;
+  border-radius: 7px;
+  background-color: var(--statColorFinalResult);
 }
 
 .innerFiltersActive select {

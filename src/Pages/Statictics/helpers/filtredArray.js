@@ -18,7 +18,6 @@ export default function filtredArray(array, period, selectName = "Все") {
     }
   });
 
-
   const filtredSumArray = [];
 
   filtredArray.forEach((item) => {
@@ -39,21 +38,20 @@ export default function filtredArray(array, period, selectName = "Все") {
       existingEntry.bonus += Number(item.otherData.bonus);
       existingEntry.fines += Number(item.otherData.fines);
       existingEntry.finalResult += bonusAndFines;
-      let checkNameofPVZ = ""
+      let checkNameofPVZ = "";
       switch (item.numberPVZ) {
-        case ("PVZ1"):
-          checkNameofPVZ = 26
+        case "PVZ1":
+          checkNameofPVZ = 26;
           break;
-        case ("PVZ2"):
-          checkNameofPVZ = 42
+        case "PVZ2":
+          checkNameofPVZ = 42;
           break;
-        case ("PVZ3"):
-          checkNameofPVZ = 48
+        case "PVZ3":
+          checkNameofPVZ = 48;
           break;
-        default: checkNameofPVZ = "???"
+        default:
+          checkNameofPVZ = "???";
       }
-      console.log("checkNameofPVZ", checkNameofPVZ);
-
 
       existingEntry.details.push({
         date: item.date,
@@ -69,18 +67,19 @@ export default function filtredArray(array, period, selectName = "Все") {
         namePVZ: checkNameofPVZ,
       });
     } else {
-      let checkNameofPVZ = ""
+      let checkNameofPVZ = "";
       switch (item.numberPVZ) {
-        case ("PVZ1"):
-          checkNameofPVZ = 26
+        case "PVZ1":
+          checkNameofPVZ = 26;
           break;
-        case ("PVZ2"):
-          checkNameofPVZ = 42
+        case "PVZ2":
+          checkNameofPVZ = 42;
           break;
-        case ("PVZ3"):
-          checkNameofPVZ = 48
+        case "PVZ3":
+          checkNameofPVZ = 48;
           break;
-        default: checkNameofPVZ = "???"
+        default:
+          checkNameofPVZ = "???";
       }
       filtredSumArray.push({
         name: item.namePerson,

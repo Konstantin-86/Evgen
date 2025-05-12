@@ -7,6 +7,7 @@ import { getPVZ3 } from "../../components/API/PVZ/getPVZ3";
 
 import getCurrentMonthAndYear from "./helpers/getCurrentMonthAndYear.js";
 import filtredArray from "./helpers/filtredArray.js";
+import checkSessionData from "./helpers/checkSessionData.js";
 
 import StatGrafic from "./StatGrafic.jsx";
 
@@ -49,12 +50,23 @@ const Statictics = () => {
   useEffect(() => {
     const storedValue = sessionStorage.getItem("checkPVZ");
     const checkMonth = sessionStorage.getItem("curMonth");
+    const checkPeriod = sessionStorage.getItem("selectPeriod");
     setCheckPVZ(storedValue || "PVZ1");
 
-    if (checkMonth) {
-      setCurMonth(checkMonth);
+    if (checkPeriod === "period") {
+      setSelectPeriod("period");
+      const startDate = sessionStorage.getItem("startPeriod");
+      const endDate = sessionStorage.getItem("endPeriod");
+      setCustomDateStart(startDate);
+      setCustomDateEnd(endDate);
+      setCurMonth([startDate, endDate]);
     } else {
-      setCurMonth(getCurrentMonthAndYear());
+      setSelectPeriod("month");
+      if (checkMonth) {
+        setCurMonth(checkMonth);
+      } else {
+        setCurMonth(getCurrentMonthAndYear());
+      }
     }
   }, []);
 
@@ -70,13 +82,6 @@ const Statictics = () => {
       setNameArray(getUnikNameArray);
     }
   }, [PVZ1, PVZ2, PVZ3, isLoadingPVZ1, isLoadingPVZ2, isLoadingPVZ3]);
-
-  useEffect(() => {
-    const [year, month] = curMonth.split("-").map(Number);
-    const nextMonth = new Date(year, month, 1);
-    const lastDayOfMonth = new Date(nextMonth - 1);
-    setDaysInMonth(lastDayOfMonth.getDate());
-  }, [curMonth]);
 
   useEffect(() => {
     if (!isLoadingPVZ1 && !isLoadingPVZ2 && !isLoadingPVZ3) {
@@ -99,10 +104,10 @@ const Statictics = () => {
           setPVZname("Все ПВЗ");
           break;
       }
-
+      const curMonth2 = checkSessionData();
       const [arg1, arg2, arg3] = filtredArray(
         checkPVZValue,
-        curMonth,
+        curMonth2,
         selectName
       );
       setSummarHours(arg1);
@@ -148,8 +153,12 @@ const Statictics = () => {
       let per = "";
       if (selectPeriod === "month") {
         per = curMonth;
+        sessionStorage.setItem("selectPeriod", "month");
       } else {
         per = [customDateStart, customDateEnd];
+        sessionStorage.setItem("selectPeriod", "period");
+        sessionStorage.setItem("startPeriod", customDateStart);
+        sessionStorage.setItem("endPeriod", customDateEnd);
       }
 
       const [arg1, arg2, arg3] = filtredArray(checkPVZValue, per, selectName);
@@ -172,16 +181,12 @@ const Statictics = () => {
   };
 
   const showDetails = (item) => {
-    console.log("item", item);
-
     if (!showDetailsArray.includes(item.name)) {
       setShowDetailsArray([...showDetailsArray, item.name]);
     } else {
       setShowDetailsArray(showDetailsArray.filter((i) => i !== item.name));
     }
   };
-  console.log(filtredSumArray);
-
 
   return (
     <div className={styles.statWrap}>
@@ -191,83 +196,85 @@ const Statictics = () => {
             handleFilter ? styles.innerFiltersActive : styles.innerFiltersHide
           }
         >
-          <select name="choosePVZ" value={checkPVZ} onChange={handleChange}>
-            <option value="PVZ1">НОВОТРОИЦК_26</option>
-            <option value="PVZ2">НОВОТРОИЦК_42</option>
-            <option value="PVZ3">НОВОТРОИЦК_48</option>
-            <option value="allPVZ">Все</option>
-          </select>
-          <select
-            name="chooseName"
-            value={selectName}
-            onChange={(event) => handleChangeName(event)}
-          >
-            <option value={"Все"}>Все</option>
-            {nameArray.length &&
-              nameArray.map((item) => (
-                <option value={item} key={item}>
-                  {item}
-                </option>
-              ))}
-          </select>
-          <div className={styles.innerCustomDate}>
-            <div className={styles.dateWrapBtn}>
-              <button
-                onClick={() => setSelectPeriod("month")}
-                style={
-                  selectPeriod === "month"
-                    ? { backgroundColor: "var(--accent)" }
-                    : { backgroundColor: "var(--secondary-background)" }
-                }
-              >
-                Месяц
-              </button>
-              <button
-                onClick={() => setSelectPeriod("period")}
-                style={
-                  selectPeriod === "period"
-                    ? { backgroundColor: "var(--accent)" }
-                    : { backgroundColor: "var(--secondary-background)" }
-                }
-              >
-                Период
-              </button>
-            </div>
-            {selectPeriod === "period" && (
-              <div
-                className={
-                  alertInput ? styles.customDateWrong : styles.customDate
-                }
-              >
-                <input
-                  type="date"
-                  name="start"
-                  value={customDateStart}
-                  onChange={(e) => setCustomDateStart(e.target.value)}
-                />
-                <input
-                  type="date"
-                  name="end"
-                  value={customDateEnd}
-                  onChange={(e) => setCustomDateEnd(e.target.value)}
-                />
+          <div className={styles.bgFilters}>
+            <select name="choosePVZ" value={checkPVZ} onChange={handleChange}>
+              <option value="PVZ1">НОВОТРОИЦК_26</option>
+              <option value="PVZ2">НОВОТРОИЦК_42</option>
+              <option value="PVZ3">НОВОТРОИЦК_48</option>
+              <option value="allPVZ">Все</option>
+            </select>
+            <select
+              name="chooseName"
+              value={selectName}
+              onChange={(event) => handleChangeName(event)}
+            >
+              <option value={"Все"}>Все</option>
+              {nameArray.length &&
+                nameArray.map((item) => (
+                  <option value={item} key={item}>
+                    {item}
+                  </option>
+                ))}
+            </select>
+            <div className={styles.innerCustomDate}>
+              <div className={styles.dateWrapBtn}>
+                <button
+                  onClick={() => setSelectPeriod("month")}
+                  style={
+                    selectPeriod === "month"
+                      ? { backgroundColor: "var(--accent)" }
+                      : { backgroundColor: "var(--secondary-background)" }
+                  }
+                >
+                  Месяц
+                </button>
+                <button
+                  onClick={() => setSelectPeriod("period")}
+                  style={
+                    selectPeriod === "period"
+                      ? { backgroundColor: "var(--accent)" }
+                      : { backgroundColor: "var(--secondary-background)" }
+                  }
+                >
+                  Период
+                </button>
               </div>
-            )}
-            {selectPeriod === "month" && (
-              <input
-                className={styles.inptMonth}
-                type="month"
-                value={curMonth}
-                onChange={(e) => {
-                  setCurMonth(e.target.value);
-                  sessionStorage.setItem("curMonth", e.target.value);
-                }}
-              />
-            )}
+              {selectPeriod === "period" && (
+                <div
+                  className={
+                    alertInput ? styles.customDateWrong : styles.customDate
+                  }
+                >
+                  <input
+                    type="date"
+                    name="start"
+                    value={customDateStart}
+                    onChange={(e) => setCustomDateStart(e.target.value)}
+                  />
+                  <input
+                    type="date"
+                    name="end"
+                    value={customDateEnd}
+                    onChange={(e) => setCustomDateEnd(e.target.value)}
+                  />
+                </div>
+              )}
+              {selectPeriod === "month" && (
+                <input
+                  className={styles.inptMonth}
+                  type="month"
+                  value={curMonth}
+                  onChange={(e) => {
+                    setCurMonth(e.target.value);
+                    sessionStorage.setItem("curMonth", e.target.value);
+                  }}
+                />
+              )}
+            </div>
+            <button className={styles.buttonShow} onClick={show}>
+              показать
+            </button>
           </div>
-          <button className={styles.buttonShow} onClick={show}>
-            показать
-          </button>
         </div>
 
         <div className={styles.innerCurSettings}>
@@ -281,7 +288,7 @@ const Statictics = () => {
 
           <img
             onClick={() => setHandleFilter(!handleFilter)}
-            className={styles.filters}
+            className={handleFilter ? styles.filters : styles.filtersOpen}
             src={filters}
             alt=""
           />
