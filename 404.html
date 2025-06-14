@@ -5,13 +5,15 @@
     <meta charset="utf-8">
     <title>Redirecting...</title>
     <script>
-        sessionStorage.redirect = location.pathname.replace('/Evgen/', '/');
-        location.replace('/Evgen/');
+        const path = window.location.pathname;
+        if (!path.startsWith('/Evgen/')) {
+            window.location.replace('/Evgen/');
+        }
     </script>
 </head>
 
 <body>
-    <noscript>Please enable JavaScript to continue.</noscript>
+    Redirecting...
 </body>
 
 </html>
