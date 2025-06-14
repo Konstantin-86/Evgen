@@ -29,7 +29,7 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <Router >
-        <Footer />
+        <Footer basename={import.meta.env.BASE_URL} />
         <Routes>
           <Route path="/" element={<Main />} />
           <Route path="/stat" element={<Statictics />} />
