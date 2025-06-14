@@ -1,7 +1,6 @@
 {
   "name": "todoevgen",
   "private": true,
-  "homepage": "https://Konstantin-86.github.io/Evgen",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
