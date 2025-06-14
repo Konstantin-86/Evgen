@@ -28,7 +28,7 @@ document.documentElement.setAttribute('data-theme', savedTheme);
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <Router basename="/Evgen">
+      <Router >
         <Footer />
         <Routes>
           <Route path="/" element={<Main />} />
