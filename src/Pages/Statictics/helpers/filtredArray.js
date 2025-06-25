@@ -62,6 +62,7 @@ export default function filtredArray(array, period, selectName = "Все") {
         sum: sum,
         bonus: Number(item.otherData.bonus),
         fines: Number(item.otherData.fines),
+
         total: bonusAndFines,
 
         namePVZ: checkNameofPVZ,
@@ -99,6 +100,8 @@ export default function filtredArray(array, period, selectName = "Все") {
             sum: sum,
             bonus: Number(item.otherData.bonus),
             fines: Number(item.otherData.fines),
+            bonusInfo: item.otherData.bonusInfo,
+            finesInfo: item.otherData.finesInfo,
             total: bonusAndFines,
             namePVZ: checkNameofPVZ,
           },

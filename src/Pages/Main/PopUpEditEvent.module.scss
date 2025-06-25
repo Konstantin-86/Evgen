@@ -1,7 +1,9 @@
 .wrapEdit {
   position: fixed;
   top: 35px;
-  left: 0;
+  left: 50%;
+  transform: translateX(-53%);
+  max-width: 500px;
   width: calc(100% - 14px);
   background-color: var(--background);
   z-index: 1000;
@@ -11,6 +13,7 @@
   gap: 7px;
   border-radius: 7px;
   margin-inline: 7px;
+
   p {
     font-size: 12px;
     color: rgb(150, 150, 150);
@@ -26,6 +29,7 @@
   padding: 10px;
   border: none;
   background-color: transparent;
+  cursor: pointer;
 
   &::after {
     content: "";
@@ -84,4 +88,29 @@ input:focus {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.textarea {
+  width: 100%;
+  resize: vertical;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #333;
+  background-color: #f9f9f9;
+  transition: all 0.2s;
+}
+
+.textarea:focus {
+  font-size: 16px;
+  font-weight: 700;
+  outline: 2px solid #0c1db4;
+}
+
+.labelInfo {
+  font-size: 12px;
+  color: rgb(150, 150, 150);
 }

@@ -187,6 +187,8 @@ const Statictics = () => {
       setShowDetailsArray(showDetailsArray.filter((i) => i !== item.name));
     }
   };
+  console.log(filtredSumArray);
+
 
   return (
     <div className={styles.statWrap}>
@@ -370,6 +372,10 @@ const Statictics = () => {
                           <p>{elem.fines}</p>
                           <p>{elem.bonus}</p>
                           <p>{elem.total}</p>
+                          <div className={styles.detailLine}>
+                            {elem.finesInfo && <p>Причина штрафа: {elem.finesInfo}</p>}
+                            {elem.bonusInfo && <p>Причина тряски: {elem.bonusInfo}</p>}
+                          </div>
                         </div>
                       ))}
                   </div>

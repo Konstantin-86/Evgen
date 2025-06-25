@@ -37,12 +37,15 @@ const PopUpEditEvent = ({
   );
   const [finesState, setFinesState] = useState(currentPerson.otherData.fines);
   const [bonusState, setBonusState] = useState(currentPerson.otherData.bonus);
+  const [finesInfo, setFinesInfo] = useState(currentPerson.otherData.finesInfo);
+  const [bonusInfo, setBonusInfo] = useState(currentPerson.otherData.bonusInfo);
+  console.log(currentPerson);
+
 
   const queryClient = useQueryClient();
 
   const createMutation = useMutation({
     mutationFn: (newUser) => {
-      /* const checkPVZFn = checkPVZ === "PVZ1" ? editEventPVZ1 : editEventPVZ2; */
       let checkPVZFn = [];
       switch (checkPVZ) {
         case "PVZ1":
@@ -84,7 +87,9 @@ const PopUpEditEvent = ({
       otherData: {
         ...currentPerson.otherData,
         fines: finesState,
+        finesInfo: finesInfo,
         bonus: bonusState,
+        bonusInfo: bonusInfo,
       },
     };
     createMutation.mutate(newEvent);
@@ -138,17 +143,47 @@ const PopUpEditEvent = ({
         value={finesState}
         onChange={(e) => setFinesState(e.target.value)}
       />
+      {finesState > 0 && (
+        <div className={styles.textareaContainer}>
+          <label htmlFor="finesInfo" className={styles.labelInfo}>
+            А за шо?
+          </label>
+          <textarea
+            id="finesInfo"
+            className={styles.textarea}
+            name="finesInfo"
+            value={finesInfo}
+            onChange={(e) => setFinesInfo(e.target.value)}
+          />
+        </div>
+      )}
+
       <p>бонус</p>
       <input
         type="number"
         value={bonusState}
         onChange={(e) => setBonusState(e.target.value)}
       />
+      {bonusState > 0 && (
+        <div className={styles.textareaContainer}>
+          <label htmlFor="bonusInfo" className={styles.labelInfo}>
+            А почему так мало?
+          </label>
+          <textarea
+            id="bonusInfo"
+            className={styles.textarea}
+            name="bonusInfo"
+            value={bonusInfo}
+            onChange={(e) => setBonusInfo(e.target.value)}
+          />
+        </div>
+      )}
 
-      <button className={styles.editButton} onClick={changeEvent}>
+
+      < button className={styles.editButton} onClick={changeEvent}>
         Готово
       </button>
-    </div>
+    </div >
   );
 };
 

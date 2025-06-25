@@ -39,6 +39,7 @@
   cursor: pointer;
   z-index: 1000;
 }
+
 .filtersOpen {
   position: absolute;
   top: 7px;
@@ -76,6 +77,7 @@
   padding: 10px 14px;
   font-size: 16px;
   min-width: 50%;
+  cursor: pointer;
 }
 
 .statTable {
@@ -245,6 +247,7 @@
   transition: all 0.2s ease-in-out;
   z-index: 1000;
 }
+
 .bgFilters {
   position: absolute;
   top: 0;
@@ -344,4 +347,22 @@
   height: 100%;
   opacity: 1;
   visibility: visible;
+}
+
+.detailLine {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 7px;
+  padding: 7px;
+}
+
+.detailLine p {
+  width: 100%;
+  text-align: start;
+}
+
+.detailItem {
+  flex-wrap: wrap;
 }
