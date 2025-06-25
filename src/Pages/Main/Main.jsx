@@ -26,9 +26,7 @@ const Main = () => {
   const [checkPVZ, setCheckPVZ] = useState("");
   const [startOfWeek, setStartOfWeek] = useState("");
 
-  const tryTroll = () => {
-    sessionStorage.removeItem("trollShown");
-  };
+
 
   useEffect(() => {
     const today = new Date();
@@ -156,9 +154,7 @@ const Main = () => {
 
   return (
     <div {...handlers} className={styles.main}>
-      <div className={styles.troll}>
-        <img src={krasnodar} alt="krasnodar" />
-      </div>
+
 
       <div className={styles.container}>
         <p className={showAlert ? styles.alert : styles.alertHide}>
